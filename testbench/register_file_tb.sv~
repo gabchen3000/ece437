@@ -55,6 +55,7 @@ program test(
 );
 
 	parameter PERIOD = 10;
+	parameter i = 0;
 
 	initial begin
     
