@@ -55,22 +55,21 @@ program test(
 );
 
 	parameter PERIOD = 10;
-	parameter i = 0;
 
 	initial begin
     
-		#(PERIOD) //waits a while
+		#(PERIOD); //waits a while
 		nRST = 0; //start with nreset
 
 		//case 1 write value 1 into register 20
-		#(PERIOD)
-		@(posedge CLK)
+		#(PERIOD);
+		@(posedge CLK);
 		nRST = 1;
 		rfiftb.WEN = 1;
 		rfiftb.wsel = 5'd20;
 		rfiftb.wdat = 1'd1;
 		rfiftb.rsel1 = 5'd20;
-		@(posedge CLK)
+		@(posedge CLK);
 
 		if (rfiftb.rdat1 == 1) begin
 			$display("==Case 1 is correct==");
@@ -78,19 +77,19 @@ program test(
 		else begin
 			$display("----------------Case 1 is wrong, rdat = %d", rfiftb.rdat1);
 		end 
-		#(PERIOD)
+		#(PERIOD);
 		nRST = 0;    
 
 
     //case 2 write value to register 0, it should stay 0
-		#(PERIOD)
-		@(posedge CLK)
+		#(PERIOD);
+		@(posedge CLK);
 		nRST = 1;
 		rfiftb.WEN = 1;
 		rfiftb.wsel = 5'd0;
 		rfiftb.wdat = 2'd3;
 		rfiftb.rsel1 = 5'd0;
-		@(posedge CLK)
+		@(posedge CLK);
 
 		if (rfiftb.rdat1 == 0) begin
 			$display("==Case 2 is correct==");
@@ -98,18 +97,18 @@ program test(
 		else begin
 			$display("----------------Case 2 is wrong, rdat = %d", rfiftb.rdat1);
 		end 
-		#(PERIOD)
+		#(PERIOD);
 		nRST = 0;
 
 		//case 3 write highest value into any register, then read from rdat2
-		#(PERIOD)
-		@(posedge CLK)
+		#(PERIOD);
+		@(posedge CLK);
 		nRST = 1;
 		rfiftb.WEN = 1;
 		rfiftb.wsel = 5'd31;
 		rfiftb.wdat = '1;
 		rfiftb.rsel2 = 5'd31;
-		@(posedge CLK)
+		@(posedge CLK);
 
 		if (rfiftb.rdat2 == '1) begin
 			$display("==Case 3 is correct==");
@@ -117,11 +116,11 @@ program test(
 		else begin
 			$display("----------------Case 3 is wrong, rdat = %d", rfiftb.rdat2);
 		end 
-		#(PERIOD)
+		#(PERIOD);
 		nRST = 0;
 
 		//case 4 check most registers to see if they're of value 0 after nRST = 0
-		@(posedge CLK)
+		@(posedge CLK);
 		nRST = 1;
 		rfiftb.rsel1 = 5'd0;
 		rfiftb.rsel2 = 5'd1;
@@ -131,7 +130,7 @@ program test(
 		else if (rfiftb.rdat2 != 0) begin
 			$display("----------------Case 4 is incorrect");
 		end
-		@(posedge CLK)
+		@(posedge CLK);
 		rfiftb.rsel1 = 5'd4;
 		rfiftb.rsel2 = 5'd5;
 		if (rfiftb.rdat1 != 0) begin
@@ -140,7 +139,7 @@ program test(
 		else if (rfiftb.rdat2 != 0) begin
 			$display("----------------Case 4 is incorrect");
 		end
-		@(posedge CLK)
+		@(posedge CLK);
 		rfiftb.rsel1 = 5'd8;
 		rfiftb.rsel2 = 5'd9;
 		if (rfiftb.rdat1 != 0) begin
@@ -149,7 +148,7 @@ program test(
 		else if (rfiftb.rdat2 != 0) begin
 			$display("----------------Case 4 is incorrect");
 		end
-		@(posedge CLK)
+		@(posedge CLK);
 		rfiftb.rsel1 = 5'd12;
 		rfiftb.rsel2 = 5'd13;
 		if (rfiftb.rdat1 != 0) begin
@@ -158,7 +157,7 @@ program test(
 		else if (rfiftb.rdat2 != 0) begin
 			$display("----------------Case 4 is incorrect");
 		end
-		@(posedge CLK)
+		@(posedge CLK);
 		rfiftb.rsel1 = 5'd16;
 		rfiftb.rsel2 = 5'd17;
 		if (rfiftb.rdat1 != 0) begin
@@ -167,7 +166,7 @@ program test(
 		else if (rfiftb.rdat2 != 0) begin
 			$display("----------------Case 4 is incorrect");
 		end
-		@(posedge CLK)
+		@(posedge CLK);
 		rfiftb.rsel1 = 5'd22;
 		rfiftb.rsel2 = 5'd23;
 		if (rfiftb.rdat1 != 0) begin
@@ -179,22 +178,22 @@ program test(
 		else begin
 			$display("==Case 4 is correct==");
 		end
-		#(PERIOD)
+		#(PERIOD);
 		nRST = 0;
 
 		//case 5 write to register w/ WEN, then write again w/o WEN, read register, expect first write's value
-		@(posedge CLK)
+		@(posedge CLK);
 		nRST = 1;
 		rfiftb.WEN = 1;
 		rfiftb.wdat = 14'd9280;
 		rfiftb.wsel = 5'd18;
 		rfiftb.rsel1 = 5'd18;
-		@(posedge CLK)
+		@(posedge CLK);
 
 		rfiftb.WEN = 0;
 		rfiftb.wdat = 14'd8193;
 		rfiftb.wsel = 5'd18;
-		@(posedge CLK)
+		@(posedge CLK);
 		rfiftb.rsel1 = 5'd18;
 		if (rfiftb.rdat1 == 9280) begin
 			$display("==Case 5 is correct==");
@@ -202,7 +201,7 @@ program test(
 		else begin
 			$display("----------------Case 5 is incorrect, rdat = %d", rfiftb.rdat1);
 		end
-		#(PERIOD)
+		#(PERIOD);
 		nRST = 0;
 
   end

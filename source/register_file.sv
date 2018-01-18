@@ -18,7 +18,7 @@ always_ff @(posedge CLK) begin
 	if (nRST == 0) begin
 		registers[31:0] <= '0;
 	end
-	else if(rfif.WEN & rfif.wsel != 0) begin
+	else if(rfif.WEN && rfif.wsel != 0) begin
 		registers[rfif.wsel] <= rfif.wdat;
 	end
 
