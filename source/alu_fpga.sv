@@ -4,6 +4,8 @@
 //interface
 `include "alu_if.vh"
 `include "cpu_types_pkg.vh"
+//import types
+import cpu_types_pkg::*;
 
 module alu_fpga (
 	input logic CLOCK_50,
@@ -20,18 +22,19 @@ word_t register_b;
 	//alu file
 	alu ALU(aif);
 
-assign aif.ALUOP = KEY[3:0];
-assign aif.OUT = HEX[7:0];
-assign aif.PORT_A[32:16] = SW[16] ? '1 : '0;
+assign aif.ALUOP[3:0] = ~KEY[3:0]; //aif.ALUOP = aluop_t'(KEY[3:0])
+//assign aif.OUT = HEX[7:0];
+assign aif.PORT_A[31:16] = SW[16] ? '1 : '0;
 assign aif.PORT_A[15:0] = SW[15:0];
 assign aif.PORT_B = register_b;
 assign LEDR[2] = aif.NEG;
 assign LEDR[1] = aif.OVERFLOW;
 assign LEDR[0] = aif.ZERO;
 
+
 always_ff @(posedge CLOCK_50) begin
 	if (SW[17] == 1) begin
-		register_b[32:16] <= SW[16] ? '1 : '0;
+		register_b[31:16] <= SW[16] ? '1 : '0;
 		register_b[15:0] <= SW[15:0];
 	end
 	else begin

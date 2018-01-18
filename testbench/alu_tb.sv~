@@ -39,7 +39,7 @@ module alu_tb;
     .\aif.OUT (aif.OUT),
     .\aif.NEG (aif.NEG),
     .\aif.OVERFLOW (aif.OVERFLOW),
-    .\aif.ZERO (aif.ZERO),
+    .\aif.ZERO (aif.ZERO)
   );
 `endif
 
@@ -102,7 +102,7 @@ testcase:
 		@(posedge CLK);
 		aiftb.ALUOP = ALU_ADD;
 		aiftb.PORT_A = 32'h7fffffff;
-		aiftb.PORT_B = 32'h0fffffff;
+		aiftb.PORT_B = 32'h7fffffff;
 		@(posedge CLK);
 		if (aiftb.OUT == ($signed(aiftb.PORT_A) + $signed(aiftb.PORT_B))) begin
 			$display("==Case 3.0 is correct==");
