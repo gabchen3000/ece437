@@ -10,7 +10,7 @@
 `include "cpu_types_pkg.vh"
 
 module alu (
-	alu_if.rf aif
+	alu_if.alu aif
 );
 //import types
 import cpu_types_pkg::*;

@@ -33,6 +33,7 @@ assign ccif.iload = ccif.ramload;
 
 //ramaddr will either be iaddr or daddr deepending on iren, dren and dwen
 always_comb begin
+	ccif.ramaddr = 0;
 	if (ccif.dWEN || ccif.dREN) begin
 		ccif.ramaddr = ccif.daddr;
 	end
@@ -43,6 +44,7 @@ end
 
 //set ramren to 1 if either dREN is asserted or (iREN && !dWEN)
 always_comb begin
+	ccif.ramREN = 0;
 	if (ccif.dREN || (ccif.iREN == 1 && ccif.dWEN == 0)) begin
 		ccif.ramREN = 1;
 	end

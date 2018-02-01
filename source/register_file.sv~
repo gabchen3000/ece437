@@ -1,35 +1,37 @@
-
+/*
+	register file
+*/
 // interface
 `include "register_file_if.vh"
 `include "cpu_types_pkg.vh"
 
 module register_file (
-	input logic CLK, nRST, register_file_if.rf rfif
+	input logic CLK, nRST, 
+	register_file_if.rf rfif
 			//.rf because modport rf from register_file_if.vh
 );
-//import types
-import cpu_types_pkg::*;
+	//import types
+	import cpu_types_pkg::*;
 
-word_t [31:0] registers;
+	word_t [31:0] registers;
+	//decoder + load registers
+	always_ff @(posedge CLK) begin
 
-//decoder + load registers
-always_ff @(posedge CLK) begin
+		if (nRST == 0) begin
+			registers[31:0] <= 32'd0;
+		end
+		else if((rfif.WEN) && (rfif.wsel != 0)) begin
+			registers[rfif.wsel] <= rfif.wdat;
+		end
 
-	if (nRST == 0) begin
-		registers[31:0] <= '0;
 	end
-	else if(rfif.WEN & rfif.wsel != 0) begin
-		registers[rfif.wsel] <= rfif.wdat;
+
+	//32 muxes
+	always_comb begin
+
+		rfif.rdat1 = registers[rfif.rsel1];
+		rfif.rdat2 = registers[rfif.rsel2];
+
 	end
-
-end
-
-//32 muxes
-always_comb begin
-
-	rfif.rdat1 = registers[rfif.rsel1];
-	rfif.rdat2 = registers[rfif.rsel2];
-
-end
 
 endmodule

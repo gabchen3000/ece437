@@ -29,10 +29,11 @@ assign ccif.ramWEN = ccif.dWEN;
 assign ccif.ramstore = ccif.dstore;
 assign ccif.dload = ccif.ramload;
 
-assign ccif.iload = (ccif.iREN == 1) ? ccif.ramload : 0;
+assign ccif.iload = ccif.ramload;
 
 //ramaddr will either be iaddr or daddr deepending on iren, dren and dwen
 always_comb begin
+	ccif.ramaddr = 0;
 	if (ccif.dWEN || ccif.dREN) begin
 		ccif.ramaddr = ccif.daddr;
 	end

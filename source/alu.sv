@@ -52,7 +52,7 @@ end
 //sub overflow: (diff most sig bit of A and B) LOGICALAND (diff most sig bit of A and OUT)
 //& bitwise and, && logical and
 always_comb begin
-	aif.OUT = '0;
+	aif.OUT = 0;
 	aif.OVERFLOW = 0;
 
 	casez (aif.ALUOP)

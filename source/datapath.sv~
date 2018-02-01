@@ -84,7 +84,7 @@ module datapath (
 	assign cuif.imemload = dpif.imemload;
 	
 	//Cache inputs
-	always_ff @(posedge CLK, negedge nRST) begin	
+	always_ff (posedge CLK, negedge nRST) begin	
 		if (nRST == 0) begin
   		dpif.halt <= 0;
 		end
