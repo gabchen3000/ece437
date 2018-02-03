@@ -1,0 +1,31 @@
+/*
+	program counter interface file
+	takes in 
+	gives out dmemWEN, and dmemREN to Cache
+*/
+
+`ifndef PROGRAM_COUNTER_IF_VH
+`define PROGRAM_COUNTER_IF_VH
+`include "cpu_types_pkg.vh"
+
+interface request_unit_if;
+
+  // import types
+  import cpu_types_pkg::*;
+	//Look at file description for input/output
+	logic				dWEN, dREN, ihit, dhit, dmemWEN, dmemREN;
+
+	// request unit ports to control unit and cache
+	modport ru(
+		input		dWEN, dREN, ihit, dhit,
+		output	dmemWEN, dmemREN
+	);
+
+	modport rutb(
+		input		dmemWEN, dmemREN,
+		output	dWEN, dREN, ihit, dhit
+	);
+
+endinterface
+
+`endif  //REQUEST_UNIT_IF_VH

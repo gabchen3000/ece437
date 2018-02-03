@@ -32,7 +32,7 @@ module caches (
   //dcache  DCACHE(dcif, cif);
 
   // single cycle instr saver (for memory ops)
-  always_ff @(posedge CLK, negedge nRST)
+  always_ff @(posedge CLK)
   begin
     if (!nRST)
     begin

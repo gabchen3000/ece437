@@ -213,7 +213,7 @@ module control_unit (
 								cuif.ExtOp = 1;
 								cuif.ALUSrc = 1;
 								cuif.MemtoReg = 1;
-								cuif.RegWr = 1;
+								cuif.RegWr = cuif.dhit ? 1 : 0;
 								cuif.dREN = 1;
 				end
 

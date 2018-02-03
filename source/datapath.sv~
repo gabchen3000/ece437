@@ -67,7 +67,18 @@ module datapath (
 	assign rfif.wsel = (cuif.RegDest == 0) ? dpif.imemload[20:16] : (cuif.RegDest == 1) ? dpif.imemload[15:11] : 5'b11111;
 	//write data between LUI(imm:16b'0), JAL(npc), memtoreg[LW](dmemload), else ALUOUT
 	assign rfif.wdat = (cuif.lui) ? {imm, 16'b0} : (cuif.jal) ? pcif.npc : (cuif.MemtoReg) ? dpif.dmemload : aif.OUT;
-	assign rfif.WEN = cuif.RegWr;
+
+	always_comb begin
+		if (cuif.RegWr) begin
+			if (dpif.imemload[31:26] == LW && dpif.dhit) begin
+				rfif.WEN = 1;
+			end
+			else begin
+				rfif.WEN = cuif.RegWr;// && dpif.ihit;
+			end
+		end	
+	end
+
 
 	//ALU inputs
 	assign aif.ALUOP = cuif.ALUOP;
@@ -84,7 +95,7 @@ module datapath (
 	assign cuif.imemload = dpif.imemload;
 	
 	//Cache inputs
-	always_ff (posedge CLK, negedge nRST) begin	
+	always_ff @(posedge CLK, negedge nRST) begin	
 		if (nRST == 0) begin
   		dpif.halt <= 0;
 		end

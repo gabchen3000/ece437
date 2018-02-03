@@ -27,9 +27,9 @@ module memory_control (
 //dload will always be ramload
 assign ccif.ramWEN = ccif.dWEN;
 assign ccif.ramstore = ccif.dstore;
-assign ccif.dload = ccif.ramload;
-
-assign ccif.iload = ccif.ramload;
+//assign ccif.dload = ccif.ramload;
+assign ccif.ramREN = ccif.dREN || (ccif.iREN && !ccif.dWEN && !ccif.dREN);
+//assign ccif.iload = ccif.ramload;
 
 //ramaddr will either be iaddr or daddr deepending on iren, dren and dwen
 always_comb begin
@@ -37,13 +37,13 @@ always_comb begin
 	if (ccif.dWEN || ccif.dREN) begin
 		ccif.ramaddr = ccif.daddr;
 	end
-	else if (ccif.iREN) begin
+	else begin
 		ccif.ramaddr = ccif.iaddr;
 	end
 end
 
 //set ramren to 1 if either dREN is asserted or (iREN && !dWEN)
-always_comb begin
+/*always_comb begin
 	ccif.ramREN = 0;
 	if (ccif.dREN || (ccif.iREN == 1 && ccif.dWEN == 0)) begin
 		ccif.ramREN = 1;
@@ -51,19 +51,26 @@ always_comb begin
 	else begin
 		ccif.ramREN = 0;
 	end
-end
+end*/
 
 //deal with dwait and iwait, load data from ram when ramstate = ACCESS
 
 always_comb begin
 	ccif.dwait = 1;
 	ccif.iwait = 1;
+	ccif.dload = 0;
+	ccif.iload = 0;
 	if (ccif.ramstate == ACCESS) begin
-		if (ccif.iREN && (!ccif.dWEN && !ccif.dREN)) begin
-			ccif.iwait = 0;
-		end
-		else if (ccif.dREN || ccif.dWEN) begin
+		if (ccif.dWEN) begin
 			ccif.dwait = 0;
+		end
+		else if (ccif.dREN) begin
+			ccif.dwait = 0;
+			ccif.dload = ccif.ramload;
+		end
+		else begin
+			ccif.iwait = 0;
+			ccif.iload = ccif.ramload;
 		end
 	end
 end

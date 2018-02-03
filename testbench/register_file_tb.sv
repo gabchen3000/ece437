@@ -66,6 +66,7 @@ program test(
 		@(posedge CLK);
 		nRST = 1;
 		rfiftb.WEN = 1;
+		@(posedge CLK);
 		rfiftb.wsel = 5'd20;
 		rfiftb.wdat = 1'd1;
 		rfiftb.rsel1 = 5'd20;
