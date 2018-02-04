@@ -2,12 +2,12 @@
   Eric Villasenor
   evillase@gmail.com
 
-  single cycle top block
+  pipeline top block
   holds data path components
   and cache level
 */
 
-module singlecycle (
+module pipeline (
   input logic CLK, nRST,
   output logic halt,
   cpu_ram_if.cpu scif
@@ -26,11 +26,7 @@ parameter PC0 = 0;
   // map datapath
   datapath #(.PC_INIT(PC0)) DP (CLK, nRST, dcif);
   // map caches
-<<<<<<< HEAD
-  caches #(.CPUID(0))       CM (CLK, nRST, dcif, cif0);
-=======
   caches                    CM (CLK, nRST, dcif, cif0);
->>>>>>> 1bf2fd8162c5e77a677bfc6a4b5f9552d17fa488
   // map coherence
   memory_control            CC (CLK, nRST, ccif);
 
