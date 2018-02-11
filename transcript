@@ -1,3 +1,6 @@
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 17:56:30 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
 # //
@@ -8,9 +11,6 @@
 # //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
 # //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
 # //
-# vsim -do "view objects; do scripts/system.do; run -all;" -onfinish stop -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
-# Start time: 16:47:14 on Feb 11,2018
-# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # Loading sv_std.std
 # Loading work.system_tb
 # Loading work.cpu_types_pkg
@@ -50,15 +50,10 @@
 # Loading altera_mf_ver.altsyncram_body
 # Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
 # Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
-# view objects
-# .main_pane.objects.interior.cs.body.tree
-#  do scripts/system.do
-# ** Error: (vish-4014) No objects found matching '/system_tb/DUT/CPU/DP/IFflushed'.
-# Executing ONERROR command at macro ./scripts/system.do line 46
-#  run -all
+# run -all
 # Starting Processor.
-# Halted at 1760 time and ran for         87 cycles.
+# Halted at 680 time and ran for         33 cycles.
 # Starting memory dump.
 # Finished memory dump.
-# Break in Module test at testbench/system_tb.sv line 122
-# 
+# End time: 17:56:30 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
