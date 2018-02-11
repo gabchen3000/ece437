@@ -37,6 +37,30 @@ always_ff @(posedge CLK, negedge nRST) begin
 		idex_if.idex_op_RegDest <= '0;
 		idex_if.idex_op_ALUSrc <= '0;
 	end
+	else if (idex_if.idex_ip_dopause) begin
+		idex_if.idex_op_npc <= '0;
+		idex_if.idex_op_imemload <= '0;
+		idex_if.idex_op_dREN <= '0;
+ 		idex_if.idex_op_dWEN <= '0;
+		idex_if.idex_op_RegWr <= '0;
+ 		idex_if.idex_op_MemtoReg <= '0;
+	 	idex_if.idex_op_jal <= '0;
+		idex_if.idex_op_jr <= '0;
+	 	idex_if.idex_op_halt <= '0;
+		idex_if.idex_op_lui <= '0;
+		idex_if.idex_op_imemREN <= '0;
+		idex_if.idex_op_branch <= '0;
+	 	idex_if.idex_op_jump <= '0;
+	 	idex_if.idex_op_bne <= '0;
+		idex_if.idex_op_beq <= '0;
+		idex_if.idex_op_ext <= '0;
+	 	idex_if.idex_op_rdat1 <= '0;
+	 	idex_if.idex_op_rdat2 <= '0;
+	 	idex_if.idex_op_shamt <= '0;
+		idex_if.idex_op_RegDest <= '0;
+		idex_if.idex_op_ALUSrc <= '0;
+		idex_if.idex_op_ALUOP[3:0] <= '0;
+	end
 	// if doflush then set to 0
 	else if (idex_if.idex_ip_doflush) begin
 		idex_if.idex_op_npc <= '0;

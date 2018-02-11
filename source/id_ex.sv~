@@ -11,6 +11,29 @@ module id_ex (
 // import types
   import cpu_types_pkg::*;
 
+		idex_if.idex_ip_npc_cur
+		idex_if.idex_ip_imemload_cur
+		idex_if.idex_ip_dREN_cur;
+ 		idex_if.idex_ip_dWEN_cur;
+		idex_if.idex_ip_RegWr_cur;
+ 		idex_if.idex_ip_MemtoReg_cur;
+	 	idex_if.idex_ip_jal_cur;
+		idex_if.idex_ip_jr_cur;
+	 	idex_if.idex_ip_halt_cur;
+		idex_if.idex_ip_lui_cur;
+		idex_if.idex_ip_imemREN_cur;
+		idex_if.idex_ip_branch_cur;
+	 	idex_if.idex_ip_jump_cur;
+	 	idex_if.idex_ip_bne_cur;
+		idex_if.idex_ip_beq_cur;
+		idex_if.idex_ip_ext_cur;
+	 	idex_if.idex_ip_rdat1_cur;
+	 	idex_if.idex_ip_rdat2_cur;
+	 	idex_if.idex_ip_shamt_cur;
+		idex_if.idex_ip_RegDest_cur;
+		idex_if.idex_ip_ALUSrc_cur;
+		idex_if.idex_ip_ALUOP_cur;
+
 always_ff @(posedge CLK, negedge nRST) begin
 
 	// if reset then set to 0
@@ -36,6 +59,30 @@ always_ff @(posedge CLK, negedge nRST) begin
 	 	idex_if.idex_op_shamt <= '0;
 		idex_if.idex_op_RegDest <= '0;
 		idex_if.idex_op_ALUSrc <= '0;
+	end
+	else if (idex_if.idex_ip_dopause) begin
+		idex_if.idex_op_npc <= '0;
+		idex_if.idex_op_imemload <= '0;
+		idex_if.idex_op_dREN <= '0;
+ 		idex_if.idex_op_dWEN <= '0;
+		idex_if.idex_op_RegWr <= '0;
+ 		idex_if.idex_op_MemtoReg <= '0;
+	 	idex_if.idex_op_jal <= '0;
+		idex_if.idex_op_jr <= '0;
+	 	idex_if.idex_op_halt <= '0;
+		idex_if.idex_op_lui <= '0;
+		idex_if.idex_op_imemREN <= '0;
+		idex_if.idex_op_branch <= '0;
+	 	idex_if.idex_op_jump <= '0;
+	 	idex_if.idex_op_bne <= '0;
+		idex_if.idex_op_beq <= '0;
+		idex_if.idex_op_ext <= '0;
+	 	idex_if.idex_op_rdat1 <= '0;
+	 	idex_if.idex_op_rdat2 <= '0;
+	 	idex_if.idex_op_shamt <= '0;
+		idex_if.idex_op_RegDest <= '0;
+		idex_if.idex_op_ALUSrc <= '0;
+		idex_if.idex_op_ALUOP[3:0] <= '0;
 	end
 	// if doflush then set to 0
 	else if (idex_if.idex_ip_doflush) begin
@@ -63,8 +110,7 @@ always_ff @(posedge CLK, negedge nRST) begin
 		idex_if.idex_op_ALUOP[3:0] <= '0;
 	end
 	//	if opcode is not LW and not SW then wait for ihit to update
-	else if ((idex_if.idex_ip_imemload[31:26] != SW && idex_if.idex_ip_imemload[31:26] != LW) 
-						&& (idex_if.idex_ip_ihit)) begin
+	else if (idex_if.idex_ip_ihit) begin
 		idex_if.idex_op_npc 			<= 		idex_if.idex_ip_npc;
 		idex_if.idex_op_imemload 	<=		idex_if.idex_ip_imemload;
 		idex_if.idex_op_dREN 			<= 		idex_if.idex_ip_dREN;
@@ -89,7 +135,7 @@ always_ff @(posedge CLK, negedge nRST) begin
 		idex_if.idex_op_ALUOP 		<= 		idex_if.idex_ip_ALUOP;
 	end
 	//	if opcode is LW or SW then wait for dhit to update
-	else if ((idex_if.idex_ip_imemload[31:26] == SW || idex_if.idex_ip_imemload[31:26] == LW) 
+	/*else if ((idex_if.idex_ip_imemload[31:26] == SW || idex_if.idex_ip_imemload[31:26] == LW) 
 						&& (idex_if.idex_ip_dhit)) begin
 		idex_if.idex_op_npc 			<= 		idex_if.idex_ip_npc;
 		idex_if.idex_op_imemload 	<=		idex_if.idex_ip_imemload;
@@ -113,7 +159,7 @@ always_ff @(posedge CLK, negedge nRST) begin
 		idex_if.idex_op_RegDest 	<= 		idex_if.idex_ip_RegDest;
 		idex_if.idex_op_ALUSrc 		<= 		idex_if.idex_ip_ALUSrc;
 		idex_if.idex_op_ALUOP 		<= 		idex_if.idex_ip_ALUOP;
-	end
+	end*/
 	//	else just keep things same as before
 	else	begin
 		idex_if.idex_op_npc 			<= 		idex_if.idex_op_npc;

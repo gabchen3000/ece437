@@ -1,0 +1,33 @@
+/*
+	hazard unit interface file
+	takes in IFimemload[25:21](rs), IFimemload[20:16](rt), MEMwsel, WBwsel, MEMRegWr, WBRegWr from datapath, 
+	gives out fowardselA, forwardselB to datapath in the EX stage
+*/
+
+`ifndef HAZARD_UNIT_IF_VH
+`define HAZARD_UNIT_IF_VH
+`include "cpu_types_pkg.vh"
+
+interface hazard_unit_if;
+
+  // import types
+  import cpu_types_pkg::*;
+	//Look at file description for input/output
+	regbits_t		WBwsel, MEMwsel, rs, rt;
+	logic				MEMRegWr, WBRegWr, IFdopause, IDdopause;
+	logic [1:0]	PCSrc;
+
+	// request unit ports to control unit and cache
+	modport hu(
+		input		WBwsel, MEMwsel, rs, rt, MEMRegWr, WBRegWr, PCSrc,
+		output	IFdopause, IDdopause
+	);
+
+	modport hutb(
+		input		IFdopause, IDdopause,
+		output	WBwsel, MEMwsel, rs, rt, MEMRegWr, WBRegWr, PCSrc
+	);
+
+endinterface
+
+`endif  //HAZARD_UNIT_IF_VH

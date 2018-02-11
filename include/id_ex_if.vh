@@ -11,7 +11,7 @@ interface id_ex_if;
   //inputs
 	
 	//common/general
-	logic idex_ip_doflush, idex_ip_ihit, idex_ip_dhit;
+	logic idex_ip_doflush, idex_ip_ihit, idex_ip_dhit, idex_ip_dopause;
 	word_t idex_ip_imemload, idex_ip_npc;
 	
 	//from control unit
@@ -41,7 +41,7 @@ interface id_ex_if;
 	
   // id ex latch ports
   modport a2 (
-    input   idex_ip_doflush, idex_ip_ihit, idex_ip_dhit,
+    input   idex_ip_doflush, idex_ip_ihit, idex_ip_dhit, idex_ip_dopause,
 						idex_ip_imemload, idex_ip_npc,
 						idex_ip_dREN, idex_ip_dWEN, idex_ip_RegWr, 		idex_ip_MemtoReg, idex_ip_jal, idex_ip_jr, idex_ip_halt, idex_ip_lui, idex_ip_imemREN, idex_ip_branch, idex_ip_jump, idex_ip_bne, idex_ip_beq,
 						idex_ip_ext, idex_ip_rdat1, idex_ip_rdat2, idex_ip_shamt, idex_ip_RegDest, idex_ip_ALUSrc, idex_ip_ALUOP,

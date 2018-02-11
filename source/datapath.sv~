@@ -37,6 +37,8 @@ module datapath (
 	id_ex_if ieif();
 	ex_mem_if emif();
 	mem_wb_if mwif();
+	hazard_unit_if huif();
+	//forwarding_unit_if fuif();
 	
 	//DUT
 	control_unit CU (cuif);
@@ -48,6 +50,8 @@ module datapath (
 	id_ex	IE (CLK, nRST, ieif);
 	ex_mem EM (CLK, nRST, emif);
 	mem_wb MW (CLK, nRST, mwif);
+	hazard_unit HU (huif);
+	//forwarding_unit FU (fuif);
 
 /* Single cycle signals
 	logic					branchAND;//, branchlogic;
@@ -61,7 +65,6 @@ module datapath (
 	logic [1:0]		PCSrc;
 	//signals in IF stage
 	word_t				IFnpc, IFimemload;
-	logic					IFflushed;
 	//signals in ID stage
 	r_t 					ID_r_type;
 	i_t 					ID_i_type;
@@ -75,7 +78,7 @@ module datapath (
 	i_t 					EX_i_type;
 	j_t						EX_j_type;
 	word_t				EXnpc, EXimemload, EXrdat1, EXrdat2, EXext, EXshamt, EXALU_OUT, EXbranchaddr;
-	logic					EXjump, EXjr, EXbne, EXbeq, EXbranch, EXhalt, EXimemREN, EXdWEN, EXdREN, EXjal, EXlui, EXMemtoReg, EXRegWr, EXZERO;
+	logic					EXflushed, EXjump, EXjr, EXbne, EXbeq, EXbranch, EXhalt, EXimemREN, EXdWEN, EXdREN, EXjal, EXlui, EXMemtoReg, EXRegWr, EXZERO;
 	logic [1:0]		EXALUSrc, EXRegDest;
 	aluop_t				EXALUOP;
 	regbits_t			EXwsel;
@@ -97,11 +100,12 @@ module datapath (
 	
 	//linking the register signals to datapath signals
 	//IF signals
-	assign iiif.ifid_ip_doflush = IFflushed;
 	assign iiif.ifid_ip_npc = IFnpc;
 	assign iiif.ifid_ip_imemload = IFimemload;
 	assign iiif.ifid_ip_ihit = dpif.ihit;
 	assign iiif.ifid_ip_dhit = dpif.dhit;
+	assign iiif.ifid_ip_dopause = huif.IFdopause;
+	assign iiif.idex_ip_dopause = huif.IDdopause;
 
 	//ID signals
 	assign IDnpc = iiif.ifid_op_npc;
@@ -135,6 +139,7 @@ module datapath (
 	assign ieif.idex_ip_ALUOP = IDALUOP;	
 	assign ieif.idex_ip_RegDest = IDRegDest;
 	assign ieif.idex_ip_ALUSrc = IDALUSrc;	
+	assign ieif.idex_ip_dopause = huif.IDdopause;
 
 	//EX signals
 	assign EXimemload = ieif.idex_op_imemload;
@@ -163,6 +168,7 @@ module datapath (
 	assign EX_i_type = i_t'(EXimemload);
 	assign EX_j_type = j_t'(EXimemload);
 
+	assign emif.exmem_ip_doflush = EXflushed;
 	assign emif.exmem_ip_ihit = dpif.ihit;
 	assign emif.exmem_ip_dhit = dpif.dhit;
   assign emif.exmem_ip_npc = EXnpc;
@@ -251,9 +257,10 @@ module datapath (
 	assign pcif.next_pc = (PCSrc == 0) ? MEMrdat1 : (PCSrc == 1) ? (MEMjumpaddr) : (PCSrc == 2) ? (MEMbranchaddr) : IFnpc;
 	assign pcif.ihit = dpif.ihit;
 	assign IFnpc = pcif.cur_pc + 4;
-	assign IFflushed = (PCSrc == 3) ? 0 : 1;
 	assign IFimemload = dpif.imemload;
 	assign dpif.imemaddr = pcif.cur_pc;
+	assign pcif.IFdopause = huif.IFdopause;
+	assign pcif.IDdopause = huif.IDdopause;
 
 	/*
 	//Control unit inputs
@@ -289,6 +296,9 @@ module datapath (
 	assign rfif.wsel = WBwsel;
 	assign rfif.wdat = WBwdat;
 
+
+	assign rfif.WEN = WBRegWr;
+/*
 	always_comb begin
 		if (cuif.RegWr) begin
 			if (IDimemload[31:26] == LW && WBdhit) begin
@@ -301,7 +311,7 @@ module datapath (
 		else begin
 			rfif.WEN = 0;
 		end
-	end
+	end*/
 
 	assign IDrdat1 = rfif.rdat1;
 	assign IDrdat2 = rfif.rdat2;
@@ -349,6 +359,7 @@ module datapath (
 	assign EXwsel = (EXRegDest == 0) ? EXimemload[20:16] : (EXRegDest == 1) ? EXimemload[15:11] : 5'b11111;
 
 	assign EXbranchaddr = EXnpc + (EXext << 2);
+	assign EXflushed = (PCSrc == 3) ? 0 : 1;
 	
 
 /*
@@ -411,5 +422,14 @@ module datapath (
 	assign WBwdatsel = (WBjal) ? 3 : (WBlui) ? 2 : (WBMemtoReg) ? 0 : 1;
 	assign WBwdat = (WBwdatsel == 0) ? WBdmemload : (WBwdatsel == 1) ? WBALU_OUT : (WBwdatsel == 2) ? {WBimemload[15:0], 16'b0} : WBnpc;
 
+	//Hazard unit
+	assign huif.EXwsel = EXwsel;
+	assign huif.MEMwsel = MEMwsel;
+	assign huif.rs = IDimemload[25:21];
+	assign huif.rt = IDimemload[20:16];
+	assign huif.MEMRegWr = MEMRegWr;
+	assign huif.EXRegWr = EXRegWr;
+	assign huif.PCSrc = PCSrc;
+	assign huif.ihit = dpif.ihit;
 
 endmodule

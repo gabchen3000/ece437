@@ -11,7 +11,7 @@ interface ex_mem_if;
   //inputs
 
   //common/general
-  logic exmem_ip_ihit, exmem_ip_dhit;
+  logic exmem_ip_doflush, exmem_ip_ihit, exmem_ip_dhit;
   word_t exmem_ip_npc, exmem_ip_imemload, exmem_ip_branchaddr;
 
   //from control unit
@@ -40,7 +40,7 @@ interface ex_mem_if;
 
   // id ex latch ports
   modport a3 (
-    input exmem_ip_ihit, exmem_ip_dhit,
+    input exmem_ip_doflush, exmem_ip_ihit, exmem_ip_dhit,
           exmem_ip_npc, exmem_ip_imemload, exmem_ip_branchaddr,
           exmem_ip_dREN, exmem_ip_dWEN, exmem_ip_RegWr, exmem_ip_MemtoReg,
           exmem_ip_jal, exmem_ip_jr, exmem_ip_halt, exmem_ip_lui, exmem_ip_imemREN,

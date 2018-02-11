@@ -23,9 +23,17 @@ always_ff @(posedge CLK, negedge nRST) begin
 		ifid_if.ifid_op_imemload <= '0;
 	end
 	// if doflush then set to 0
-	else if (ifid_if.ifid_ip_doflush) begin
+	/*else if (ifid_if.ifid_ip_doflush) begin
 		ifid_if.ifid_op_npc <= '0;
 		ifid_if.ifid_op_imemload <= '0;
+	end*/
+	else if (ifid_if.ifid_ip_dopause) begin
+		ifid_if.ifid_op_npc <= '0;
+		ifid_if.ifid_op_imemload <= '0;
+	end
+	else if (ifid_if.idex_ip_dopause) begin
+		ifid_if.ifid_op_npc <= ifid_if.ifid_op_npc;
+		ifid_if.ifid_op_imemload <= ifid_if.ifid_op_imemload;
 	end
 	//	if opcode is not LW and not SW then wait for ihit to update
 	else if (ifid_if.ifid_ip_ihit) begin

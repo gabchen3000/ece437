@@ -35,6 +35,27 @@ always_ff @(posedge CLK, negedge nRST) begin
     exmem_if.exmem_op_ZERO        <=  '0;
     exmem_if.exmem_op_wsel        <=  '0;
   end
+	else if (exmem_if.exmem_ip_doflush && exmem_if.exmem_ip_ihit) begin
+    exmem_if.exmem_op_npc         <=  '0;
+    exmem_if.exmem_op_imemload    <=  '0;
+    exmem_if.exmem_op_branchaddr  <=  '0;
+    exmem_if.exmem_op_RegWr       <=  '0;
+    exmem_if.exmem_op_MemtoReg    <=  '0;
+    exmem_if.exmem_op_jal         <=  '0;
+    exmem_if.exmem_op_jr          <=  '0;
+    exmem_if.exmem_op_halt        <=  '0;
+    exmem_if.exmem_op_lui         <=  '0;
+    exmem_if.exmem_op_imemREN     <=  '0;
+    exmem_if.exmem_op_branch      <=  '0;
+    exmem_if.exmem_op_jump        <=  '0;
+    exmem_if.exmem_op_bne         <=  '0;
+    exmem_if.exmem_op_beq         <=  '0;
+    exmem_if.exmem_op_rdat1       <=  '0;
+    exmem_if.exmem_op_rdat2       <=  '0;
+    exmem_if.exmem_op_ALUOUT      <=  '0;
+    exmem_if.exmem_op_ZERO        <=  '0;
+    exmem_if.exmem_op_wsel        <=  '0;
+	end
   //  if opcode is not LW and not SW then wait for ihit to update
   else if (exmem_if.exmem_ip_ihit) begin
     exmem_if.exmem_op_npc         <=    exmem_if.exmem_ip_npc;

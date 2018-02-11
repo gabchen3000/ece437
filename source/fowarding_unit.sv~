@@ -1,15 +1,15 @@
 /*
-request unit module
+fowarding unit module
 */
 
 // interface include
-`include "request_unit_if.vh"
+`include "forwarding_unit_if.vh"
 // memory types
 `include "cpu_types_pkg.vh"
 
-module request_unit (
+module forwarding_unit (
   input logic CLK, nRST,
-  request_unit_if.ru ruif
+  forwarding_unit_if.ru fuif
 );
 
 always_ff @(posedge CLK, negedge nRST) begin

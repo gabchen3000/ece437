@@ -4,7 +4,7 @@
 // all types
 `include "cpu_types_pkg.vh"
 
-interface exmem_if;
+interface ex_mem_if;
   // import types
   import cpu_types_pkg::*;
 
