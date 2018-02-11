@@ -23,7 +23,7 @@ module program_counter (
 			pcif.cur_pc <= 0;
 		end
 		else if (pcif.IDdopause || pcif.IFdopause) begin
-			pcif.cur_pc <= 0;
+			pcif.cur_pc <= pcif.cur_pc;
 		end
 		else if (pcif.ihit) begin
 			pcif.cur_pc <= pcif.next_pc;

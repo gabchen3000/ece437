@@ -1,17 +1,8 @@
-processing file asmFiles/test2.asm (1 of 8)
---- memsim.hex	2018-02-08 15:00:53.577584607 -0500
-+++ memcpu.hex	2018-02-08 15:00:53.559584091 -0500
-@@ -7,7 +7,6 @@
- :040006008C2500083D
- :04000700AC450008FC
- :04000800FFFFFFFFF8
--:040022000000133790
- :04003C000000733716
- :04003D000000270197
- :04003E000000133774
-processing file asmFiles/test2.asm~ (2 of 8)
---- memsim.hex	2018-02-08 15:00:54.721617424 -0500
-+++ memcpu.hex	2018-02-08 15:00:54.709617080 -0500
+processing file asmFiles/test2.asm (1 of 9)
+processing file asmFiles/test2.asm (1 of 9)
+processing file asmFiles/test2.asm~ (2 of 9)
+--- memsim.hex	2018-02-11 16:45:21.462837419 -0500
++++ memcpu.hex	2018-02-11 16:45:21.450837075 -0500
 @@ -13,7 +13,7 @@
  :040020000000733732
  :0400210000002701B3
@@ -21,29 +12,38 @@ processing file asmFiles/test2.asm~ (2 of 8)
  :04003C000000733716
  :04003D000000270197
  :04003E000000133774
-processing file asmFiles/test.branchjump1.asm (3 of 8)
---- memsim.hex	2018-02-08 15:00:55.830649236 -0500
-+++ memcpu.hex	2018-02-08 15:00:55.818648892 -0500
-@@ -1,4 +1,4 @@
+processing file asmFiles/test.branchjump1.asm (3 of 9)
+--- memsim.hex	2018-02-11 16:45:22.622870714 -0500
++++ memcpu.hex	2018-02-11 16:45:22.610870369 -0500
+@@ -1,4 +1,3 @@
 -:040000003401BA5CB1
-+:040000000000BA5CE6
  :040001003402008045
  :04000200340F003483
  :0400030010000001E8
-@@ -13,6 +13,7 @@
+@@ -13,6 +12,5 @@
  :04000C00AC41000CF7
  :04000D0017E3FFF9FD
  :04000E00FFFFFFFFF2
-+:040021000000BA5CC5
- :0400220000000018C2
+-:0400220000000018C2
 -:0400240000000030A8
-+:040023000000BA5CC3
++:040021000000BA5CC5
  :00000001FF
-processing file asmFiles/test.ldst1.asm (4 of 8)
-processing file asmFiles/test.ldst2.asm (5 of 8)
-processing file asmFiles/test.ldst2.asm~ (6 of 8)
---- memsim.hex	2018-02-08 15:00:59.121743641 -0500
-+++ memcpu.hex	2018-02-08 15:00:59.109743298 -0500
+processing file asmFiles/test.branchjump1.asm~ (4 of 9)
+--- memsim.hex	2018-02-11 16:45:23.782904008 -0500
++++ memcpu.hex	2018-02-11 16:45:23.768903605 -0500
+@@ -13,6 +13,5 @@
+ :04000F00AC41000CF4
+ :0400100017E3FFF8FB
+ :04001200FFFFFFFFEE
+-:040022000000001CBE
+-:0400240000000038A0
++:040024000000001CBC
+ :00000001FF
+processing file asmFiles/test.ldst1.asm (5 of 9)
+processing file asmFiles/test.ldst2.asm (6 of 9)
+processing file asmFiles/test.ldst2.asm~ (7 of 9)
+--- memsim.hex	2018-02-11 16:45:27.175001365 -0500
++++ memcpu.hex	2018-02-11 16:45:27.161000963 -0500
 @@ -13,7 +13,7 @@
  :040200000000733750
  :0402010000002701D1
@@ -53,9 +53,9 @@ processing file asmFiles/test.ldst2.asm~ (6 of 8)
  :0403C000000073378F
  :0403C1000000270110
  :0403C20000001337ED
-processing file asmFiles/test.loadstore.asm (7 of 8)
---- memsim.hex	2018-02-08 15:01:00.220775166 -0500
-+++ memcpu.hex	2018-02-08 15:01:00.207774793 -0500
+processing file asmFiles/test.loadstore.asm (8 of 9)
+--- memsim.hex	2018-02-11 16:45:28.348035035 -0500
++++ memcpu.hex	2018-02-11 16:45:28.336034687 -0500
 @@ -13,7 +13,7 @@
  :040020000000733732
  :0400210000002701B3
@@ -65,9 +65,61 @@ processing file asmFiles/test.loadstore.asm (7 of 8)
  :04003C000000733716
  :04003D000000270197
  :04003E000000133774
-processing file asmFiles/test.rtype.asm (8 of 8)
---- memsim.hex	2018-02-08 15:01:01.247804627 -0500
-+++ memcpu.hex	2018-02-08 15:01:01.234804248 -0500
+processing file asmFiles/test.rtype.asm (9 of 9)
+--- memsim.hex	2018-02-11 16:45:29.438066318 -0500
++++ memcpu.hex	2018-02-11 16:45:29.425065946 -0500
+@@ -25,15 +25,14 @@
+ :04001800AEAB00206B
+ :04001900AEAC002465
+ :04001A00FFFFFFFFE6
+-:040020000000F7F9EC
++:040020000000D269A1
+ :040021000000126168
+ :0400220000000009D1
+ :0400230000010A5A74
+-:0400240000007F3920
++:04002400000059A9D6
+ :04002500FFFFDA708F
+ :04002600000037F8A7
+ :04002700000021565E
+ :04002800000D269011
+ :04002900000006933A
+-:04003C00FFFF0806B4
+ :00000001FF
+processing file asmFiles/test2.asm (1 of 6)
+processing file asmFiles/test.branchjump1.asm (2 of 6)
+--- memsim.hex	2018-02-11 16:46:57.420591548 -0500
++++ memcpu.hex	2018-02-11 16:46:57.406591141 -0500
+@@ -1,4 +1,3 @@
+-:040000003401BA5CB1
+ :040001003402008045
+ :04000200340F003483
+ :0400030010000001E8
+@@ -13,6 +12,5 @@
+ :04000C00AC41000CF7
+ :04000D0017E3FFF9FD
+ :04000E00FFFFFFFFF2
+-:0400220000000018C2
+-:0400240000000030A8
++:040021000000BA5CC5
+ :00000001FF
+processing file asmFiles/test.ldst1.asm (3 of 6)
+processing file asmFiles/test.ldst2.asm (4 of 6)
+processing file asmFiles/test.loadstore.asm (5 of 6)
+--- memsim.hex	2018-02-11 16:47:00.910691719 -0500
++++ memcpu.hex	2018-02-11 16:47:00.898691375 -0500
+@@ -13,7 +13,7 @@
+ :040020000000733732
+ :0400210000002701B3
+ :040022000000133790
+-:04002300DEADBEEFA1
++:040023000000BEEF2C
+ :04003C000000733716
+ :04003D000000270197
+ :04003E000000133774
+processing file asmFiles/test.rtype.asm (6 of 6)
+--- memsim.hex	2018-02-11 16:47:02.074725129 -0500
++++ memcpu.hex	2018-02-11 16:47:02.061724755 -0500
 @@ -25,15 +25,14 @@
  :04001800AEAB00206B
  :04001900AEAC002465

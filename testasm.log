@@ -1,0 +1,1221 @@
+processing file asmFiles/test2.asm (1 of 9)
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/datapath.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 16:37:09 on Feb 11,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/datapath.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface datapath_cache_if
+-- Importing package cpu_types_pkg
+-- Compiling interface control_unit_if
+-- Compiling interface program_counter_if
+-- Compiling interface alu_if
+-- Compiling interface register_file_if
+-- Compiling interface request_unit_if
+-- Compiling module datapath
+
+Top level modules:
+	datapath
+End time: 16:37:09 on Feb 11,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/hazard_unit.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 16:37:09 on Feb 11,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/hazard_unit.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface hazard_unit_if
+-- Importing package cpu_types_pkg
+-- Compiling module hazard_unit
+
+Top level modules:
+	hazard_unit
+End time: 16:37:09 on Feb 11,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/program_counter.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 16:37:09 on Feb 11,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/program_counter.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface program_counter_if
+-- Importing package cpu_types_pkg
+-- Compiling module program_counter
+
+Top level modules:
+	program_counter
+End time: 16:37:09 on Feb 11,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:37:10 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Break key hit
+# Simulation stop requested.
+# Stopped at source/caches.sv line 33
+#  exit
+# End time: 16:38:01 on Feb 11,2018, Elapsed time: 0:00:51
+# Errors: 0, Warnings: 1
+processing file asmFiles/test2.asm (1 of 9)
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/program_counter.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 16:45:18 on Feb 11,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/program_counter.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface program_counter_if
+-- Importing package cpu_types_pkg
+-- Compiling module program_counter
+
+Top level modules:
+	program_counter
+End time: 16:45:19 on Feb 11,2018, Elapsed time: 0:00:01
+Errors: 0, Warnings: 0
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:45:19 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 840 time and ran for         41 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:45:20 on Feb 11,2018, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 1
+9 instructions
+processing file asmFiles/test2.asm~ (2 of 9)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:45:21 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 1000 time and ran for         49 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:45:21 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+12 instructions
+--- memsim.hex	2018-02-11 16:45:21.462837419 -0500
++++ memcpu.hex	2018-02-11 16:45:21.450837075 -0500
+@@ -13,7 +13,7 @@
+ :040020000000733732
+ :0400210000002701B3
+ :040022000000133790
+-:04002300DEADBEEFA1
++:040023000000BEEF2C
+ :04003C000000733716
+ :04003D000000270197
+ :04003E000000133774
+processing file asmFiles/test.branchjump1.asm (3 of 9)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:45:22 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 680 time and ran for         33 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:45:22 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+11 instructions
+--- memsim.hex	2018-02-11 16:45:22.622870714 -0500
++++ memcpu.hex	2018-02-11 16:45:22.610870369 -0500
+@@ -1,4 +1,3 @@
+-:040000003401BA5CB1
+ :040001003402008045
+ :04000200340F003483
+ :0400030010000001E8
+@@ -13,6 +12,5 @@
+ :04000C00AC41000CF7
+ :04000D0017E3FFF9FD
+ :04000E00FFFFFFFFF2
+-:0400220000000018C2
+-:0400240000000030A8
++:040021000000BA5CC5
+ :00000001FF
+processing file asmFiles/test.branchjump1.asm~ (4 of 9)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:45:23 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 800 time and ran for         39 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:45:23 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+11 instructions
+--- memsim.hex	2018-02-11 16:45:23.782904008 -0500
++++ memcpu.hex	2018-02-11 16:45:23.768903605 -0500
+@@ -13,6 +13,5 @@
+ :04000F00AC41000CF4
+ :0400100017E3FFF8FB
+ :04001200FFFFFFFFEE
+-:040022000000001CBE
+-:0400240000000038A0
++:040024000000001CBC
+ :00000001FF
+processing file asmFiles/test.ldst1.asm (5 of 9)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:45:24 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 960 time and ran for         47 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:45:24 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+14 instructions
+processing file asmFiles/test.ldst2.asm (6 of 9)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:45:25 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 1120 time and ran for         55 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:45:26 on Feb 11,2018, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 1
+17 instructions
+processing file asmFiles/test.ldst2.asm~ (7 of 9)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:45:26 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 1040 time and ran for         51 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:45:27 on Feb 11,2018, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 1
+15 instructions
+--- memsim.hex	2018-02-11 16:45:27.175001365 -0500
++++ memcpu.hex	2018-02-11 16:45:27.161000963 -0500
+@@ -13,7 +13,7 @@
+ :040200000000733750
+ :0402010000002701D1
+ :0402020000001337AE
+-:04020300FEEDBEEF5F
++:040203000000BEEF4A
+ :0403C000000073378F
+ :0403C1000000270110
+ :0403C20000001337ED
+processing file asmFiles/test.loadstore.asm (8 of 9)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:45:27 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 1000 time and ran for         49 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:45:28 on Feb 11,2018, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 1
+12 instructions
+--- memsim.hex	2018-02-11 16:45:28.348035035 -0500
++++ memcpu.hex	2018-02-11 16:45:28.336034687 -0500
+@@ -13,7 +13,7 @@
+ :040020000000733732
+ :0400210000002701B3
+ :040022000000133790
+-:04002300DEADBEEFA1
++:040023000000BEEF2C
+ :04003C000000733716
+ :04003D000000270197
+ :04003E000000133774
+processing file asmFiles/test.rtype.asm (9 of 9)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:45:29 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 1760 time and ran for         87 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:45:29 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+27 instructions
+--- memsim.hex	2018-02-11 16:45:29.438066318 -0500
++++ memcpu.hex	2018-02-11 16:45:29.425065946 -0500
+@@ -25,15 +25,14 @@
+ :04001800AEAB00206B
+ :04001900AEAC002465
+ :04001A00FFFFFFFFE6
+-:040020000000F7F9EC
++:040020000000D269A1
+ :040021000000126168
+ :0400220000000009D1
+ :0400230000010A5A74
+-:0400240000007F3920
++:04002400000059A9D6
+ :04002500FFFFDA708F
+ :04002600000037F8A7
+ :04002700000021565E
+ :04002800000D269011
+ :04002900000006933A
+-:04003C00FFFF0806B4
+ :00000001FF
+processing file asmFiles/test2.asm (1 of 6)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:46:55 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 840 time and ran for         41 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:46:56 on Feb 11,2018, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 1
+9 instructions
+processing file asmFiles/test.branchjump1.asm (2 of 6)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:46:57 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 680 time and ran for         33 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:46:57 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+11 instructions
+--- memsim.hex	2018-02-11 16:46:57.420591548 -0500
++++ memcpu.hex	2018-02-11 16:46:57.406591141 -0500
+@@ -1,4 +1,3 @@
+-:040000003401BA5CB1
+ :040001003402008045
+ :04000200340F003483
+ :0400030010000001E8
+@@ -13,6 +12,5 @@
+ :04000C00AC41000CF7
+ :04000D0017E3FFF9FD
+ :04000E00FFFFFFFFF2
+-:0400220000000018C2
+-:0400240000000030A8
++:040021000000BA5CC5
+ :00000001FF
+processing file asmFiles/test.ldst1.asm (3 of 6)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:46:58 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 960 time and ran for         47 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:46:58 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+14 instructions
+processing file asmFiles/test.ldst2.asm (4 of 6)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:46:59 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 1120 time and ran for         55 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:46:59 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+17 instructions
+processing file asmFiles/test.loadstore.asm (5 of 6)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:47:00 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 1000 time and ran for         49 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:47:00 on Feb 11,2018, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 1
+12 instructions
+--- memsim.hex	2018-02-11 16:47:00.910691719 -0500
++++ memcpu.hex	2018-02-11 16:47:00.898691375 -0500
+@@ -13,7 +13,7 @@
+ :040020000000733732
+ :0400210000002701B3
+ :040022000000133790
+-:04002300DEADBEEFA1
++:040023000000BEEF2C
+ :04003C000000733716
+ :04003D000000270197
+ :04003E000000133774
+processing file asmFiles/test.rtype.asm (6 of 6)
+Reading pref.tcl
+
+# 10.3b
+
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 16:47:01 on Feb 11,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# //  Questa Sim-64
+# //  Version 10.3b linux_x86_64 May 29 2014
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+# Loading sv_std.std
+# Loading work.system_tb
+# Loading work.cpu_types_pkg
+# Loading work.system_if
+# Loading work.test
+# Loading work.system
+# Loading work.cpu_ram_if
+# Loading work.pipeline
+# Loading work.datapath_cache_if
+# Loading work.caches_if
+# Loading work.cache_control_if
+# Loading work.datapath
+# Loading work.control_unit_if
+# Loading work.program_counter_if
+# Loading work.alu_if
+# Loading work.register_file_if
+# Loading work.request_unit_if
+# Loading work.if_id_if
+# Loading work.id_ex_if
+# Loading work.ex_mem_if
+# Loading work.mem_wb_if
+# Loading work.hazard_unit_if
+# Loading work.control_unit
+# Loading work.program_counter
+# Loading work.alu
+# Loading work.register_file
+# Loading work.request_unit
+# Loading work.if_id
+# Loading work.id_ex
+# Loading work.ex_mem
+# Loading work.mem_wb
+# Loading work.hazard_unit
+# Loading work.caches
+# Loading work.memory_control
+# Loading work.ram
+# Loading altera_mf_ver.altsyncram
+# Loading altera_mf_ver.altsyncram_body
+# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
+# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
+# run -all
+# Starting Processor.
+# Halted at 1760 time and ran for         87 cycles.
+# Starting memory dump.
+# Finished memory dump.
+# End time: 16:47:02 on Feb 11,2018, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 1
+27 instructions
+--- memsim.hex	2018-02-11 16:47:02.074725129 -0500
++++ memcpu.hex	2018-02-11 16:47:02.061724755 -0500
+@@ -25,15 +25,14 @@
+ :04001800AEAB00206B
+ :04001900AEAC002465
+ :04001A00FFFFFFFFE6
+-:040020000000F7F9EC
++:040020000000D269A1
+ :040021000000126168
+ :0400220000000009D1
+ :0400230000010A5A74
+-:0400240000007F3920
++:04002400000059A9D6
+ :04002500FFFFDA708F
+ :04002600000037F8A7
+ :04002700000021565E
+ :04002800000D269011
+ :04002900000006933A
+-:04003C00FFFF0806B4
+ :00000001FF
