@@ -64,7 +64,7 @@ module datapath (
 	//misc signals (actually signals for PC coming out of MEM stage)
 	logic [1:0]		PCSrc;
 	//signals in IF stage
-	word_t				IFnpc, IFimemload;
+	word_t				IFnext_pc, IFnpc, IFimemload;
 	//signals in ID stage
 	r_t 					ID_r_type;
 	i_t 					ID_i_type;
@@ -254,13 +254,26 @@ module datapath (
 	assign dpif.imemaddr = pcif.cur_pc;
 	*/
 	//IF stage (PC)
-	assign pcif.next_pc = (PCSrc == 0) ? MEMrdat1 : (PCSrc == 1) ? (MEMjumpaddr) : (PCSrc == 2) ? (MEMbranchaddr) : IFnpc;
+
 	assign pcif.ihit = dpif.ihit;
 	assign IFnpc = pcif.cur_pc + 4;
 	assign IFimemload = dpif.imemload;
 	assign dpif.imemaddr = pcif.cur_pc;
 	assign pcif.IFdopause = huif.IFdopause;
 	assign pcif.IDdopause = huif.IDdopause;
+	assign pcif.next_pc = IFnext_pc;
+
+	always_ff @(posedge CLK, negedge nRST) begin
+		if (nRST == 0) begin
+			IFnext_pc <= 0;
+		end		
+		else if (huif.IFdopause || huif.IDdopause) begin
+			IFnext_pc <= pcif.next_pc;
+		end
+		else
+			IFnext_pc <= (PCSrc == 0) ? MEMrdat1 : (PCSrc == 1) ? (MEMjumpaddr) : (PCSrc == 2) ? MEMbranchaddr : IFnpc;
+		end
+	end
 
 	/*
 	//Control unit inputs
