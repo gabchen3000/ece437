@@ -15,7 +15,7 @@ module register_file (
 
 	word_t [31:0] registers;
 	//decoder + load registers
-	always_ff @(posedge CLK, negedge nRST) begin
+	always_ff @(negedge CLK, negedge nRST) begin
 
 		if (nRST == 0) begin
 			registers[31:0] <= 32'd0;

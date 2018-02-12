@@ -38,7 +38,7 @@ always_ff @(posedge CLK, negedge nRST) begin
 		idex_if.idex_op_ALUSrc <= '0;
 	end
 	// if doflush or dopause then set to 0
-	else if (idex_if.idex_ip_dopause || idex_if.idex_ip_doflush) begin
+	else if (idex_if.idex_ip_ihit && (idex_if.idex_ip_dopause || idex_if.idex_ip_doflush)) begin
 		idex_if.idex_op_npc <= '0;
 		idex_if.idex_op_imemload <= '0;
 		idex_if.idex_op_dREN <= '0;
@@ -64,7 +64,7 @@ always_ff @(posedge CLK, negedge nRST) begin
 	end
 
 	//	if opcode is not LW and not SW then wait for ihit to update
-	else if (idex_if.idex_ip_ihit) begin
+	else if (idex_if.idex_ip_ihit && !idex_if.idex_ip_dopause) begin
 		idex_if.idex_op_npc 			<= 		idex_if.idex_ip_npc;
 		idex_if.idex_op_imemload 	<=		idex_if.idex_ip_imemload;
 		idex_if.idex_op_dREN 			<= 		idex_if.idex_ip_dREN;

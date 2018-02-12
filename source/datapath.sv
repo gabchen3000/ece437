@@ -50,7 +50,7 @@ module datapath (
 	id_ex	IE (CLK, nRST, ieif);
 	ex_mem EM (CLK, nRST, emif);
 	mem_wb MW (CLK, nRST, mwif);
-	hazard_unit HU (huif);
+	hazard_unit HU (CLK, nRST, huif);
 	//forwarding_unit FU (fuif);
 
 /* Single cycle signals
@@ -65,6 +65,7 @@ module datapath (
 	logic [1:0]		PCSrc;
 	//signals in IF stage
 	word_t				IFnext_pc, IFnpc, IFimemload;
+	logic 				IFflushed;
 	//signals in ID stage
 	r_t 					ID_r_type;
 	i_t 					ID_i_type;
@@ -104,8 +105,10 @@ module datapath (
 	assign iiif.ifid_ip_imemload = IFimemload;
 	assign iiif.ifid_ip_ihit = dpif.ihit;
 	assign iiif.ifid_ip_dhit = dpif.dhit;
-	assign iiif.ifid_ip_dopause = huif.IFdopause;
-	assign iiif.idex_ip_dopause = huif.IDdopause;
+	//assign iiif.ifid_ip_dopause = huif.IFdopause;
+	assign iiif.ifid_ip_doflush = IFflushed;
+	assign iiif.idex_ip_dopause = huif.IDdopause;	//THIS IS CORRECT SIGNAL
+
 
 	//ID signals
 	assign IDnpc = iiif.ifid_op_npc;
@@ -259,10 +262,13 @@ module datapath (
 	assign IFnpc = pcif.cur_pc + 4;
 	assign IFimemload = dpif.imemload;
 	assign dpif.imemaddr = pcif.cur_pc;
-	assign pcif.IFdopause = huif.IFdopause;
+	//assign pcif.IFdopause = huif.IFdopause;
 	assign pcif.IDdopause = huif.IDdopause;
-	assign pcif.next_pc = IFnext_pc;
+	assign pcif.next_pc = (PCSrc == 0) ? MEMrdat1 : (PCSrc == 1) ? (MEMjumpaddr) : (PCSrc == 2) ? MEMbranchaddr : IFnpc;
+	assign pcif.PCSrc = PCSrc;
+	assign IFflushed = (PCSrc == 3) ? 0 : 1;
 
+/*
 	always_ff @(posedge CLK, negedge nRST) begin
 		if (nRST == 0) begin
 			IFnext_pc <= 0;
@@ -274,7 +280,7 @@ module datapath (
 			IFnext_pc <= (PCSrc == 0) ? MEMrdat1 : (PCSrc == 1) ? (MEMjumpaddr) : (PCSrc == 2) ? MEMbranchaddr : IFnpc;
 		end
 	end
-
+*/
 	/*
 	//Control unit inputs
 	assign cuif.imemload = dpif.imemload;
@@ -438,10 +444,12 @@ module datapath (
 	//Hazard unit
 	assign huif.EXwsel = EXwsel;
 	assign huif.MEMwsel = MEMwsel;
+	assign huif.WBwsel = WBwsel;
 	assign huif.rs = IDimemload[25:21];
 	assign huif.rt = IDimemload[20:16];
 	assign huif.MEMRegWr = MEMRegWr;
 	assign huif.EXRegWr = EXRegWr;
+	assign huif.WBRegWr = WBRegWr;
 	assign huif.PCSrc = PCSrc;
 	assign huif.ihit = dpif.ihit;
 

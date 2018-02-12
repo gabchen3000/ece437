@@ -9,7 +9,7 @@ interface if_id_if;
   import cpu_types_pkg::*;
 
   //inputs
-	logic 	ifid_ip_ihit, ifid_ip_dhit, ifid_ip_dopause, idex_ip_dopause;
+	logic 	ifid_ip_ihit, ifid_ip_dhit, ifid_ip_dopause, idex_ip_dopause, idex_ip_doflush;
 	word_t	ifid_ip_imemload, ifid_ip_npc;
 	
 	//outputs
@@ -18,7 +18,7 @@ interface if_id_if;
   // if if latch ports
   modport a (
     input   ifid_ip_ihit, ifid_ip_dhit,
-    			  ifid_ip_imemload, ifid_ip_npc, ifid_ip_dopause,
+    			  ifid_ip_imemload, ifid_ip_npc, ifid_ip_dopause, idex_ip_dopause, idex_ip_doflush,
 		output 	ifid_op_imemload, ifid_op_npc
   );
 endinterface

@@ -15,16 +15,17 @@ interface program_counter_if;
 	//Look at file description for input/output
 	word_t	next_pc, cur_pc, npc;
 	logic		ihit, IFdopause, IDdopause;
+	logic [1:0]	PCSrc;
 
 	// request unit ports to control unit and cache
 	modport pc(
-		input		ihit, next_pc, IFdopause, IDdopause,
+		input		ihit, next_pc, IFdopause, IDdopause, PCSrc,
 		output	cur_pc, npc
 	);
 
 	modport pctb(
 		input		cur_pc, npc,
-		output	ihit, next_pc, IFdopause, IDdopause
+		output	ihit, next_pc, IFdopause, IDdopause, PCSrc
 	);
 
 endinterface

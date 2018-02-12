@@ -22,6 +22,9 @@ module program_counter (
 		if (nRST == 0) begin
 			pcif.cur_pc <= 0;
 		end
+		else if (pcif.PCSrc != 3) begin
+			pcif.cur_pc <= pcif.next_pc;
+		end
 		else if (pcif.IDdopause || pcif.IFdopause) begin
 			pcif.cur_pc <= pcif.cur_pc;
 		end

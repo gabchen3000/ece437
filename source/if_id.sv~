@@ -22,12 +22,11 @@ always_ff @(posedge CLK, negedge nRST) begin
 		ifid_if.ifid_op_npc <= '0;
 		ifid_if.ifid_op_imemload <= '0;
 	end
-	// if doflush then set to 0
-	else if (ifid_if.ifid_ip_do_pause) begin
+	// if ifiddopause then set to 0
+	else if ((ifid_if.ifid_ip_ihit && ifid_if.ifid_ip_dopause) || ifid_if.ifid_ip_doflushed) begin
 		ifid_if.ifid_op_npc <= '0;
 		ifid_if.ifid_op_imemload <= '0;
 	end
-	//	if opcode is not LW and not SW then wait for ihit to update
 	//if IDEXdopause, then send the same data as before
 	else if (ifid_if.ifid_ip_ihit && !ifid_if.idex_ip_dopause) begin
 		ifid_if.ifid_op_npc <= ifid_if.ifid_ip_npc;

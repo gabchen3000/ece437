@@ -13,19 +13,19 @@ interface hazard_unit_if;
   // import types
   import cpu_types_pkg::*;
 	//Look at file description for input/output
-	regbits_t		EXwsel, MEMwsel, rs, rt;
-	logic				MEMRegWr, EXRegWr, IFdopause, IDdopause, ihit, dhit;
+	regbits_t		EXwsel, MEMwsel, WBwsel, rs, rt;
+	logic				MEMRegWr, EXRegWr, WBRegWr, IFdopause, IDdopause, ihit, dhit;
 	logic [1:0]	PCSrc;
 
 	// request unit ports to control unit and cache
 	modport hu(
-		input		EXwsel, MEMwsel, rs, rt, MEMRegWr, EXRegWr, PCSrc, ihit, dhit,
+		input		EXwsel, MEMwsel, WBwsel, rs, rt, WBRegWr, MEMRegWr, EXRegWr, PCSrc, ihit, dhit,
 		output	IFdopause, IDdopause
 	);
 
 	modport hutb(
 		input		IFdopause, IDdopause,
-		output	EXwsel, MEMwsel, rs, rt, MEMRegWr, EXRegWr, PCSrc, ihit, dhit
+		output	EXwsel, MEMwsel, WBwsel, rs, rt, WBRegWr, MEMRegWr, EXRegWr, PCSrc, ihit, dhit
 	);
 
 endinterface
