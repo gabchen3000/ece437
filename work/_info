@@ -7,9 +7,31 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-Z0 d/home/ecegrid/a/mg280/ece437/processors
-valu
+Z0 d/home/ecegrid/a/mg279/ece437/collab/ece437
+Xcpu_types_pkg
 Z1 DXx6 sv_std 3 std 0 22 <EOTafDcUY:cQeO^ICn]m3
+<<<<<<< HEAD
+Z2 !s110 1518397120
+!i10b 1
+!s100 mc<:`NYGd86@T9LCJ@GTf2
+Ik97PmhC^jBNnl@F?Ho]<C0
+Vk97PmhC^jBNnl@F?Ho]<C0
+S1
+R0
+Z3 w1518397107
+Finclude/cpu_types_pkg.vh
+Z4 Finclude/forward_unit_if.vh
+Z5 8source/forward_unit.sv
+Z6 Fsource/forward_unit.sv
+L0 15
+Z7 OL;L;10.3b;59
+r1
+!s85 0
+31
+Z8 !s108 1518397120.718810
+Z9 !s107 include/cpu_types_pkg.vh|include/forward_unit_if.vh|source/forward_unit.sv|
+Z10 !s90 +acc|-sv12compat|-mfcu|-lint|+incdir+include|source/forward_unit.sv|
+=======
 Z2 DXx4 work 13 cpu_types_pkg 0 22 k97PmhC^jBNnl@F?Ho]<C0
 Z3 !s110 1518473698
 !i10b 1
@@ -30,14 +52,44 @@ r1
 !s108 1518473697.998184
 !s107 include/cpu_types_pkg.vh|include/alu_if.vh|source/alu.sv|
 !s90 +acc|-sv12compat|-mfcu|-lint|+incdir+include|source/alu.sv|
+>>>>>>> 42c71f638ad3100180e86550b9c6d7aff7c258a6
 !i113 1
+<<<<<<< HEAD
 Z8 o+acc -sv12compat -mfcu -lint -L mtiAvm -L mtiOvm -L mtiUvm -L mtiUPF
 Z9 !s92 +acc -sv12compat -mfcu -lint +incdir+include -L mtiAvm -L mtiOvm -L mtiUvm -L mtiUPF
 Z10 tShow_source 1 ScalarOpts 1 Show_Lint 1 Show_BadOptionWarning 1 Svlog 1 FsmImplicitTrans 1
 Yalu_if
+=======
+Z11 o+acc -sv12compat -mfcu -lint -L mtiAvm -L mtiOvm -L mtiUvm -L mtiUPF
+Z12 !s92 +acc -sv12compat -mfcu -lint +incdir+include -L mtiAvm -L mtiOvm -L mtiUvm -L mtiUPF
+Z13 tShow_source 1 ScalarOpts 1 Show_Lint 1 Show_BadOptionWarning 1 Svlog 1 FsmImplicitTrans 1
+vforward_unit
+>>>>>>> 933c9f272a35960b0b6213ed01e7272c93d4e6ec
 R1
+Z14 DXx4 work 13 cpu_types_pkg 0 22 k97PmhC^jBNnl@F?Ho]<C0
 R2
+<<<<<<< HEAD
 R3
+=======
+<<<<<<< HEAD
+!i10b 1
+!s100 >?9l`d[Z7LnGXXzEkVcm33
+IlZh6gM2jR:79WB@0McN]81
+Z15 V`JN@9S9cnhjKRR_L]QIcM3
+Z16 !s105 forward_unit_sv_unit
+S1
+R0
+R3
+R5
+R6
+L0 10
+R7
+r1
+!s85 0
+31
+=======
+Z10 !s110 1518394103
+>>>>>>> 933c9f272a35960b0b6213ed01e7272c93d4e6ec
 !i10b 1
 !s100 79gSX75^H3EREc87aNh:U2
 IRLZ=hT6W2QLl1H8XB]ahj3
@@ -165,6 +217,7 @@ r1
 !s107 include/cpu_types_pkg.vh|include/control_unit_if.vh|source/control_unit.sv|
 !s90 +acc|-sv12compat|-mfcu|-lint|+incdir+include|source/control_unit.sv|
 !i113 1
+<<<<<<< HEAD
 R8
 R9
 R10
@@ -172,6 +225,22 @@ Ycontrol_unit_if
 R1
 R2
 R3
+=======
+R7
+>>>>>>> 42c71f638ad3100180e86550b9c6d7aff7c258a6
+R8
+R9
+R10
+<<<<<<< HEAD
+!i113 1
+R11
+R12
+R13
+Yforward_unit_if
+R1
+R14
+=======
+>>>>>>> 933c9f272a35960b0b6213ed01e7272c93d4e6ec
 !i10b 1
 !s100 6[]1ob0>c6<mC4]h<i[CW1
 IUCBCJ?kXi@3@BKmI@G8<?1
@@ -511,13 +580,33 @@ R9
 R10
 vif_id
 R1
+>>>>>>> 42c71f638ad3100180e86550b9c6d7aff7c258a6
 R2
+<<<<<<< HEAD
 R44
 !i10b 1
 !s100 Ki>BA7;=nNh1NNH?V5DN]2
 IaJV^>6[HFl5G=G56S6SLI0
 R4
 !s105 if_id_sv_unit
+=======
+!i10b 1
+<<<<<<< HEAD
+!s100 0X_?NmCYba>=GiSj3XM5Q0
+IY6elzzcY2`<>>Z11>^IGj2
+R15
+R16
+S1
+R0
+R3
+R4
+R5
+=======
+!s100 :a9KVeE5l09nSQDb1GcQ]2
+IQIcoc?GMDjH7[Mc75XHk>1
+R3
+Z56 !s105 if_id_sv_unit
+>>>>>>> 933c9f272a35960b0b6213ed01e7272c93d4e6ec
 S1
 R0
 w1518402575
@@ -730,6 +819,7 @@ R0
 R29
 R30
 R31
+<<<<<<< HEAD
 R45
 R7
 r1
@@ -739,6 +829,20 @@ R32
 R33
 R34
 !i113 1
+=======
+R32
+R33
+R46
+>>>>>>> 42c71f638ad3100180e86550b9c6d7aff7c258a6
+R6
+L0 7
+R7
+<<<<<<< HEAD
+r1
+!s85 0
+31
+=======
+>>>>>>> 933c9f272a35960b0b6213ed01e7272c93d4e6ec
 R8
 R9
 R10
@@ -765,6 +869,7 @@ r1
 !s107 include/cpu_types_pkg.vh|include/register_file_if.vh|source/register_file.sv|
 !s90 +acc|-sv12compat|-mfcu|-lint|+incdir+include|source/register_file.sv|
 !i113 1
+<<<<<<< HEAD
 R8
 R9
 R10
@@ -772,6 +877,19 @@ Yregister_file_if
 R1
 R2
 R19
+=======
+R7
+>>>>>>> 42c71f638ad3100180e86550b9c6d7aff7c258a6
+R8
+R9
+R10
+<<<<<<< HEAD
+!i113 1
+R11
+R12
+R13
+=======
+>>>>>>> 933c9f272a35960b0b6213ed01e7272c93d4e6ec
 !i10b 1
 !s100 H12d2DX_zlEE^59W5QQDP3
 IRegG>;kJYnW96`B6RKFZ80
@@ -947,4 +1065,8 @@ R43
 !i113 1
 R8
 R9
+<<<<<<< HEAD
 R10
+=======
+>>>>>>> 42c71f638ad3100180e86550b9c6d7aff7c258a6
+>>>>>>> 933c9f272a35960b0b6213ed01e7272c93d4e6ec
