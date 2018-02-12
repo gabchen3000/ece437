@@ -1,20 +1,12 @@
 processing file asmFiles/test2.asm (1 of 6)
 processing file asmFiles/test.branchjump1.asm (2 of 6)
---- memsim.hex	2018-02-11 21:18:54.101792020 -0500
-+++ memcpu.hex	2018-02-11 21:18:54.087791618 -0500
+--- memsim.hex	2018-02-12 17:15:03.591751748 -0500
++++ memcpu.hex	2018-02-12 17:15:03.579751404 -0500
 @@ -1,4 +1,3 @@
 -:040000003401BA5CB1
  :040001003402008045
  :04000200340F003483
  :0400030010000001E8
-@@ -13,6 +12,7 @@
- :04000C00AC41000CF7
- :04000D0017E3FFF9FD
- :04000E00FFFFFFFFF2
-+:040021000000BA5CC5
- :0400220000000018C2
- :0400240000000030A8
- :00000001FF
 processing file asmFiles/test.ldst1.asm (3 of 6)
 processing file asmFiles/test.ldst2.asm (4 of 6)
 processing file asmFiles/test.loadstore.asm (5 of 6)

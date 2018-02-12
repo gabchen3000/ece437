@@ -8,7 +8,6 @@ hazard unit module
 `include "cpu_types_pkg.vh"
 
 module hazard_unit (
-  input logic CLK, nRST,
   hazard_unit_if.hu huif
 );
 

@@ -50,7 +50,7 @@ module datapath (
 	id_ex	IE (CLK, nRST, ieif);
 	ex_mem EM (CLK, nRST, emif);
 	mem_wb MW (CLK, nRST, mwif);
-	hazard_unit HU (CLK, nRST, huif);
+	hazard_unit HU (huif);
 	//forwarding_unit FU (fuif);
 
 /* Single cycle signals
@@ -107,7 +107,7 @@ module datapath (
 	assign iiif.ifid_ip_dhit = dpif.dhit;
 	//assign iiif.ifid_ip_dopause = huif.IFdopause;
 	assign iiif.ifid_ip_doflush = IFflushed;
-	assign iiif.idex_ip_dopause = huif.IDdopause;
+	assign iiif.idex_ip_dopause = huif.IDdopause;	//THIS IS CORRECT SIGNAL
 
 
 	//ID signals
@@ -444,12 +444,10 @@ module datapath (
 	//Hazard unit
 	assign huif.EXwsel = EXwsel;
 	assign huif.MEMwsel = MEMwsel;
-	assign huif.WBwsel = WBwsel;
 	assign huif.rs = IDimemload[25:21];
 	assign huif.rt = IDimemload[20:16];
 	assign huif.MEMRegWr = MEMRegWr;
 	assign huif.EXRegWr = EXRegWr;
-	assign huif.WBRegWr = WBRegWr;
 	assign huif.PCSrc = PCSrc;
 	assign huif.ihit = dpif.ihit;
 

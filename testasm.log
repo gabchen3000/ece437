@@ -1,7 +1,108 @@
 processing file asmFiles/test2.asm (1 of 6)
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/alu.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:57 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/alu.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface alu_if
+-- Importing package cpu_types_pkg
+-- Compiling module alu
+
+Top level modules:
+	alu
+End time: 17:14:58 on Feb 12,2018, Elapsed time: 0:00:01
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/alu_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:58 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/alu_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface alu_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:14:58 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/cache_control_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:58 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/cache_control_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface caches_if
+-- Importing package cpu_types_pkg
+-- Compiling interface cache_control_if
+
+Top level modules:
+	--none--
+End time: 17:14:58 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/caches.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:58 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/caches.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface datapath_cache_if
+-- Importing package cpu_types_pkg
+-- Compiling interface caches_if
+-- Compiling module caches
+
+Top level modules:
+	caches
+End time: 17:14:58 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/caches_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:58 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/caches_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface caches_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:14:58 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/control_unit.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:58 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/control_unit.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface control_unit_if
+-- Importing package cpu_types_pkg
+-- Compiling module control_unit
+
+Top level modules:
+	control_unit
+End time: 17:14:58 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/control_unit_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:58 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/control_unit_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface control_unit_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:14:58 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/cpu_ram_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:58 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/cpu_ram_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface cpu_ram_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:14:58 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
 vlog +acc -sv12compat -mfcu -lint +incdir+include  source/datapath.sv
 QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
-Start time: 21:18:51 on Feb 11,2018
+Start time: 17:14:58 on Feb 12,2018
 vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/datapath.sv 
 -- Compiling package cpu_types_pkg
 -- Compiling interface datapath_cache_if
@@ -15,24 +116,73 @@ vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/datapath.sv
 
 Top level modules:
 	datapath
-End time: 21:18:51 on Feb 11,2018, Elapsed time: 0:00:00
+End time: 17:14:58 on Feb 12,2018, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
-vlog +acc -sv12compat -mfcu -lint +incdir+include  source/hazard_unit.sv
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/datapath_cache_if.vh
 QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
-Start time: 21:18:51 on Feb 11,2018
-vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/hazard_unit.sv 
+Start time: 17:14:58 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/datapath_cache_if.vh 
 -- Compiling package cpu_types_pkg
--- Compiling interface hazard_unit_if
+-- Compiling interface datapath_cache_if
 -- Importing package cpu_types_pkg
--- Compiling module hazard_unit
 
 Top level modules:
-	hazard_unit
-End time: 21:18:51 on Feb 11,2018, Elapsed time: 0:00:00
+	--none--
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:01
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/ex_mem.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:59 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/ex_mem.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface ex_mem_if
+-- Importing package cpu_types_pkg
+-- Compiling module ex_mem
+
+Top level modules:
+	ex_mem
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/ex_mem_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:59 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/ex_mem_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface ex_mem_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/id_ex.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:59 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/id_ex.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface id_ex_if
+-- Importing package cpu_types_pkg
+-- Compiling module id_ex
+
+Top level modules:
+	id_ex
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/id_ex_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:59 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/id_ex_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface id_ex_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 vlog +acc -sv12compat -mfcu -lint +incdir+include  source/if_id.sv
 QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
-Start time: 21:18:51 on Feb 11,2018
+Start time: 17:14:59 on Feb 12,2018
 vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/if_id.sv 
 -- Compiling package cpu_types_pkg
 -- Compiling interface if_id_if
@@ -41,14 +191,203 @@ vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/if_id.sv
 
 Top level modules:
 	if_id
-End time: 21:18:51 on Feb 11,2018, Elapsed time: 0:00:00
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/if_id_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:59 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/if_id_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface if_id_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/mem_wb.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:59 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/mem_wb.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface mem_wb_if
+-- Importing package cpu_types_pkg
+-- Compiling module mem_wb
+
+Top level modules:
+	mem_wb
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/mem_wb_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:59 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/mem_wb_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface mem_wb_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/memory_control.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:14:59 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/memory_control.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface caches_if
+-- Importing package cpu_types_pkg
+-- Compiling interface cache_control_if
+-- Compiling module memory_control
+
+Top level modules:
+	memory_control
+End time: 17:14:59 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/pipeline.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/pipeline.sv 
+-- Compiling module pipeline
+
+Top level modules:
+	pipeline
+End time: 17:15:00 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/program_counter.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/program_counter.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface program_counter_if
+-- Importing package cpu_types_pkg
+-- Compiling module program_counter
+
+Top level modules:
+	program_counter
+End time: 17:15:00 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/program_counter_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/program_counter_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface program_counter_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:15:00 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/ram.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/ram.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface cpu_ram_if
+-- Importing package cpu_types_pkg
+-- Compiling module ram
+
+Top level modules:
+	ram
+End time: 17:15:00 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/register_file.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/register_file.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface register_file_if
+-- Importing package cpu_types_pkg
+-- Compiling module register_file
+
+Top level modules:
+	register_file
+End time: 17:15:00 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/register_file_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/register_file_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface register_file_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:15:00 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/request_unit.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/request_unit.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface caches_if
+-- Importing package cpu_types_pkg
+-- Compiling interface cache_control_if
+-- Compiling module request_unit
+
+Top level modules:
+	request_unit
+End time: 17:15:00 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/request_unit_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/request_unit_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface request_unit_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:15:00 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  source/system.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" source/system.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface system_if
+-- Importing package cpu_types_pkg
+-- Compiling module system
+
+Top level modules:
+	system
+End time: 17:15:00 on Feb 12,2018, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  include/system_if.vh
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:00 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" include/system_if.vh 
+-- Compiling package cpu_types_pkg
+-- Compiling interface system_if
+-- Importing package cpu_types_pkg
+
+Top level modules:
+	--none--
+End time: 17:15:01 on Feb 12,2018, Elapsed time: 0:00:01
+Errors: 0, Warnings: 0
+vlog +acc -sv12compat -mfcu -lint +incdir+include  testbench/system_tb.sv
+QuestaSim-64 vlog 10.3b Compiler 2014.05 May 29 2014
+Start time: 17:15:01 on Feb 12,2018
+vlog "+acc" -sv12compat -mfcu -lint "+incdir+include" testbench/system_tb.sv 
+-- Compiling package cpu_types_pkg
+-- Compiling interface system_if
+-- Importing package cpu_types_pkg
+-- Compiling module system_tb
+-- Compiling program test
+
+Top level modules:
+	system_tb
+End time: 17:15:01 on Feb 12,2018, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 Reading pref.tcl
 
 # 10.3b
 
 # vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
-# Start time: 21:18:52 on Feb 11,2018
+# Start time: 17:15:01 on Feb 12,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -104,7 +443,7 @@ Reading pref.tcl
 # Halted at 1000 time and ran for         49 cycles.
 # Starting memory dump.
 # Finished memory dump.
-# End time: 21:18:52 on Feb 11,2018, Elapsed time: 0:00:00
+# End time: 17:15:02 on Feb 12,2018, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 1
 12 instructions
 processing file asmFiles/test.branchjump1.asm (2 of 6)
@@ -113,7 +452,7 @@ Reading pref.tcl
 # 10.3b
 
 # vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
-# Start time: 21:18:53 on Feb 11,2018
+# Start time: 17:15:03 on Feb 12,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -166,34 +505,26 @@ Reading pref.tcl
 # Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
 # run -all
 # Starting Processor.
-# Halted at 1360 time and ran for         67 cycles.
+# Halted at 1320 time and ran for         65 cycles.
 # Starting memory dump.
 # Finished memory dump.
-# End time: 21:18:54 on Feb 11,2018, Elapsed time: 0:00:01
+# End time: 17:15:03 on Feb 12,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1
 11 instructions
---- memsim.hex	2018-02-11 21:18:54.101792020 -0500
-+++ memcpu.hex	2018-02-11 21:18:54.087791618 -0500
+--- memsim.hex	2018-02-12 17:15:03.591751748 -0500
++++ memcpu.hex	2018-02-12 17:15:03.579751404 -0500
 @@ -1,4 +1,3 @@
 -:040000003401BA5CB1
  :040001003402008045
  :04000200340F003483
  :0400030010000001E8
-@@ -13,6 +12,7 @@
- :04000C00AC41000CF7
- :04000D0017E3FFF9FD
- :04000E00FFFFFFFFF2
-+:040021000000BA5CC5
- :0400220000000018C2
- :0400240000000030A8
- :00000001FF
 processing file asmFiles/test.ldst1.asm (3 of 6)
 Reading pref.tcl
 
 # 10.3b
 
 # vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
-# Start time: 21:18:54 on Feb 11,2018
+# Start time: 17:15:04 on Feb 12,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -249,7 +580,7 @@ Reading pref.tcl
 # Halted at 960 time and ran for         47 cycles.
 # Starting memory dump.
 # Finished memory dump.
-# End time: 21:18:55 on Feb 11,2018, Elapsed time: 0:00:01
+# End time: 17:15:04 on Feb 12,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1
 14 instructions
 processing file asmFiles/test.ldst2.asm (4 of 6)
@@ -258,7 +589,7 @@ Reading pref.tcl
 # 10.3b
 
 # vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
-# Start time: 21:18:55 on Feb 11,2018
+# Start time: 17:15:05 on Feb 12,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -314,7 +645,7 @@ Reading pref.tcl
 # Halted at 960 time and ran for         47 cycles.
 # Starting memory dump.
 # Finished memory dump.
-# End time: 21:18:56 on Feb 11,2018, Elapsed time: 0:00:01
+# End time: 17:15:05 on Feb 12,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1
 13 instructions
 processing file asmFiles/test.loadstore.asm (5 of 6)
@@ -323,7 +654,7 @@ Reading pref.tcl
 # 10.3b
 
 # vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
-# Start time: 21:18:57 on Feb 11,2018
+# Start time: 17:15:06 on Feb 12,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -379,7 +710,7 @@ Reading pref.tcl
 # Halted at 1000 time and ran for         49 cycles.
 # Starting memory dump.
 # Finished memory dump.
-# End time: 21:18:57 on Feb 11,2018, Elapsed time: 0:00:00
+# End time: 17:15:06 on Feb 12,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1
 12 instructions
 processing file asmFiles/test.rtype.asm (6 of 6)
@@ -388,7 +719,7 @@ Reading pref.tcl
 # 10.3b
 
 # vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
-# Start time: 21:18:58 on Feb 11,2018
+# Start time: 17:15:07 on Feb 12,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -444,6 +775,6 @@ Reading pref.tcl
 # Halted at 1760 time and ran for         87 cycles.
 # Starting memory dump.
 # Finished memory dump.
-# End time: 21:18:58 on Feb 11,2018, Elapsed time: 0:00:00
+# End time: 17:15:07 on Feb 12,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1
 27 instructions
