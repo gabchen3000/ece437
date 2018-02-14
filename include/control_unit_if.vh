@@ -14,7 +14,7 @@ interface control_unit_if;
   import cpu_types_pkg::*;
 	//Look at file description for input/output
 	word_t				imemload;
-	aluop_t				ALUOP;	
+	aluop_t				ALUOP;
 	logic [1:0]		RegDest;
 	//logic [25:0]	jaddr;
 	logic 				ALUSrc, ExtOp, dREN, dWEN, RegWr, MemtoReg, jal, jr, halt, lui, imemREN, branch, jump, sll, srl, bne, beq;

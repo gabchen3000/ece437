@@ -15,7 +15,7 @@ interface forward_unit_if;
   //outputs
   logic [1:0] forwardselA, forwardselB;
 
-  modport a222 (
+  modport fu (
     input id_ex_rs, id_ex_rt, MEMwsel, WBwsel, MEMRegWr, WBRegWr,
     output forwardselA, forwardselB
   );

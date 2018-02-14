@@ -44,18 +44,9 @@ add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/PCSrc
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IFnpc
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IFimemload
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IFflushed
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/ID_r_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/ID_i_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/ID_j_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/EX_r_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/EX_i_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/EX_j_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/MEM_r_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/MEM_i_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/MEM_j_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/WB_r_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/WB_i_type
-add wave -noupdate -expand -group {Datapath Signals} -expand -group {instruction types} /system_tb/DUT/CPU/DP/WB_j_type
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/ID_r_type
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/ID_i_type
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/ID_j_type
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IDALUSrc
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IDRegDest
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IDnpc
@@ -79,6 +70,9 @@ add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IDlui
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IDMemtoReg
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IDRegWr
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/IDALUOP
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EX_r_type
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EX_i_type
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EX_j_type
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXnpc
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXimemload
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXrdat1
@@ -87,6 +81,7 @@ add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXext
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXshamt
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXALU_OUT
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXbranchaddr
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXflushed
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXjump
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXjr
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXbne
@@ -105,6 +100,9 @@ add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXALU
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXRegDest
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXALUOP
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/EXwsel
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEM_r_type
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEM_i_type
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEM_j_type
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEMimemload
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEMbranchaddr
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEMnpc
@@ -129,6 +127,9 @@ add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEMRe
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEMZERO
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEMbranchAND
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MEMwsel
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WB_r_type
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WB_i_type
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WB_j_type
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WBimemload
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WBnpc
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WBALU_OUT
@@ -142,6 +143,7 @@ add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WBdhi
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WBihit
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WBwdatsel
 add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/WBwsel
+add wave -noupdate -expand -group {Datapath Signals} /system_tb/DUT/CPU/DP/MUX_XXX
 TreeUpdate [SetDefaultTree]
 quietly WaveActivateNextPane
 add wave -noupdate -group rfif /system_tb/DUT/CPU/DP/rfif/WEN
@@ -154,7 +156,6 @@ add wave -noupdate -group rfif /system_tb/DUT/CPU/DP/rfif/rdat2
 add wave -noupdate /system_tb/DUT/CPU/DP/REGF/registers
 add wave -noupdate -expand -group iiif /system_tb/DUT/CPU/DP/iiif/ifid_ip_ihit
 add wave -noupdate -expand -group iiif /system_tb/DUT/CPU/DP/iiif/ifid_ip_dhit
-add wave -noupdate -expand -group iiif /system_tb/DUT/CPU/DP/iiif/ifid_ip_dopause
 add wave -noupdate -expand -group iiif /system_tb/DUT/CPU/DP/iiif/ifid_ip_imemload
 add wave -noupdate -expand -group iiif /system_tb/DUT/CPU/DP/iiif/ifid_ip_npc
 add wave -noupdate -expand -group iiif /system_tb/DUT/CPU/DP/iiif/ifid_op_npc
@@ -210,7 +211,6 @@ add wave -noupdate -expand -group huif /system_tb/DUT/CPU/DP/huif/rs
 add wave -noupdate -expand -group huif /system_tb/DUT/CPU/DP/huif/rt
 add wave -noupdate -expand -group huif /system_tb/DUT/CPU/DP/huif/MEMRegWr
 add wave -noupdate -expand -group huif /system_tb/DUT/CPU/DP/huif/EXRegWr
-add wave -noupdate -expand -group huif /system_tb/DUT/CPU/DP/huif/IFdopause
 add wave -noupdate -expand -group huif /system_tb/DUT/CPU/DP/huif/IDdopause
 add wave -noupdate -expand -group huif /system_tb/DUT/CPU/DP/huif/PCSrc
 add wave -noupdate -expand -group ieif /system_tb/DUT/CPU/DP/ieif/idex_ip_doflush
@@ -262,7 +262,7 @@ add wave -noupdate -expand -group ieif /system_tb/DUT/CPU/DP/ieif/idex_op_rdat1
 add wave -noupdate -expand -group ieif /system_tb/DUT/CPU/DP/ieif/idex_op_rdat2
 add wave -noupdate -expand -group ieif /system_tb/DUT/CPU/DP/ieif/idex_op_shamt
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {114221 ps} 0}
+WaveRestoreCursors {{Cursor 1} {470558 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 181
 configure wave -valuecolwidth 100
@@ -278,4 +278,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {797040 ps}
+WaveRestoreZoom {435856 ps} {1525512 ps}
