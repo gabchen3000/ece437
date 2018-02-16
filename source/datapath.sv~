@@ -99,7 +99,7 @@ module datapath (
 	logic [1:0]		WBwdatsel;
 	regbits_t			WBwsel;
   word_t        MUX_XXX;
-
+  logic         IDdopause;
 	//linking the register signals to datapath signals
 	//IF signals
 	assign iiif.ifid_ip_npc = IFnpc;
@@ -108,7 +108,7 @@ module datapath (
 	assign iiif.ifid_ip_dhit = dpif.dhit;
 	//assign iiif.ifid_ip_dopause = huif.IFdopause;
 	assign iiif.ifid_ip_doflush = IFflushed;
-	assign iiif.idex_ip_dopause = huif.IDdopause;	//THIS IS CORRECT SIGNAL
+	assign iiif.idex_ip_dopause = IDdopause;	//THIS IS CORRECT SIGNAL
 
 
 	//ID signals
@@ -143,7 +143,7 @@ module datapath (
 	assign ieif.idex_ip_ALUOP = IDALUOP;
 	assign ieif.idex_ip_RegDest = IDRegDest;
 	assign ieif.idex_ip_ALUSrc = IDALUSrc;
-	assign ieif.idex_ip_dopause = huif.IDdopause;
+	assign ieif.idex_ip_dopause = IDdopause;
 
 	//EX signals
 	assign EXimemload = ieif.idex_op_imemload;
@@ -192,7 +192,7 @@ module datapath (
 	assign emif.exmem_ip_bne = EXbne;
 	assign emif.exmem_ip_beq = EXbeq;
 	assign emif.exmem_ip_rdat1 = EXrdat1;
-	assign emif.exmem_ip_rdat2 = EXrdat2;
+	assign emif.exmem_ip_rdat2 = MUX_XXX;	//MUX output from forward unit
 	assign emif.exmem_ip_ALUOUT = EXALU_OUT;
 	assign emif.exmem_ip_ZERO = EXZERO;
   assign emif.exmem_ip_wsel = EXwsel;
@@ -264,7 +264,7 @@ module datapath (
 	assign IFimemload = dpif.imemload;
 	assign dpif.imemaddr = pcif.cur_pc;
 	//assign pcif.IFdopause = huif.IFdopause;
-	assign pcif.IDdopause = huif.IDdopause;
+	assign pcif.IDdopause = IDdopause;
 	assign pcif.next_pc = (PCSrc == 0) ? MEMrdat1 : (PCSrc == 1) ? (MEMjumpaddr) : (PCSrc == 2) ? MEMbranchaddr : IFnpc;
 	assign pcif.PCSrc = PCSrc;
 	assign IFflushed = (PCSrc == 3) ? 0 : 1;
@@ -378,9 +378,9 @@ module datapath (
   assign fuif.id_ex_rt = EXimemload[20:16];
   assign fuif.WBwsel = WBwsel;
   assign fuif.MEMwsel = MEMwsel;
-  assign MUX_XXX = (fuif.forwardselB == 0) ? EXrdat2 : fuif.forwardselB == 1 ? WBwdat : MEMALU_OUT;
+  assign MUX_XXX = (fuif.forwardselB == 0) ? EXrdat2 : (fuif.forwardselB == 1) ? WBwdat : (fuif.forwardselB == 2) ? MEMALU_OUT : {MEMimemload[15:0], 16'b0};
 	assign aif.ALUOP = EXALUOP;
-  assign aif.PORT_A = (fuif.forwardselA == 0) ? EXrdat1 : fuif.forwardselA == 1 ? WBwdat : MEMALU_OUT;
+  assign aif.PORT_A = (fuif.forwardselA == 0) ? EXrdat1 : (fuif.forwardselA == 1) ? WBwdat : (fuif.forwardselB == 2) ? MEMALU_OUT : {MEMimemload[15:0], 16'b0};
   assign aif.PORT_B = (EXALUSrc == 0) ? MUX_XXX : (EXALUSrc == 1) ? EXext : EXshamt;
 /*
 	assign jaddr = dpif.imemload[25:0];
@@ -431,8 +431,7 @@ module datapath (
 	assign dpif.dmemREN = MEMdmemREN;
 	assign dpif.dmemWEN = MEMdmemWEN;
 	assign dpif.dmemaddr = MEMALU_OUT;
-	//assign dpif.dmemstore = MEMrdat2;
-	assign dpif.dmemstore = MUX_XXX;
+	assign dpif.dmemstore = MEMrdat2;
 	assign MEMdmemload = dpif.dmemload;
 
 /*
@@ -452,5 +451,9 @@ module datapath (
 	assign huif.EXRegWr = EXRegWr;
 	assign huif.PCSrc = PCSrc;
 	assign huif.ihit = dpif.ihit;
+  assign IDdopause = ((EXimemload[31:26] == LW || EXimemload[31:26] == SW) && !dpif.dhit) ? huif.IDdopause : 0;
+
+
+
 
 endmodule
