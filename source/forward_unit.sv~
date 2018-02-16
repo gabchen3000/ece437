@@ -39,20 +39,10 @@ module forward_unit (
 
     if(fuif.WBRegWr) begin
       if(fuif.id_ex_rs == fuif.WBwsel && fuif.id_ex_rs != 0) begin
-				if(fuif.WBlui) begin
-					fuif.forwardselA = 2'd3;
-				end
-				else begin
-        	fuif.forwardselA = 2'd2;
-				end
+        fuif.forwardselA = 2'd2;
       end
       else if (fuif.id_ex_rt == fuif.WBwsel && fuif.id_ex_rt != 0) begin
-				if(fuif.WBlui) begin
-					fuif.forwardselB = 2'd3;
-				end
-				else begin
-        	fuif.forwardselB = 2'd2;
-				end
+        fuif.forwardselB = 2'd2;
       end
 
     end

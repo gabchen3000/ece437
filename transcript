@@ -1,5 +1,5 @@
 # vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
-# Start time: 03:28:57 on Feb 16,2018
+# Start time: 17:59:07 on Feb 16,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -54,8 +54,8 @@
 # Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
 # run -all
 # Starting Processor.
-# Halted at 4880 time and ran for        243 cycles.
+# Halted at 14360 time and ran for        717 cycles.
 # Starting memory dump.
 # Finished memory dump.
-# End time: 03:28:58 on Feb 16,2018, Elapsed time: 0:00:01
+# End time: 17:59:08 on Feb 16,2018, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 1
