@@ -18,6 +18,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     exmem_if.exmem_op_npc         <=  '0;
     exmem_if.exmem_op_imemload    <=  '0;
     exmem_if.exmem_op_branchaddr  <=  '0;
+    exmem_if.exmem_op_jumpaddr	  <=  '0;
     exmem_if.exmem_op_RegWr       <=  '0;
     exmem_if.exmem_op_MemtoReg    <=  '0;
     exmem_if.exmem_op_jal         <=  '0;
@@ -39,6 +40,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     exmem_if.exmem_op_npc         <=  '0;
     exmem_if.exmem_op_imemload    <=  '0;
     exmem_if.exmem_op_branchaddr  <=  '0;
+    exmem_if.exmem_op_jumpaddr	  <=  '0;
     exmem_if.exmem_op_RegWr       <=  '0;
     exmem_if.exmem_op_MemtoReg    <=  '0;
     exmem_if.exmem_op_jal         <=  '0;
@@ -61,6 +63,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     exmem_if.exmem_op_npc         <=    exmem_if.exmem_ip_npc;
     exmem_if.exmem_op_imemload    <=    exmem_if.exmem_ip_imemload;
     exmem_if.exmem_op_branchaddr  <=    exmem_if.exmem_ip_branchaddr;
+    exmem_if.exmem_op_jumpaddr	  <=    exmem_if.exmem_ip_jumpaddr;
     exmem_if.exmem_op_RegWr       <=    exmem_if.exmem_ip_RegWr;
     exmem_if.exmem_op_MemtoReg    <=    exmem_if.exmem_ip_MemtoReg;
     exmem_if.exmem_op_jal         <=    exmem_if.exmem_ip_jal;
@@ -109,6 +112,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     exmem_if.exmem_op_npc         <=    exmem_if.exmem_op_npc;
     exmem_if.exmem_op_imemload    <=    exmem_if.exmem_op_imemload;
     exmem_if.exmem_op_branchaddr  <=    exmem_if.exmem_op_branchaddr;
+    exmem_if.exmem_op_jumpaddr	  <=    exmem_if.exmem_op_jumpaddr;
     exmem_if.exmem_op_RegWr       <=    exmem_if.exmem_op_RegWr;
     exmem_if.exmem_op_MemtoReg    <=    exmem_if.exmem_op_MemtoReg;
     exmem_if.exmem_op_jal         <=    exmem_if.exmem_op_jal;

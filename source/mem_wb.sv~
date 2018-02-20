@@ -43,7 +43,7 @@ always_ff @(posedge CLK, negedge nRST) begin
   else if (memwb_if.memwb_ip_ihit) begin
     memwb_if.memwb_op_npc         <=    memwb_if.memwb_ip_npc;
     memwb_if.memwb_op_imemload    <=    memwb_if.memwb_ip_imemload;
-    //memwb_if.memwb_op_dmemload    <=    memwb_if.memwb_ip_dmemload;
+    memwb_if.memwb_op_dmemload    <=    memwb_if.memwb_op_dmemload;	//ihit shouldnt change dmemload at all
     memwb_if.memwb_op_jal         <=    memwb_if.memwb_ip_jal;
     memwb_if.memwb_op_lui         <=    memwb_if.memwb_ip_lui;
     memwb_if.memwb_op_MemToReg    <=    memwb_if.memwb_ip_MemToReg;

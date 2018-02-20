@@ -10,7 +10,7 @@
 	ori $29, $0, 0xFFFC
 	##initialize the values in the stack by pushing
 	ori $28, $0, 9
-	ori $27, $0, 0
+	ori $27, $0, 2
 	push $28
 	push $27
 

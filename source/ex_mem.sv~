@@ -133,6 +133,10 @@ always_ff @(posedge CLK, negedge nRST) begin
 	  exmem_if.exmem_op_dmemREN     <=    0;
     exmem_if.exmem_op_dmemWEN     <=    0;
 	end
+	else if (exmem_if.exmem_ip_doflush && exmem_if.exmem_ip_ihit) begin
+	  exmem_if.exmem_op_dmemREN     <=    0;
+    exmem_if.exmem_op_dmemWEN     <=    0;
+	end
 	else if (exmem_if.exmem_ip_dhit) begin
 	  exmem_if.exmem_op_dmemREN     <=    0;
     exmem_if.exmem_op_dmemWEN     <=    0;

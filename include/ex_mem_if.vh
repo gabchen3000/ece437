@@ -12,7 +12,7 @@ interface ex_mem_if;
 
   //common/general
   logic exmem_ip_doflush, exmem_ip_ihit, exmem_ip_dhit;
-  word_t exmem_ip_npc, exmem_ip_imemload, exmem_ip_branchaddr;
+  word_t exmem_ip_npc, exmem_ip_imemload, exmem_ip_branchaddr, exmem_ip_jumpaddr;
 
   //from control unit
   logic exmem_ip_dREN, exmem_ip_dWEN, exmem_ip_RegWr, exmem_ip_MemtoReg,
@@ -26,7 +26,7 @@ interface ex_mem_if;
 
   //outputs
 
-  word_t exmem_op_npc, exmem_op_imemload, exmem_op_branchaddr;
+  word_t exmem_op_npc, exmem_op_imemload, exmem_op_branchaddr, exmem_op_jumpaddr;
 
   //from control unit
   logic exmem_op_dmemREN, exmem_op_dmemWEN, exmem_op_RegWr, exmem_op_MemtoReg,
@@ -41,14 +41,14 @@ interface ex_mem_if;
   // id ex latch ports
   modport a3 (
     input exmem_ip_doflush, exmem_ip_ihit, exmem_ip_dhit,
-          exmem_ip_npc, exmem_ip_imemload, exmem_ip_branchaddr,
+          exmem_ip_npc, exmem_ip_imemload, exmem_ip_branchaddr, exmem_ip_jumpaddr,
           exmem_ip_dREN, exmem_ip_dWEN, exmem_ip_RegWr, exmem_ip_MemtoReg,
           exmem_ip_jal, exmem_ip_jr, exmem_ip_halt, exmem_ip_lui, exmem_ip_imemREN,
           exmem_ip_branch, exmem_ip_jump, exmem_ip_bne, exmem_ip_beq,
           exmem_ip_rdat1, exmem_ip_rdat2, exmem_ip_ALUOUT, exmem_ip_ZERO,
           exmem_ip_wsel,
 
-    output exmem_op_npc, exmem_op_imemload, exmem_op_branchaddr,
+    output exmem_op_npc, exmem_op_imemload, exmem_op_branchaddr, exmem_op_jumpaddr,
         exmem_op_dmemREN, exmem_op_dmemWEN, exmem_op_RegWr, exmem_op_MemtoReg,
         exmem_op_jal, exmem_op_jr, exmem_op_halt, exmem_op_lui, exmem_op_imemREN,
         exmem_op_branch, exmem_op_jump, exmem_op_bne, exmem_op_beq,

@@ -8,31 +8,41 @@ forward unit module
 `include "cpu_types_pkg.vh"
 
 module forward_unit (
-  foward_unit_if.a222 fuif
+  forward_unit_if.fu fuif
 );
 
   // import types
   import cpu_types_pkg::*;
 
 	always_comb begin
-    forwardselA = '0;
-    forwardselB = '0;
+    fuif.forwardselA = '0;
+    fuif.forwardselB = '0;
 
-    if(MEMRegWr) begin
-      if(id_ex_rs == MEMwsel) begin
-        forwardselA = 2'd2;
+    if(fuif.MEMRegWr) begin
+      if(fuif.id_ex_rs == fuif.MEMwsel && fuif.id_ex_rs != 0) begin
+				if(fuif.MEMlui) begin
+					fuif.forwardselA = 2'd3;
+				end
+				else begin
+        	fuif.forwardselA = 2'd2;
+				end
       end
-      else if (id_ex_rt == MEMwsel) begin
-        forwardselB = 2'd2;
+      else if (fuif.id_ex_rt == fuif.MEMwsel && fuif.id_ex_rt != 0) begin
+				if(fuif.MEMlui) begin
+					fuif.forwardselB = 2'd3;
+				end
+				else begin
+        	fuif.forwardselB = 2'd2;
+				end
       end
     end
 
-    if(WBRegWr) begin
-      if(id_ex_rs == WBwsel) begin
-        forwardselA = 2'd1;
+    if(fuif.WBRegWr) begin
+      if(fuif.id_ex_rs == fuif.WBwsel && fuif.id_ex_rs != 0 && fuif.forwardselA == 0) begin
+        fuif.forwardselA = 2'd1;
       end
-      else if (id_ex_rt == WBwsel) begin
-        forwardselB = 2'd1;
+      else if (fuif.id_ex_rt == fuif.WBwsel && fuif.id_ex_rt != 0) begin
+        fuif.forwardselB = 2'd1;
       end
 
     end
