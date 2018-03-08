@@ -9,7 +9,7 @@
 # //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
 # //
 # vsim -do "view objects; do scripts/icache.do; run -all;" -onfinish stop -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf icache_tb.wlf work.icache_tb 
-# Start time: 21:15:17 on Mar 07,2018
+# Start time: 23:04:24 on Mar 07,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # Loading sv_std.std
 # Loading work.icache_tb
@@ -24,9 +24,9 @@
 #  run -all
 # Passed test           1: ihit is asserted and imemload has correct data
 # Passed test           2: ihit is deasserted for miss and imemload is same as cif.iload
-# Failed test           3: incorrect beahvior for 2 consecutive hits
-# Failed test           4: incorrect beahvior for 2 consecutive misses
+# Passed test           3: correct beahvior for 2 consecutive hits
+# Passed test           4: correct beahvior for 2 consecutive misses
 # Simulation stop requested.
 # 
-# End time: 21:15:50 on Mar 07,2018, Elapsed time: 0:00:33
+# End time: 23:04:45 on Mar 07,2018, Elapsed time: 0:00:21
 # Errors: 0, Warnings: 1

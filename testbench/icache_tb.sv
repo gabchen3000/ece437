@@ -106,7 +106,6 @@ program test(
 			$display("Failed test %d: for expected hit-- ihit = %d and imemload = %d", testcase, dcif.ihit, dcif.imemload);
 		end 
 		#(PERIOD);
-		nRST = 0;
 
 		//case 2: test miss
 		dcif.imemREN		= 1;
@@ -132,7 +131,6 @@ program test(
 		dcif.dmemREN		= 0;
 		dcif.dmemWEN		= 0;
 		dcif.imemaddr =  {tag2, idx2, 2'b00};
-		cif.iwait				= 0;
 		
 		@(posedge CLK);
 		if (dcif.ihit && (dcif.imemload == 32'd2)) begin
@@ -156,7 +154,7 @@ program test(
 			$display("Passed test %d: correct beahvior for 2 consecutive hits", testcase);
 		end
 		else begin
-			$display("Failed test %d: incorrect beahvior for 2 consecutive hits", testcase);
+			$display("Failed test %d: incorrect beahvior for 2 consecutive hits, %d, %d", testcase, dcif.ihit, dcif.imemload);
 		end
 		#(PERIOD);
 	
@@ -170,7 +168,7 @@ program test(
 		cif.iload 			= 32'd9;
 	
 		@(posedge CLK);
-		if (dcif.ihit && (dcif.imemload == cif.iload)) begin
+		if (!dcif.ihit && (dcif.imemload == cif.iload)) begin
 			hitcount--;
 		end
 
@@ -191,7 +189,7 @@ program test(
 			$display("Passed test %d: correct beahvior for 2 consecutive misses", testcase);
 		end
 		else begin
-			$display("Failed test %d: incorrect beahvior for 2 consecutive misses", testcase);
+			$display("Failed test %d: incorrect beahvior for 2 consecutive misses, %d, %d", testcase, dcif.ihit, hitcount);
 		end
 		#(PERIOD);
 		nRST = 0;
