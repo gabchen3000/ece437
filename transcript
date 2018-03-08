@@ -1,3 +1,6 @@
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf icache_tb.wlf work.icache_tb 
+# Start time: 00:06:07 on Mar 08,2018
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
 # //
@@ -8,9 +11,6 @@
 # //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
 # //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
 # //
-# vsim -do "view objects; do scripts/icache.do; run -all;" -onfinish stop -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf icache_tb.wlf work.icache_tb 
-# Start time: 23:33:32 on Mar 07,2018
-# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # Loading sv_std.std
 # Loading work.icache_tb
 # Loading work.cpu_types_pkg
@@ -18,16 +18,11 @@
 # Loading work.caches_if
 # Loading work.test
 # Loading work.icache
-# view objects
-# .main_pane.objects.interior.cs.body.tree
-#  do scripts/icache.do
-#  run -all
+# run -all
 # Passed test           1: ihit is asserted and imemload has correct data
 # Passed test           2: ihit is deasserted for miss and imemload is same as cif.iload
 # Passed test           3: correct beahvior for 2 consecutive hits
 # Passed test           4: correct beahvior for 2 consecutive misses
 # Passed test           5: correct beahvior for when dmemREN is deasserted
-# Simulation stop requested.
-# 
-# End time: 23:33:42 on Mar 07,2018, Elapsed time: 0:00:10
+# End time: 00:06:07 on Mar 08,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1

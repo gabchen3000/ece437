@@ -17,7 +17,7 @@ module icache (
   // import types
   import cpu_types_pkg::*;
 
-	icache_frame [15:0]	blocks;//512bits in total, 32 bits per block
+	icache_frame [15:0]	frame;//512bits in total, 32 bits per block
 	logic [25:0]				tag;
 	logic [3:0]					idx;
 	logic								hit;
@@ -29,8 +29,8 @@ module icache (
 
 	always_comb begin
 		if (dcif.imemREN && !dcif.dmemREN && !dcif.dmemWEN) begin
-			hit = (tag == blocks[idx].tag) && blocks[idx].valid;
-			dcif.imemload = hit ? blocks[idx].data : cif.iload;
+			hit = (tag == frame[idx].tag) && frame[idx].valid;
+			dcif.imemload = hit ? frame[idx].data : cif.iload;
 			dcif.ihit = hit ? 1 : !cif.iwait; //ihit is when instr read is done == when iwait is 0 (given a cache miss)
 		end
 		else begin
@@ -42,12 +42,12 @@ module icache (
 
 	always_ff @(posedge CLK, negedge nRST) begin
 		if (nRST == 0) begin
-			blocks[15:0] <= '0;
+			frame[15:0] <= '0;
 		end
 		else if (cif.iwait == 0) begin
-			blocks[idx].tag <= dcif.imemaddr[31:6];
-			blocks[idx].data <= cif.iload;	//this is from RAM
-			blocks[idx].valid <= 1;
+			frame[idx].tag <= dcif.imemaddr[31:6];
+			frame[idx].data <= cif.iload;	//this is from RAM
+			frame[idx].valid <= 1;
 		end
 	end
 
