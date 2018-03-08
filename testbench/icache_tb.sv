@@ -72,7 +72,7 @@ program test(
 		cif.iwait				= '0;
 		#(PERIOD); //waits a while
 		nRST = 0; //start with nreset
-
+		
 		//fill cache
 		@(posedge CLK);
 		nRST = 1;
@@ -90,12 +90,12 @@ program test(
 		cif.iwait = 0;
 		@(posedge CLK);
 	
+		//pre-test initialize
+		dcif.imemREN		= 1;
+
 		//case 1: test hit
 		cif.iwait = 1;
 		dcif.imemaddr =  {tag1, idx1, 2'b00};
-		dcif.imemREN		= 1;
-		dcif.dmemREN		= 0;
-		dcif.dmemWEN		= 0;
 		++testcase;
 
 		@(posedge CLK);
@@ -108,9 +108,6 @@ program test(
 		#(PERIOD);
 
 		//case 2: test miss
-		dcif.imemREN		= 1;
-		dcif.dmemREN		= 0;
-		dcif.dmemWEN		= 0;
 		dcif.imemaddr 	=  {tag_junk, idx1, 2'b00};
 		cif.iwait				= 1;
 		cif.iload 			= 32'd69;
@@ -127,9 +124,6 @@ program test(
 
 		//case 3: test 2 consecutive hits
 		@(posedge CLK);
-		dcif.imemREN		= 1;
-		dcif.dmemREN		= 0;
-		dcif.dmemWEN		= 0;
 		dcif.imemaddr =  {tag2, idx2, 2'b00};
 		
 		@(posedge CLK);
@@ -138,9 +132,6 @@ program test(
 		end
 
 		@(posedge CLK);
-		dcif.imemREN		= 1;
-		dcif.dmemREN		= 0;
-		dcif.dmemWEN		= 0;
 		dcif.imemaddr =  {tag3, idx3, 2'b00};
 		++testcase;
 
@@ -160,9 +151,6 @@ program test(
 	
 		//case 4: test 2 consecutive missies    
 		@(posedge CLK);
-		dcif.imemREN		= 1;
-		dcif.dmemREN		= 0;
-		dcif.dmemWEN		= 0;
 		dcif.imemaddr =  {tag_junk, idx2, 2'b00};
 		cif.iwait				= 1;
 		cif.iload 			= 32'd9;
@@ -173,9 +161,6 @@ program test(
 		end
 
 		@(posedge CLK);
-		dcif.imemREN		= 1;
-		dcif.dmemREN		= 0;
-		dcif.dmemWEN		= 0;
 		dcif.imemaddr =  {tag_junk, idx3, 2'b00};
 		++testcase;
 
