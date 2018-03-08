@@ -177,6 +177,19 @@ program test(
 			$display("Failed test %d: incorrect beahvior for 2 consecutive misses, %d, %d", testcase, dcif.ihit, hitcount);
 		end
 		#(PERIOD);
+
+		//case 5: dMEM    
+		@(posedge CLK);
+		dcif.imemREN		= '0;
+		++testcase;
+		@(posedge CLK);
+		if (!dcif.ihit && (dcif.imemload == '0)) begin
+			$display("Passed test %d: correct beahvior for when dmemREN is deasserted", testcase);
+		end
+		else begin
+			$display("Failed test %d: incorrect beahvior for when dmemREN is deasserted", testcase);
+		end
+		#(PERIOD);
 		nRST = 0;
   end
 
