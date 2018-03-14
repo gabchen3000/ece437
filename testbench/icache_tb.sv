@@ -38,32 +38,18 @@ program test(
 	int testcase = 0;
 	int hitcount = 0;
 	logic [25:0] tag1 	= 26'd10;
-	logic [3:0]  idx1 	= 4'd1;
+	logic [3:0]  idx1 	= 3'd1;
 
 	logic [25:0] tag2 	= 26'd12;
-	logic [3:0]  idx2		= 4'd2;
+	logic [3:0]  idx2		= 3'd2;
 	
 	logic [25:0] tag3 	= 26'd13;
-	logic [3:0]  idx3 	= 4'd3;
+	logic [3:0]  idx3 	= 3'd3;
 
 	logic [25:0] tag_junk 	= 26'd69;
 
 	initial begin
 		
-		//to test:
-		// cif.iREN
-		// cif.iaddr
-		// dcif.imemload
-		// dcif.ihit
-    
-		//inputs
-		//	dcif.imemaddr
-		//	dcif.imemREN
-		//	dcif.dmemREN
-		//	dcif.dmemWEN
-		//	cif.iload
-		//	cif.iwait
-
 		dcif.imemaddr		= '0;
 		dcif.imemREN		= '0;
 		dcif.dmemREN		= '0;
@@ -92,9 +78,9 @@ program test(
 	
 		//pre-test initialize
 		dcif.imemREN		= 1;
+		cif.iwait = 1;
 
 		//case 1: test hit
-		cif.iwait = 1;
 		dcif.imemaddr =  {tag1, idx1, 2'b00};
 		++testcase;
 
@@ -107,7 +93,7 @@ program test(
 		end 
 		#(PERIOD);
 
-		//case 2: test miss
+		//case 2: test miss -->>> add replacement for miss and valid 
 		dcif.imemaddr 	=  {tag_junk, idx1, 2'b00};
 		cif.iwait				= 1;
 		cif.iload 			= 32'd69;
@@ -122,7 +108,26 @@ program test(
 		end 
 		#(PERIOD);
 
-		//case 3: test 2 consecutive hits
+		// after miss --> iwait is deasserted for a clock cycle
+		cif.iwait				= 0;
+		@(posedge CLK);
+		
+		//case 3: test hit after miss -->>> add replacement for miss and valid 
+		dcif.imemaddr 	=  {tag_junk, idx1, 2'b00};
+		cif.iwait				= 1;
+		cif.iload 			= 32'd79;
+		++testcase;
+
+		@(posedge CLK);
+		if (dcif.ihit && (dcif.imemload == 32'd69)) begin
+			$display("Passed test %d: ihit is asserted and imemload has correct data", testcase);
+		end
+		else begin
+			$display("Failed test %d: for expected miss-- ihit = %d and imemload = %d", testcase, dcif.ihit, dcif.imemload);
+		end 
+		#(PERIOD);
+
+		//case 4: test 2 consecutive hits
 		@(posedge CLK);
 		dcif.imemaddr =  {tag2, idx2, 2'b00};
 		
@@ -149,7 +154,7 @@ program test(
 		end
 		#(PERIOD);
 	
-		//case 4: test 2 consecutive missies    
+		//case 5: test 2 consecutive missies    
 		@(posedge CLK);
 		dcif.imemaddr =  {tag_junk, idx2, 2'b00};
 		cif.iwait				= 1;
@@ -178,7 +183,7 @@ program test(
 		end
 		#(PERIOD);
 
-		//case 5: dMEM    
+		//case 6: dMEM    
 		@(posedge CLK);
 		dcif.imemREN		= '0;
 		++testcase;

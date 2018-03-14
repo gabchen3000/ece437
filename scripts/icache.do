@@ -3,9 +3,10 @@ quietly WaveActivateNextPane {} 0
 add wave -noupdate /icache_tb/CLK
 add wave -noupdate /icache_tb/nRST
 add wave -noupdate /icache_tb/PROG/testcase
-add wave -noupdate -expand -group icache /icache_tb/DUT/blocks
 add wave -noupdate -expand -group icache /icache_tb/DUT/tag
-add wave -noupdate -expand -group icache /icache_tb/DUT/idx
+add wave -noupdate -expand -group icache -expand /icache_tb/DUT/idx
+add wave -noupdate -expand -group icache /icache_tb/DUT/frame
+add wave -noupdate -expand -group icache /icache_tb/DUT/hit
 add wave -noupdate -expand -group dcif /icache_tb/DUT/dcif/halt
 add wave -noupdate -expand -group dcif /icache_tb/DUT/dcif/ihit
 add wave -noupdate -expand -group dcif /icache_tb/DUT/dcif/imemREN
@@ -35,7 +36,7 @@ add wave -noupdate -expand -group cif /icache_tb/DUT/cif/ccwrite
 add wave -noupdate -expand -group cif /icache_tb/DUT/cif/cctrans
 add wave -noupdate -expand -group cif /icache_tb/DUT/cif/ccsnoopaddr
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {68 ns} 0}
+WaveRestoreCursors {{Cursor 1} {87 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -51,4 +52,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {5 ns} {79 ns}
+WaveRestoreZoom {0 ns} {296 ns}

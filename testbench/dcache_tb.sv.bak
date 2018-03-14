@@ -1,0 +1,214 @@
+// mapped needs this
+`include "datapath_cache_if.vh"
+`include "caches_if.vh"
+
+// mapped timing needs this. 1ns is too fast
+`timescale 1 ns / 1 ns
+
+module dcache_tb;
+
+  parameter PERIOD = 10;
+
+  logic CLK = 0, nRST;
+
+  // clock
+  always #(PERIOD/2) CLK++;
+
+  // interface
+	datapath_cache_if dcif ();
+  caches_if cif ();
+	
+  // test program
+  test PROG (CLK, nRST, dcif, cif);
+  // DUT
+`ifndef MAPPED
+  dcache DUT(CLK, nRST, dcif, cif);
+`endif
+
+endmodule
+
+program test(
+	input logic CLK,
+	output logic nRST,
+	datapath_cache_if.cache dcif,
+  caches_if.dcache cif
+);
+
+	parameter PERIOD = 10;
+	int testcase = 0;
+	int hitcount = 0;
+
+	logic [3:0]  idx1 				= 4'd1;
+	logic [25:0] tag1_frame1 	= 26'd1;
+	logic [25:0] tag1_frame2 	= 26'd11;
+
+	logic [3:0]  idx2					= 4'd2;
+	logic [25:0] tag2_frame1 	= 26'd2;
+	logic [25:0] tag2_frame2 	= 26'd22;
+
+	logic [3:0]  idx3					= 4'd3;
+	logic [25:0] tag3_frame1 	= 26'd3;
+	logic [25:0] tag3_frame2 	= 26'd33;
+
+	logic [25:0] tag_junk 	= 26'd69;
+
+	logic offset0 						= 1'b0;
+	logic offset1 						= 1'b1;
+
+	initial begin
+		
+		//to test:
+		// cif.iREN
+		// cif.iaddr
+		// dcif.imemload
+		// dcif.ihit
+    
+		//inputs
+		//	dcif.dmemaddr 	-- tag idx offst
+		//	cif.dload 			-- data from memory
+		//	cif.dwait 			-- controls state machine
+		//	dcif.halt				-- controls halt
+		//	dcif.dmemREN
+		//	dcif.dmemWEN
+
+		dcif.dmemaddr		= '0;
+		dcif.imemREN		= '0;
+		cif.dload				= '0;
+		cif.dwait				= '0;
+		#(PERIOD); //waits a while
+		nRST = 0; //start with nreset
+		
+		//fill cache
+		@(posedge CLK);
+		nRST = 1;
+		
+		dcif.dmemWEN		= '0;
+		dcif.dmemREN		= 1;
+		
+		//frame 1		
+		@(posedge CLK);
+		cif.dwait = 1;
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset0, 2'b00};
+		cif.dload = 32'd1;
+		
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset1, 2'b00};
+		cif.dload = 32'd2;
+		
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		
+		//frame 2
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset0, 2'b00};
+		cif.dload = 32'd3;
+
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset1, 2'b00};
+		cif.dload = 32'd4;
+
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		
+		@(posedge CLK);		@(posedge CLK);		@(posedge CLK);
+		
+		//tests 1-4 : test writing to cache
+		//case 1:
+		
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset0, 2'b00};
+		++testcase;
+
+		@(posedge CLK);
+		if (dcif.dhit && (dcif.dmemload == 32'd1)) begin
+			$display("Passed test %d: wrote 1 to frame 1 word 0", testcase);
+		end
+		else begin
+			$display("Failed test %d: could not write 1 to frame 1 word 1", testcase);
+		end 
+
+		//case 2:
+		
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset1, 2'b00};
+		++testcase;
+
+		@(posedge CLK);
+		if (dcif.dhit && (dcif.dmemload == 32'd2)) begin
+			$display("Passed test %d: wrote 2 to frame 1 word 1", testcase);
+		end
+		else begin
+			$display("Failed test %d: could not write 2 to frame 1 word 2", testcase);
+		end 
+		
+		//case 3:
+		
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset0, 2'b00};
+		++testcase;
+
+		@(posedge CLK);
+		if (dcif.dhit && (dcif.dmemload == 32'd3)) begin
+			$display("Passed test %d: wrote 3 to frame 2 word 0", testcase);
+		end
+		else begin
+			$display("Failed test %d: could not write 3 to frame 2 word 1", testcase);
+		end 
+
+		//case 4:
+		
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset1, 2'b00};
+		++testcase;
+
+		@(posedge CLK);
+		if (dcif.dhit && (dcif.dmemload == 32'd4)) begin
+			$display("Passed test %d: wrote 4 to frame 2 word 1", testcase);
+		end
+		else begin
+			$display("Failed test %d: could not write 4 to frame 2 word 2", testcase);
+		end 
+		
+		
+		//case 5:
+		dcif.dmemaddr =  {tag_junk, idx1, offset1, 2'b00};
+		cif.dload = 32'd69;
+		++testcase;
+
+		@(posedge CLK);
+		if (!dcif.dhit && (dcif.dmemload != 32'd4)) begin
+			$display("Passed test %d: reset dhit on a miss", testcase);
+		end
+		else begin
+			$display("Failed test %d: did not reset dhit on a miss", testcase);
+		end 
+
+		//case 6:
+		dcif.dmemaddr =  {tag_junk, idx1, offset1, 2'b00};
+		cif.dload = 32'd69;
+		++testcase;
+
+		@(posedge CLK);
+		if (!dcif.dhit && (dcif.dmemload != 32'd4) && cif.dstore == 32'd69) begin
+			$display("Passed test %d: reset dhit on a miss", testcase);
+		end
+		else begin
+			$display("Failed test %d: did not reset dhit on a miss", testcase);
+		end 
+				
+
+		#(PERIOD);
+		nRST = 0;
+  end
+
+endprogram

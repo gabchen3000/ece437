@@ -5,7 +5,7 @@
 // mapped timing needs this. 1ns is too fast
 `timescale 1 ns / 1 ns
 
-module icache_tb;
+module dcache_tb;
 
   parameter PERIOD = 10;
 
@@ -22,7 +22,7 @@ module icache_tb;
   test PROG (CLK, nRST, dcif, cif);
   // DUT
 `ifndef MAPPED
-  icache DUT(CLK, nRST, dcif, cif);
+  dcache DUT(CLK, nRST, dcif, cif);
 `endif
 
 endmodule
@@ -37,16 +37,20 @@ program test(
 	parameter PERIOD = 10;
 	int testcase = 0;
 	int hitcount = 0;
-	logic [25:0] tag1 	= 26'd10;
-	logic [3:0]  idx1 	= 4'd1;
 
-	logic [25:0] tag2 	= 26'd12;
-	logic [3:0]  idx2		= 4'd2;
-	
-	logic [25:0] tag3 	= 26'd13;
-	logic [3:0]  idx3 	= 4'd3;
+	logic [3:0]  idx1 				= 4'd1;
+	logic [25:0] tag1_frame1 	= 26'd1;
+	logic [25:0] tag1_frame2 	= 26'd11;
 
-	logic [25:0] tag_junk 	= 26'd69;
+	logic [3:0]  idx4					= 4'd4;
+	logic [25:0] tag4				 	= 26'd20;
+
+	logic [25:0] tag_junk 		= 26'd69;
+	logic [25:0] tag_hit			=	26'd69;
+	logic [25:0] tag_new			= 26'd18;
+
+	logic offset0 						= 1'b0;
+	logic offset1 						= 1'b1;
 
 	initial begin
 		
@@ -57,138 +61,297 @@ program test(
 		// dcif.ihit
     
 		//inputs
-		//	dcif.imemaddr
-		//	dcif.imemREN
+		//	dcif.dmemaddr 	-- tag idx offst
+		//	cif.dload 			-- data from memory
+		//	cif.dwait 			-- controls state machine
+		//	dcif.halt				-- controls halt
 		//	dcif.dmemREN
 		//	dcif.dmemWEN
-		//	cif.iload
-		//	cif.iwait
 
-		dcif.imemaddr		= '0;
+		dcif.dmemaddr		= '0;
 		dcif.imemREN		= '0;
-		dcif.dmemREN		= '0;
-		dcif.dmemWEN		= '0;
-		cif.iload				= '0;
-		cif.iwait				= '0;
+		dcif.dmemREN		= 0;
+		dcif.dmemWEN 		= 0;
+		cif.dload				= '0;
+		cif.dwait				= '0;
 		#(PERIOD); //waits a while
 		nRST = 0; //start with nreset
 		
 		//fill cache
 		@(posedge CLK);
 		nRST = 1;
+		
+		dcif.dmemWEN		= '0;
+		dcif.dmemREN		= 1;
+		
+		//frame 1		
 		@(posedge CLK);
-		dcif.imemaddr =  {tag1, idx1, 2'b00};
-		cif.iload = 32'd1;
-		cif.iwait = 0;
-		@(posedge CLK);
-		dcif.imemaddr =  {tag2, idx2, 2'b00};
-		cif.iload = 32'd2;
-		cif.iwait = 0;
-		@(posedge CLK);
-		dcif.imemaddr =  {tag3, idx3, 2'b00};
-		cif.iload = 32'd3;
-		cif.iwait = 0;
-		@(posedge CLK);
-	
-		//pre-test initialize
-		dcif.imemREN		= 1;
-
-		//case 1: test hit
-		cif.iwait = 1;
-		dcif.imemaddr =  {tag1, idx1, 2'b00};
-		++testcase;
-
-		@(posedge CLK);
-		if (dcif.ihit && (dcif.imemload == 32'd1)) begin
-			$display("Passed test %d: ihit is asserted and imemload has correct data", testcase);
-		end
-		else begin
-			$display("Failed test %d: for expected hit-- ihit = %d and imemload = %d", testcase, dcif.ihit, dcif.imemload);
-		end 
-		#(PERIOD);
-
-		//case 2: test miss
-		dcif.imemaddr 	=  {tag_junk, idx1, 2'b00};
-		cif.iwait				= 1;
-		cif.iload 			= 32'd69;
-		++testcase;
-
-		@(posedge CLK);
-		if (!dcif.ihit && (dcif.imemload == cif.iload)) begin
-			$display("Passed test %d: ihit is deasserted for miss and imemload is same as cif.iload", testcase);
-		end
-		else begin
-			$display("Failed test %d: for expected miss-- ihit = %d and imemload = %d", testcase, dcif.ihit, dcif.imemload);
-		end 
-		#(PERIOD);
-
-		//case 3: test 2 consecutive hits
-		@(posedge CLK);
-		dcif.imemaddr =  {tag2, idx2, 2'b00};
+		cif.dwait = 1;
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset0, 2'b00};
+		cif.dload = 32'd1;
 		
 		@(posedge CLK);
-		if (dcif.ihit && (dcif.imemload == 32'd2)) begin
-			hitcount++;
-		end
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
 
 		@(posedge CLK);
-		dcif.imemaddr =  {tag3, idx3, 2'b00};
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset1, 2'b00};
+		cif.dload = 32'd2;
+		
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		
+		//frame 2
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset0, 2'b00};
+		cif.dload = 32'd3;
+
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset1, 2'b00};
+		cif.dload = 32'd4;
+
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		
+		//@(posedge CLK);		@(posedge CLK);		@(posedge CLK);
+		
+		//tests 1-4 : test reading from cache (all hits)
+		//case 1 and 2 is ONE LOADWORD from cache into a single block
+		//case 1:
+		
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset0, 2'b00};
 		++testcase;
 
 		@(posedge CLK);
-		if (dcif.ihit && (dcif.imemload == 32'd3)) begin
-			hitcount++;
-		end
-
-		@(posedge CLK);
-		if (hitcount == 2) begin
-			$display("Passed test %d: correct beahvior for 2 consecutive hits", testcase);
+		if (dcif.dhit && (dcif.dmemload == 32'd1)) begin
+			$display("Passed test %d: reading 1 from cache frame 1 word 1", testcase);
 		end
 		else begin
-			$display("Failed test %d: incorrect beahvior for 2 consecutive hits, %d, %d", testcase, dcif.ihit, dcif.imemload);
-		end
-		#(PERIOD);
-	
-		//case 4: test 2 consecutive missies    
-		@(posedge CLK);
-		dcif.imemaddr =  {tag_junk, idx2, 2'b00};
-		cif.iwait				= 1;
-		cif.iload 			= 32'd9;
-	
-		@(posedge CLK);
-		if (!dcif.ihit && (dcif.imemload == cif.iload)) begin
-			hitcount--;
-		end
+			$display("Failed test %d: could not read 1 from cache frame 1 word 1", testcase);
+		end 
 
-		@(posedge CLK);
-		dcif.imemaddr =  {tag_junk, idx3, 2'b00};
+		//case 2:
+		
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset1, 2'b00};
 		++testcase;
 
 		@(posedge CLK);
-		if (!dcif.ihit && (dcif.imemload == cif.iload)) begin
-			hitcount--;
-		end
-
-		@(posedge CLK);
-		if (hitcount == 0) begin
-			$display("Passed test %d: correct beahvior for 2 consecutive misses", testcase);
+		if (dcif.dhit && (dcif.dmemload == 32'd2)) begin
+			$display("Passed test %d: reading 2 from cache frame 1 word 2", testcase);
 		end
 		else begin
-			$display("Failed test %d: incorrect beahvior for 2 consecutive misses, %d, %d", testcase, dcif.ihit, hitcount);
-		end
-		#(PERIOD);
+			$display("Failed test %d: could not read 2 from cache frame 1 word 2", testcase);
+		end 
+		
+		//case 3 and 4 reading from the second frame in the cache
+		//case 3:
+		
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset0, 2'b00};
+		++testcase;
 
-		//case 5: dMEM    
 		@(posedge CLK);
-		dcif.imemREN		= '0;
+		if (dcif.dhit && (dcif.dmemload == 32'd3)) begin
+			$display("Passed test %d: reading 3 from cache frame 2 word 1", testcase);
+		end
+		else begin
+			$display("Failed test %d: could not read 3 from cache frame 2 word 1", testcase);
+		end 
+
+		//case 4:
+		
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset1, 2'b00};
+		++testcase;
+
+		@(posedge CLK);
+		if (dcif.dhit && (dcif.dmemload == 32'd4)) begin
+			$display("Passed test %d: reading 4 from cache frame 2 word 1", testcase);
+		end
+		else begin
+			$display("Failed test %d: could not read 4 from cache frame 2 word 2", testcase);
+		end 
+		
+		
+		//case 5: testing miss, trying to read from new tag -- eviction of cache first word
+		dcif.dmemaddr =  {tag_junk, idx1, offset0, 2'b00};
+		cif.dload = 32'd69;
+		@(posedge CLK);
+		cif.dwait = 0;
+		
+		++testcase;
+
+		@(posedge CLK);
+		if (!dcif.dhit) begin
+			$display("Passed test %d: It's a miss, load word eviction, first word loaded to cache", testcase);
+		end
+		else begin
+			$display("Failed test %d: It was a hit, load word eviction did not happen", testcase);
+		end 
+		cif.dwait = 1;
+
+		//case 6: testing miss, trying to read from new tag -- eviction of cache second word
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag_junk, idx1, offset1, 2'b00};
+		cif.dload = 32'd67;
+		@(posedge CLK);
+		cif.dwait = 0;
+		++testcase;
+
+
+		if (!dcif.dhit) begin
+			$display("Passed test %d: It's a miss, load word eviction, second word loaded to cache", testcase);
+		end
+		else begin
+			$display("Failed test %d: It was a hit, load word eviction did not happen", testcase);
+		end 
+		@(posedge CLK);
+		cif.dwait = 1;
+
+		//case 7: test dhit and dmemload on rewritten data first word
+		dcif.dmemaddr =  {tag_junk, idx1, offset0, 2'b00};
+		++testcase;
+
+		@(posedge CLK);
+		if (dcif.dhit && (dcif.dmemload == 32'd69)) begin
+			$display("Passed test %d: dhit on rewritten data, correct data", testcase);
+		end
+		else begin
+			$display("Failed test %d: no dhit on rewritten data, data is %d", testcase, dcif.dmemload);
+		end 
+
+		//case 8: test dhit and dmemload on rewritten data first word
+		dcif.dmemaddr =  {tag_junk, idx1, offset1, 2'b00};
+		++testcase;
+
+		@(posedge CLK);
+		if (dcif.dhit && (dcif.dmemload == 32'd67)) begin
+			$display("Passed test %d: dhit on rewritten data, correct data", testcase);
+		end
+		else begin
+			$display("Failed test %d: no dhit on rewritten data, data is %d", testcase, dcif.dmemload);
+		end 
+
+		//case 9 test hit and setting dirty bit and imemREN = 1 (should ignore)
+		dcif.dmemREN = 0;
+		dcif.imemREN = 1;	//should ignore
+		dcif.dmemWEN = 1;
+		dcif.dmemaddr = {tag_hit, idx1, offset0, 2'b0};
+		dcif.dmemstore = 32'd40;
 		++testcase;
 		@(posedge CLK);
-		if (!dcif.ihit && (dcif.imemload == '0)) begin
-			$display("Passed test %d: correct beahvior for when dmemREN is deasserted", testcase);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		dcif.dmemaddr = {tag_hit, idx1, offset1, 2'b0};
+		dcif.dmemstore = 32'd50;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+
+
+		if (dcif.dhit) begin
+			$display("Passed test %d: dhit on a write", testcase);
 		end
 		else begin
-			$display("Failed test %d: incorrect beahvior for when dmemREN is deasserted", testcase);
+			$display("Failed test %d: no dhit on a write", testcase);
 		end
+
+		@(posedge CLK);
+
+		//case 10 test hit and setting dirty bit
+		++testcase;
+		dcif.dmemREN = 0;
+		dcif.dmemWEN = 1;
+		dcif.dmemaddr = {tag1_frame2, idx1, offset0, 2'b0};
+		dcif.dmemstore = 32'd41;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		dcif.dmemaddr = {tag1_frame2, idx1, offset1, 2'b0};
+		dcif.dmemstore = 32'd51;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+
+
+		if (dcif.dhit) begin
+			$display("Passed test %d: dhit on a write", testcase);
+		end
+		else begin
+			$display("Failed test %d: no dhit on a write", testcase);
+		end
+
+		@(posedge CLK);
+
+		//case 11 test rewrite on data, this is eviction with a store word one
+		++testcase;
+		dcif.imemREN = 0;	//should ignore
+		dcif.dmemaddr = {tag_new, idx1, offset0, 2'b0};
+		dcif.dmemstore = 32'd49;
+		@(posedge CLK);
+		cif.dwait = 0;
+
+		if (!dcif.dhit && cif.dstore == 40) begin
+			$display("Passed test %d: dhit on a write, new dstore into memory", testcase);
+		end
+		else begin
+			$display("Failed test %d: no dhit on a write dstore value = %d", testcase, cif.dstore);
+		end
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+
+
+
+		//case 12 test rewrite on data, this is eviction with a store word two
+		++testcase;
+		dcif.dmemaddr = {tag_new, idx1, offset1, 2'b0};
+		dcif.dmemstore = 32'd59;
+		@(posedge CLK);
+		cif.dwait = 0;
+
+		if (!dcif.dhit && cif.dstore == 50) begin
+			$display("Passed test %d: dhit on a write, new dstore into memory", testcase);
+		end
+		else begin
+			$display("Failed test %d: no dhit on a write dstore value = %d", testcase, cif.dstore);
+		end
+		@(posedge CLK);
+		cif.dwait = 1;
+
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+				
+
+
+
+		
+		
+		
+
+
+				
+		//add another test case for a store word and evict that
+		//add another test case for halt -> flush
+
 		#(PERIOD);
 		nRST = 0;
   end

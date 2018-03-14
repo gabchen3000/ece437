@@ -9,7 +9,7 @@
 // cpu types
 `include "cpu_types_pkg.vh"
 
-module cache (
+module dcache (
   input logic CLK, nRST,
   datapath_cache_if.cache dcif,
   caches_if.dcache cif
@@ -27,7 +27,7 @@ module cache (
 	logic [25:0]				tag, frame1_tag, frame2_tag;
 	logic [2:0]					idx; //0 - 8
 	logic [3:0]					flushcount, nxt_flushcount;
-	logic								offset, dirtyloop, miss, frame1_valid, frame2_valid, frame1_dirty, frame2_dirty, lru[7:0], nxt_lru[7:0]; //lru 0 for left, 1 for right
+	logic								goflush, offset, dirtyloop, miss, frame1_valid, frame2_valid, frame1_dirty, frame2_dirty, lru[7:0], nxt_lru[7:0]; //lru 0 for left, 1 for right
 	word_t							count, nxt_count, frame1_data_1, frame1_data_2, frame2_data_1, frame2_data_2;
 	
 	typedef enum logic[3:0] {IDLE, LD1, LD2, WB1, WB2, FLUSH1, FLUSH2, DIRTY, COUNT, HALT} state_t;
@@ -94,7 +94,7 @@ module cache (
 
 			IDLE: begin
 				if (dcif.halt) begin
-					nxt_state = FLUSH1;
+					nxt_state = DIRTY;
 				end
 				else if (miss) begin
 					if (lru[idx] == 0) begin
@@ -164,16 +164,18 @@ module cache (
 			end
 
 			DIRTY: begin
-				if (dirtyloop) begin
+				if (goflush) begin
 					nxt_state = FLUSH1;
 				end
-				else begin
+				else if (!dirtyloop) begin
 					nxt_state = COUNT;
 				end
 			end
 
 			COUNT: begin
-				nxt_state = HALT;
+				if (!cif.dwait) begin
+					nxt_state = HALT;
+				end
 			end
 
 			HALT: begin
@@ -189,12 +191,20 @@ module cache (
 		miss = 0;
 		dcif.dhit = 0;
 		dcif.dmemload = 0;
-		nxt_lru[7:0] = lru[7:0];
+		nxt_lru[7] = lru[7];
+		nxt_lru[6] = lru[6];
+		nxt_lru[5] = lru[5];
+		nxt_lru[4] = lru[4];
+		nxt_lru[3] = lru[3];
+		nxt_lru[2] = lru[2];
+		nxt_lru[1] = lru[1];
+		nxt_lru[0] = lru[0];
 		cif.dWEN = 0;
 		cif.dREN = 0;
 		cif.daddr = 0;
 		cif.dstore = 0;
 		dirtyloop = 1;
+		goflush = 0;
 		nxt_flushcount = flushcount;
 
 		frame1_valid = frame1[idx].valid;
@@ -207,6 +217,7 @@ module cache (
 		frame2_tag = frame2[idx].tag;
 		frame2_data_1 = frame2[idx].data[0];
 		frame2_data_2 = frame2[idx].data[1];
+
 
 		casez (cur_state)
 			IDLE: begin
@@ -251,14 +262,14 @@ module cache (
 						else begin
 							frame2_data_2 = dcif.dmemstore;
 						end
-						nxt_lru[idx] = 1;
+						nxt_lru[idx] = 0;
 					end
 					else begin
 						miss = 1;
 						nxt_count = count - 1;
 					end
 				end
-				else begin
+				else if (dcif.halt) begin
 					dirtyloop = 1;
 				end
 			end
@@ -282,12 +293,14 @@ module cache (
 					frame1_valid = 1;
 					frame1_dirty = 0;
 					frame1_tag = tag;
+					nxt_lru[idx] = 1;
 				end
 				else begin
 					frame2_data_2 = cif.dload;
 					frame2_valid = 1;
 					frame2_dirty = 0;
 					frame2_tag = tag;
+					nxt_lru[idx] = 0;
 				end
 			end
 
@@ -308,16 +321,18 @@ module cache (
 				if (lru[idx] == 0) begin
 					cif.daddr = {frame1[idx].tag, idx, 3'b100}; //write the second words, set index 2 to 1
 					cif.dstore = frame1[idx].data[1];
+					nxt_lru[idx] = 1;
 				end
 				else begin
 					cif.daddr = {frame2[idx].tag, idx, 3'b100}; //write the second words first, set index 2 to 1
 					cif.dstore = frame2[idx].data[1];
+					nxt_lru[idx] = 0;
 				end
 			end
 
 			FLUSH1: begin
 				cif.dWEN = 1;
-				if (flushcount < 8) begin
+				if (flushcount[3] == 0) begin
 					cif.daddr = {frame1[flushcount].tag, flushcount, 3'b000};
 					cif.dstore = frame1[flushcount].data[0];
 				end
@@ -329,20 +344,41 @@ module cache (
 
 			FLUSH2: begin
 				cif.dWEN = 1;
-				if (flushcount < 8) begin
+				if (flushcount[3] == 0) begin
 					cif.daddr = {frame1[flushcount].tag, flushcount, 3'b100};
 					cif.dstore = frame1[flushcount].data[1];
 				end
-				else begin
+				else begin		
 					cif.daddr = {frame2[flushcount - 8].tag, (flushcount - 8), 3'b100};
 					cif.dstore = frame2[flushcount - 8].data[1];
+				end
+				if (!cif.dwait) begin
+					nxt_flushcount = flushcount + 1;
 				end
 			end
 
 			DIRTY: begin
-				nxt_flushcount = flushcount + 1;
-				if (flushcount >= 15) begin
+				if (flushcount[3] == 0) begin
+					if (frame1[flushcount].dirty) begin					
+						goflush = 1;
+					end
+					else begin
+						nxt_flushcount = flushcount + 1;
+					end
+				end
+				else begin
+					if (frame2[flushcount - 8].dirty) begin
+						goflush = 1;
+					end
+					else begin
+						nxt_flushcount = flushcount + 1;
+					end
+				end
+				if (flushcount == 15) begin
 					dirtyloop = 0;
+				end
+				else begin
+					dirtyloop = 1;
 				end
 			end
 
