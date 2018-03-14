@@ -44,10 +44,13 @@ program test(
 
 	logic [3:0]  idx4					= 4'd4;
 	logic [25:0] tag4				 	= 26'd20;
+	logic [3:0]	 idx7					= 4'd7;
 
 	logic [25:0] tag_junk 		= 26'd69;
 	logic [25:0] tag_hit			=	26'd69;
 	logic [25:0] tag_new			= 26'd18;
+	logic [25:0] tag_last			= 26'd500;
+	logic [25:0] tag_last2			= 26'd600;
 
 	logic offset0 						= 1'b0;
 	logic offset1 						= 1'b1;
@@ -340,17 +343,133 @@ program test(
 		@(posedge CLK);
 		cif.dwait = 1;
 				
-
-
-
+		//case 13 write into one more index, test flush all dirty data with halt signal
+		++testcase;
+		//frame 1		
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag_last, idx7, offset0, 2'b00};
+		cif.dload = 32'hAA;
 		
-		
-		
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
 
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag_last, idx7, offset1, 2'b00};
+		cif.dload = 32'hAA;
+		
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		
+		//frame 2
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag_last2, idx7, offset0, 2'b00};
+		cif.dload = 32'hAA;
 
-				
-		//add another test case for a store word and evict that
-		//add another test case for halt -> flush
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+
+		@(posedge CLK);
+		dcif.dmemaddr =  {tag_last2, idx7, offset1, 2'b00};
+		cif.dload = 32'hAA;
+
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+
+		dcif.dmemaddr = {tag_last, idx7, offset0, 2'b0};
+		dcif.dmemstore = 32'd88;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		dcif.dmemaddr = {tag_last, idx7, offset1, 2'b0};
+		dcif.dmemstore = 32'd89;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+
+		dcif.dmemaddr = {tag_last2, idx7, offset0, 2'b0};
+		dcif.dmemstore = 32'd98;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		dcif.dmemaddr = {tag_last2, idx7, offset1, 2'b0};
+		dcif.dmemstore = 32'd99;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		
+		dcif.halt = 1;
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		
+		if (cif.dstore == 18) begin
+			$display("Passed test %d: count value is correct, all data flushed", testcase);
+		end
+		else begin
+			$display("Failed test %d: count value is not correct: %d, data not flushed", testcase, cif.dstore);
+		end
+
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		//finish writing count.
+
 
 		#(PERIOD);
 		nRST = 0;

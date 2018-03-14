@@ -1,5 +1,5 @@
 # vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf dcache_tb.wlf work.dcache_tb 
-# Start time: 19:02:48 on Mar 14,2018
+# Start time: 19:41:22 on Mar 14,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -31,5 +31,6 @@
 # Passed test          10: dhit on a write
 # Passed test          11: dhit on a write, new dstore into memory
 # Passed test          12: dhit on a write, new dstore into memory
-# End time: 19:02:48 on Mar 14,2018, Elapsed time: 0:00:00
+# Passed test          13: count value is correct, all data flushed
+# End time: 19:41:22 on Mar 14,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1

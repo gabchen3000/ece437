@@ -27,7 +27,7 @@ module dcache (
 	logic [25:0]				tag, frame1_tag, frame2_tag;
 	logic [2:0]					idx; //0 - 8
 	logic [3:0]					flushcount, nxt_flushcount;
-	logic								goflush, offset, dirtyloop, miss, frame1_valid, frame2_valid, frame1_dirty, frame2_dirty, lru[7:0], nxt_lru[7:0]; //lru 0 for left, 1 for right
+	logic								goflush, offset, dirtyloop, nxt_dirtyloop, miss, frame1_valid, frame2_valid, frame1_dirty, frame2_dirty, lru[7:0], nxt_lru[7:0]; //lru 0 for left, 1 for right
 	word_t							count, nxt_count, frame1_data_1, frame1_data_2, frame2_data_1, frame2_data_2;
 	
 	typedef enum logic[3:0] {IDLE, LD1, LD2, WB1, WB2, FLUSH1, FLUSH2, DIRTY, COUNT, HALT} state_t;
@@ -51,6 +51,7 @@ module dcache (
 			lru[0] <= 0;
 			count <= 0;
 			flushcount <= 0;
+			dirtyloop <= 1;
 		end
 		else begin
 			cur_state <= nxt_state;
@@ -64,6 +65,7 @@ module dcache (
 			lru[0] <= nxt_lru[0];
 			count <= nxt_count;
 			flushcount <= nxt_flushcount;
+			dirtyloop <= nxt_dirtyloop;
 		end
 	end
 
@@ -203,7 +205,7 @@ module dcache (
 		cif.dREN = 0;
 		cif.daddr = 0;
 		cif.dstore = 0;
-		dirtyloop = 1;
+		nxt_dirtyloop = dirtyloop;
 		goflush = 0;
 		nxt_flushcount = flushcount;
 
@@ -270,7 +272,7 @@ module dcache (
 					end
 				end
 				else if (dcif.halt) begin
-					dirtyloop = 1;
+					nxt_dirtyloop = 1;
 				end
 			end
 
@@ -374,11 +376,12 @@ module dcache (
 						nxt_flushcount = flushcount + 1;
 					end
 				end
-				if (flushcount == 15) begin
-					dirtyloop = 0;
+				if (flushcount >= 15) begin
+					nxt_dirtyloop = 0;
+					nxt_flushcount = 16;
 				end
 				else begin
-					dirtyloop = 1;
+					nxt_dirtyloop = 1;
 				end
 			end
 
