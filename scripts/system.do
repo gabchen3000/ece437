@@ -173,7 +173,7 @@ add wave -noupdate -group rfif /system_tb/DUT/CPU/DP/rfif/rsel2
 add wave -noupdate -group rfif /system_tb/DUT/CPU/DP/rfif/wdat
 add wave -noupdate -group rfif /system_tb/DUT/CPU/DP/rfif/rdat1
 add wave -noupdate -group rfif /system_tb/DUT/CPU/DP/rfif/rdat2
-add wave -noupdate -expand /system_tb/DUT/CPU/DP/REGF/registers
+add wave -noupdate /system_tb/DUT/CPU/DP/REGF/registers
 add wave -noupdate -group iiif /system_tb/DUT/CPU/DP/iiif/ifid_ip_ihit
 add wave -noupdate -group iiif /system_tb/DUT/CPU/DP/iiif/ifid_ip_dhit
 add wave -noupdate -group iiif /system_tb/DUT/CPU/DP/iiif/ifid_ip_imemload
@@ -314,14 +314,16 @@ add wave -noupdate -expand -group caches /system_tb/DUT/CPU/cif0/ccinv
 add wave -noupdate -expand -group caches /system_tb/DUT/CPU/cif0/ccwrite
 add wave -noupdate -expand -group caches /system_tb/DUT/CPU/cif0/cctrans
 add wave -noupdate -expand -group caches /system_tb/DUT/CPU/cif0/ccsnoopaddr
-add wave -noupdate -expand -group dcache -expand -subitemconfig {{/system_tb/DUT/CPU/CM/DCACHE/frame1[7]} -expand} /system_tb/DUT/CPU/CM/DCACHE/frame1
-add wave -noupdate -expand -group dcache /system_tb/DUT/CPU/CM/DCACHE/frame2
+add wave -noupdate -expand -group dcache -expand /system_tb/DUT/CPU/CM/DCACHE/frame1
+add wave -noupdate -expand -group dcache -expand -subitemconfig {{/system_tb/DUT/CPU/CM/DCACHE/frame2[7]} -expand {/system_tb/DUT/CPU/CM/DCACHE/frame2[6]} -expand {/system_tb/DUT/CPU/CM/DCACHE/frame2[0]} -expand} /system_tb/DUT/CPU/CM/DCACHE/frame2
 add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/cur_state
 add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/nxt_state
 add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/frame1_dirty
 add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/frame2_dirty
+add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/flushcountIDX
+add wave -noupdate /system_tb/DUT/CPU/CM/DCACHE/flushcount
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {400000 ps} 0}
+WaveRestoreCursors {{Cursor 1} {453755804 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 181
 configure wave -valuecolwidth 166
@@ -337,4 +339,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {1683517 ps}
+WaveRestoreZoom {453206831 ps} {454890348 ps}

@@ -187,7 +187,6 @@ module dcache (
 		endcase
 	end
 
-	assign flushcountIDX = flushcount[2:0];
 	//output logic
 	always_comb begin
 		nxt_count = count;
@@ -209,6 +208,7 @@ module dcache (
 		nxt_dirtyloop = dirtyloop;
 		goflush = 0;
 		nxt_flushcount = flushcount;
+		flushcountIDX = flushcount[2:0];
 
 		frame1_valid = frame1[idx].valid;
 		frame1_dirty = frame1[idx].dirty;
@@ -244,7 +244,7 @@ module dcache (
 					end
 				end
 				else if (dcif.dmemWEN) begin
-					if (tag == frame1[idx].tag && frame1[idx].valid) begin
+					if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
 						nxt_count = count + 1;
 						dcif.dhit = 1;
 						frame1_dirty = 1;
@@ -256,7 +256,7 @@ module dcache (
 						end
 						nxt_lru[idx] = 1;
 					end
-					else if (tag == frame2[idx].tag && frame2[idx].valid) begin
+					else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
 						nxt_count = count + 1;
 						dcif.dhit = 1;
 						frame2_dirty = 1;
@@ -329,16 +329,10 @@ module dcache (
 				if (lru[idx] == 0) begin
 					cif.daddr = {frame1[idx].tag, idx, 3'b100}; //write the second words, set index 2 to 1
 					cif.dstore = frame1[idx].data[1];
-					if (!cif.dwait) begin
-						nxt_lru[idx] = 1;
-					end
 				end
 				else begin
 					cif.daddr = {frame2[idx].tag, idx, 3'b100}; //write the second words first, set index 2 to 1
 					cif.dstore = frame2[idx].data[1];
-					if (!cif.dwait) begin
-						nxt_lru[idx] = 0;
-					end
 				end
 			end
 
@@ -371,7 +365,7 @@ module dcache (
 
 			DIRTY: begin
 				if (flushcount[3] == 0) begin
-					if (frame1[flushcount].dirty) begin					
+					if (frame1[flushcountIDX].dirty) begin					
 						goflush = 1;
 					end
 					else begin
@@ -379,15 +373,16 @@ module dcache (
 					end
 				end
 				else begin
-					if (frame2[flushcount - 8].dirty) begin
+					if (frame2[flushcountIDX].dirty) begin
 						goflush = 1;
 					end
 					else begin
 						nxt_flushcount = flushcount + 1;
 					end
 				end
-				if (flushcount >= 15) begin
+				if (flushcount >= 16) begin
 					nxt_dirtyloop = 0;
+					goflush = 0;
 					nxt_flushcount = 16;
 				end
 				else begin

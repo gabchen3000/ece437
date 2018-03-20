@@ -1,0 +1,47 @@
+143 words loaded from meminit.hex
+Starting simulation...
+
+HALT executed(Core 1).
+Done simulating...
+
+Instruction Breakdown:
+
+	  SLL:    3 (0.64%)
+	    J:   46 (9.87%)
+	  JAL:    3 (0.64%)
+	  BEQ:  116 (24.89%)
+	  BNE:   14 (3.00%)
+	 ADDIU:   77 (16.52%)
+	  ORI:    7 (1.50%)
+	  SRL:    2 (0.43%)
+	   LW:   69 (14.81%)
+	   SW:   48 (10.30%)
+	 HALT:    1 (0.21%)
+	   JR:    3 (0.64%)
+	 ADDU:   13 (2.79%)
+	 SUBU:    1 (0.21%)
+	   OR:    8 (1.72%)
+	  SLT:   41 (8.80%)
+	 SLTU:   14 (3.00%)
+	 TOTAL:  466
+
+	PC: 00000068
+
+ICache:
+	 Accesses:	466
+	 Hits:		376
+	 Hit Rate:	80%
+DCache:
+	 Accesses:	117
+	 Hits:		101
+	 Hit Rate:	86%
+
+General Purpose Registers:
+	R 0: 00000000	R 1: 00000000	R 2: 00000000	R 3: 00000000
+	R 4: 00000320	R 5: 00000000	R 6: 0000033C	R 7: 00000000
+	R 8: 00000538	R 9: 0000005A	R10: 00000053	R11: 00000000
+	R12: 00000000	R13: 00000000	R14: 00000000	R15: 0000004B
+	R16: 0000000E	R17: 00000304	R18: 00000007	R19: 00000320
+	R20: 00000007	R21: 00000000	R22: 00000000	R23: 00000000
+	R24: 00000051	R25: 00000334	R26: 00000000	R27: 00000000
+	R28: 00000000	R29: 0000FFFC	R30: 0000FFFC	R31: 00000060
