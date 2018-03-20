@@ -11,7 +11,7 @@
 
 module icache (
   input logic CLK, nRST,
-  datapath_cache_if.cache dcif,
+  datapath_cache_if.icache dcif,
   caches_if.icache cif
 );
   // import types
@@ -28,7 +28,7 @@ module icache (
 	assign cif.iaddr = hit ? 0 : dcif.imemaddr;
 
 	always_comb begin
-		if (dcif.imemREN && !dcif.dmemREN && !dcif.dmemWEN) begin
+		if (dcif.imemREN) begin
 			hit = (tag == frame[idx].tag) && frame[idx].valid;
 			dcif.imemload = hit ? frame[idx].data : cif.iload;
 			dcif.ihit = hit ? 1 : !cif.iwait; //ihit is when instr read is done == when iwait is 0 (given a cache miss)

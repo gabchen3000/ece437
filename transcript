@@ -1,5 +1,5 @@
-# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf dcache_tb.wlf work.dcache_tb 
-# Start time: 19:41:22 on Mar 14,2018
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
+# Start time: 19:50:14 on Mar 19,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -12,25 +12,51 @@
 # //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
 # //
 # Loading sv_std.std
-# Loading work.dcache_tb
+# Loading work.system_tb
 # Loading work.cpu_types_pkg
-# Loading work.datapath_cache_if
-# Loading work.caches_if
+# Loading work.system_if
 # Loading work.test
+# Loading work.system
+# Loading work.ram
+# Loading work.altsyncram_1
+# Loading work.altsyncram_99f1
+# Loading work.sld_mod_ram_rom
+# Loading work.sld_rom_sr
+# Loading altera_ver.dffeas
+# Loading cycloneive_ver.cycloneive_lcell_comb
+# Loading work.altsyncram_fta2
+# Loading work.decode_jsa_1
+# Loading work.decode_jsa
+# Loading cycloneive_ver.cycloneive_ram_block
+# Loading cycloneive_ver.cycloneive_ram_register
+# Loading cycloneive_ver.cycloneive_ram_pulse_generator
+# Loading work.pipeline
+# Loading work.datapath
+# Loading work.mem_wb
+# Loading work.ex_mem
+# Loading work.id_ex
+# Loading work.if_id
+# Loading work.register_file
+# Loading work.alu
+# Loading work.program_counter
+# Loading work.control_unit
+# Loading work.forward_unit
+# Loading work.hazard_unit
+# Loading work.memory_control
+# Loading work.caches
 # Loading work.dcache
+# Loading work.icache
+# Loading cycloneive_ver.cycloneive_jtag
+# Loading cycloneive_ver.cycloneive_io_ibuf
+# Loading cycloneive_ver.cycloneive_clkctrl
+# Loading cycloneive_ver.cycloneive_mux41
+# Loading cycloneive_ver.cycloneive_ena_reg
+# Loading cycloneive_ver.cycloneive_io_obuf
+# Loading altera_ver.PRIM_GDFF_LOW
 # run -all
-# Passed test           1: reading 1 from cache frame 1 word 1
-# Passed test           2: reading 2 from cache frame 1 word 2
-# Passed test           3: reading 3 from cache frame 2 word 1
-# Passed test           4: reading 4 from cache frame 2 word 1
-# Passed test           5: It's a miss, load word eviction, first word loaded to cache
-# Passed test           6: It's a miss, load word eviction, second word loaded to cache
-# Passed test           7: dhit on rewritten data, correct data
-# Passed test           8: dhit on rewritten data, correct data
-# Passed test           9: dhit on a write
-# Passed test          10: dhit on a write
-# Passed test          11: dhit on a write, new dstore into memory
-# Passed test          12: dhit on a write, new dstore into memory
-# Passed test          13: count value is correct, all data flushed
-# End time: 19:41:22 on Mar 14,2018, Elapsed time: 0:00:00
+# Starting Processor.
+# Break key hit
+# Simulation stop requested.
+#  exit
+# End time: 20:05:14 on Mar 19,2018, Elapsed time: 0:15:00
 # Errors: 0, Warnings: 1

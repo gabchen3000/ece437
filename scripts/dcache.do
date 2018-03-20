@@ -27,8 +27,10 @@ add wave -noupdate /dcache_tb/cif/dwait
 add wave -noupdate /dcache_tb/cif/dstore
 add wave -noupdate /dcache_tb/DUT/flushcount
 add wave -noupdate /dcache_tb/DUT/dirtyloop
+add wave -noupdate /dcache_tb/DUT/count
+add wave -noupdate /dcache_tb/DUT/nxt_count
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {675 ns} 0}
+WaveRestoreCursors {{Cursor 1} {6 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 151
@@ -44,4 +46,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {625 ns} {782 ns}
+WaveRestoreZoom {916 ns} {1073 ns}

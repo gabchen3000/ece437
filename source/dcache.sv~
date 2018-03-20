@@ -11,7 +11,7 @@
 
 module dcache (
   input logic CLK, nRST,
-  datapath_cache_if.cache dcif,
+  datapath_cache_if.dcache dcif,
   caches_if.dcache cif
 );
   // import types
@@ -25,8 +25,8 @@ module dcache (
 */
 	dcache_frame [7:0]	frame1, frame2;//1kbits in total, two words (64bits) per block
 	logic [25:0]				tag, frame1_tag, frame2_tag;
-	logic [2:0]					idx; //0 - 8
-	logic [3:0]					flushcount, nxt_flushcount;
+	logic [2:0]					idx, flushcountIDX; //0 - 8
+	logic [4:0]					flushcount, nxt_flushcount;
 	logic								goflush, offset, dirtyloop, nxt_dirtyloop, miss, frame1_valid, frame2_valid, frame1_dirty, frame2_dirty, lru[7:0], nxt_lru[7:0]; //lru 0 for left, 1 for right
 	word_t							count, nxt_count, frame1_data_1, frame1_data_2, frame2_data_1, frame2_data_2;
 	
@@ -75,7 +75,7 @@ module dcache (
 			frame1[7:0] <= '0;
 			frame2[7:0] <= '0;
 		end
-		else if (cif.dwait == 0) begin
+		else begin
 			frame1[idx].valid <= frame1_valid;
 			frame1[idx].dirty <= frame1_dirty;
 			frame1[idx].tag <= frame1_tag;
@@ -187,6 +187,7 @@ module dcache (
 		endcase
 	end
 
+	assign flushcountIDX = flushcount[2:0];
 	//output logic
 	always_comb begin
 		nxt_count = count;
@@ -219,6 +220,7 @@ module dcache (
 		frame2_tag = frame2[idx].tag;
 		frame2_data_1 = frame2[idx].data[0];
 		frame2_data_2 = frame2[idx].data[1];
+		dcif.flushed = 0;
 
 
 		casez (cur_state)
@@ -242,7 +244,7 @@ module dcache (
 					end
 				end
 				else if (dcif.dmemWEN) begin
-					if (tag == frame1[idx].tag) begin
+					if (tag == frame1[idx].tag && frame1[idx].valid) begin
 						nxt_count = count + 1;
 						dcif.dhit = 1;
 						frame1_dirty = 1;
@@ -254,7 +256,7 @@ module dcache (
 						end
 						nxt_lru[idx] = 1;
 					end
-					else if (tag == frame2[idx].tag) begin
+					else if (tag == frame2[idx].tag && frame2[idx].valid) begin
 						nxt_count = count + 1;
 						dcif.dhit = 1;
 						frame2_dirty = 1;
@@ -295,14 +297,18 @@ module dcache (
 					frame1_valid = 1;
 					frame1_dirty = 0;
 					frame1_tag = tag;
-					nxt_lru[idx] = 1;
+					if (!cif.dwait) begin
+						nxt_lru[idx] = 1;
+					end
 				end
 				else begin
 					frame2_data_2 = cif.dload;
 					frame2_valid = 1;
 					frame2_dirty = 0;
 					frame2_tag = tag;
-					nxt_lru[idx] = 0;
+					if (!cif.dwait) begin
+						nxt_lru[idx] = 0;
+					end
 				end
 			end
 
@@ -323,36 +329,40 @@ module dcache (
 				if (lru[idx] == 0) begin
 					cif.daddr = {frame1[idx].tag, idx, 3'b100}; //write the second words, set index 2 to 1
 					cif.dstore = frame1[idx].data[1];
-					nxt_lru[idx] = 1;
+					if (!cif.dwait) begin
+						nxt_lru[idx] = 1;
+					end
 				end
 				else begin
 					cif.daddr = {frame2[idx].tag, idx, 3'b100}; //write the second words first, set index 2 to 1
 					cif.dstore = frame2[idx].data[1];
-					nxt_lru[idx] = 0;
+					if (!cif.dwait) begin
+						nxt_lru[idx] = 0;
+					end
 				end
 			end
 
 			FLUSH1: begin
 				cif.dWEN = 1;
 				if (flushcount[3] == 0) begin
-					cif.daddr = {frame1[flushcount].tag, flushcount, 3'b000};
-					cif.dstore = frame1[flushcount].data[0];
+					cif.daddr = {frame1[flushcountIDX].tag, flushcountIDX, 3'b000};
+					cif.dstore = frame1[flushcountIDX].data[0];
 				end
 				else begin
-					cif.daddr = {frame2[flushcount - 8].tag, (flushcount - 8), 3'b000};
-					cif.dstore = frame2[flushcount - 8].data[0];
+					cif.daddr = {frame2[flushcountIDX].tag, flushcountIDX, 3'b000};
+					cif.dstore = frame2[flushcountIDX].data[0];
 				end
 			end
 
 			FLUSH2: begin
 				cif.dWEN = 1;
 				if (flushcount[3] == 0) begin
-					cif.daddr = {frame1[flushcount].tag, flushcount, 3'b100};
-					cif.dstore = frame1[flushcount].data[1];
+					cif.daddr = {frame1[flushcountIDX].tag, flushcountIDX, 3'b100};
+					cif.dstore = frame1[flushcountIDX].data[1];
 				end
 				else begin		
-					cif.daddr = {frame2[flushcount - 8].tag, (flushcount - 8), 3'b100};
-					cif.dstore = frame2[flushcount - 8].data[1];
+					cif.daddr = {frame2[flushcountIDX].tag, flushcountIDX, 3'b100};
+					cif.dstore = frame2[flushcountIDX].data[1];
 				end
 				if (!cif.dwait) begin
 					nxt_flushcount = flushcount + 1;
@@ -392,7 +402,7 @@ module dcache (
 			end
 
 			HALT: begin
-
+				dcif.flushed = 1;
 			end
 
 		endcase

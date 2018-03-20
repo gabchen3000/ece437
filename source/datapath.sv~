@@ -430,14 +430,14 @@ module datapath (
   		dpif.halt <= 0;
 		end
 		else if (dpif.halt == 1)begin
-			dpif.halt <= dpif.halt
+			dpif.halt <= dpif.halt;
 		end
 		else begin
 			dpif.halt <= MEMhalt;
 		end
 	end
 
-	assign dpif.imemREN = MEMimemREN;
+	assign dpif.imemREN = !emif.exmem_op_dmemREN && !emif.exmem_op_dmemWEN; //ihit but not dhit yet
 	assign dpif.dmemREN = MEMdmemREN;
 	assign dpif.dmemWEN = MEMdmemWEN;
 	assign dpif.dmemaddr = MEMALU_OUT;

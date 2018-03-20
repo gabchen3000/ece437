@@ -17,8 +17,4 @@ module hazard_unit (
 													((huif.rt != 0) && (huif.MEMwsel == huif.rt) && huif.MEMRegWr && huif.ihit) ||
 													((huif.rs != 0) && (huif.EXwsel == huif.rs) && huif.EXRegWr && huif.ihit) ||
 													((huif.rt != 0) && (huif.EXwsel == huif.rt) && huif.EXRegWr && huif.ihit);
-/* ||
-													((huif.rs != 0) && (huif.WBwsel == huif.rs) && huif.WBRegWr && huif.ihit) ||
-													((huif.rt != 0) && (huif.WBwsel == huif.rt) && huif.WBRegWr && huif.ihit);
-*/
 endmodule

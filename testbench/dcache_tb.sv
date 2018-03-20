@@ -132,7 +132,7 @@ program test(
 		//case 1 and 2 is ONE LOADWORD from cache into a single block
 		//case 1:
 		
-		dcif.dmemaddr =  {tag1_frame1, idx1, offset0, 2'b00};
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset0, 2'b00};//hit1
 		++testcase;
 
 		@(posedge CLK);
@@ -145,7 +145,7 @@ program test(
 
 		//case 2:
 		
-		dcif.dmemaddr =  {tag1_frame1, idx1, offset1, 2'b00};
+		dcif.dmemaddr =  {tag1_frame1, idx1, offset1, 2'b00};//hit2
 		++testcase;
 
 		@(posedge CLK);
@@ -159,7 +159,7 @@ program test(
 		//case 3 and 4 reading from the second frame in the cache
 		//case 3:
 		
-		dcif.dmemaddr =  {tag1_frame2, idx1, offset0, 2'b00};
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset0, 2'b00};//hit3
 		++testcase;
 
 		@(posedge CLK);
@@ -172,9 +172,10 @@ program test(
 
 		//case 4:
 		
-		dcif.dmemaddr =  {tag1_frame2, idx1, offset1, 2'b00};
+		dcif.dmemaddr =  {tag1_frame2, idx1, offset1, 2'b00};//hit4
 		++testcase;
 
+		@(posedge CLK);
 		@(posedge CLK);
 		if (dcif.dhit && (dcif.dmemload == 32'd4)) begin
 			$display("Passed test %d: reading 4 from cache frame 2 word 1", testcase);
@@ -185,41 +186,48 @@ program test(
 		
 		
 		//case 5: testing miss, trying to read from new tag -- eviction of cache first word
-		dcif.dmemaddr =  {tag_junk, idx1, offset0, 2'b00};
+		dcif.dmemaddr =  {tag_junk, idx1, offset0, 2'b00};//miss
 		cif.dload = 32'd69;
 		@(posedge CLK);
 		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
 		
 		++testcase;
 
-		@(posedge CLK);
 		if (!dcif.dhit) begin
 			$display("Passed test %d: It's a miss, load word eviction, first word loaded to cache", testcase);
 		end
 		else begin
 			$display("Failed test %d: It was a hit, load word eviction did not happen", testcase);
 		end 
+		cif.dwait = 0;
+		@(posedge CLK);
 		cif.dwait = 1;
 
-		//case 6: testing miss, trying to read from new tag -- eviction of cache second word
+		//case 6: testing hit, trying to read from new tag -- second word//hit5
 		@(posedge CLK);
 		dcif.dmemaddr =  {tag_junk, idx1, offset1, 2'b00};
 		cif.dload = 32'd67;
 		@(posedge CLK);
 		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
 		++testcase;
 
-
-		if (!dcif.dhit) begin
-			$display("Passed test %d: It's a miss, load word eviction, second word loaded to cache", testcase);
+		if (dcif.dhit) begin
+			$display("Passed test %d: It's a hit, second word loaded to cache", testcase);
 		end
 		else begin
 			$display("Failed test %d: It was a hit, load word eviction did not happen", testcase);
 		end 
 		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
 		cif.dwait = 1;
 
-		//case 7: test dhit and dmemload on rewritten data first word
+		//case 7: test dhit and dmemload on replace data first word // hit6
 		dcif.dmemaddr =  {tag_junk, idx1, offset0, 2'b00};
 		++testcase;
 
@@ -231,12 +239,12 @@ program test(
 			$display("Failed test %d: no dhit on rewritten data, data is %d", testcase, dcif.dmemload);
 		end 
 
-		//case 8: test dhit and dmemload on rewritten data first word
+		//case 8: test dhit and dmemload on replace data first word //hit7
 		dcif.dmemaddr =  {tag_junk, idx1, offset1, 2'b00};
 		++testcase;
 
 		@(posedge CLK);
-		if (dcif.dhit && (dcif.dmemload == 32'd67)) begin
+		if (dcif.dhit && (dcif.dmemload == 32'd69)) begin
 			$display("Passed test %d: dhit on rewritten data, correct data", testcase);
 		end
 		else begin
@@ -247,14 +255,14 @@ program test(
 		dcif.dmemREN = 0;
 		dcif.imemREN = 1;	//should ignore
 		dcif.dmemWEN = 1;
-		dcif.dmemaddr = {tag_hit, idx1, offset0, 2'b0};
+		dcif.dmemaddr = {tag_hit, idx1, offset0, 2'b0}; //hit8
 		dcif.dmemstore = 32'd40;
 		++testcase;
 		@(posedge CLK);
 		cif.dwait = 0;
 		@(posedge CLK);
 		cif.dwait = 1;
-		dcif.dmemaddr = {tag_hit, idx1, offset1, 2'b0};
+		dcif.dmemaddr = {tag_hit, idx1, offset1, 2'b0}; //hit9
 		dcif.dmemstore = 32'd50;
 		@(posedge CLK);
 		cif.dwait = 0;
@@ -345,52 +353,50 @@ program test(
 				
 		//case 13 write into one more index, test flush all dirty data with halt signal
 		++testcase;
-		//frame 1		
+		//frame 1				
 		@(posedge CLK);
-		dcif.dmemaddr =  {tag_last, idx7, offset0, 2'b00};
-		cif.dload = 32'hAA;
-		
-		@(posedge CLK);
-		cif.dwait = 0;
-		@(posedge CLK);
-		cif.dwait = 1;
-
-		@(posedge CLK);
-		dcif.dmemaddr =  {tag_last, idx7, offset1, 2'b00};
-		cif.dload = 32'hAA;
-		
+		dcif.dmemaddr = {tag_last, idx7, offset0, 2'b0};
+		dcif.dmemstore = 32'hAA;
+		cif.dload = 32'hff;
 		@(posedge CLK);
 		cif.dwait = 0;
 		@(posedge CLK);
 		cif.dwait = 1;
-		
-		//frame 2
 		@(posedge CLK);
-		dcif.dmemaddr =  {tag_last2, idx7, offset0, 2'b00};
-		cif.dload = 32'hAA;
-
+		dcif.dmemaddr = {tag_last, idx7, offset1, 2'b0};
+		dcif.dmemstore = 32'hAB;
 		@(posedge CLK);
 		cif.dwait = 0;
 		@(posedge CLK);
 		cif.dwait = 1;
-
 		@(posedge CLK);
-		dcif.dmemaddr =  {tag_last2, idx7, offset1, 2'b00};
-		cif.dload = 32'hAA;
-
-		@(posedge CLK);
-		cif.dwait = 0;
-		@(posedge CLK);
-		cif.dwait = 1;
 
 		dcif.dmemaddr = {tag_last, idx7, offset0, 2'b0};
-		dcif.dmemstore = 32'd88;
+		dcif.dmemstore = 32'hAA;
 		@(posedge CLK);
 		cif.dwait = 0;
 		@(posedge CLK);
 		cif.dwait = 1;
+		@(posedge CLK);
 		dcif.dmemaddr = {tag_last, idx7, offset1, 2'b0};
-		dcif.dmemstore = 32'd89;
+		dcif.dmemstore = 32'hAB;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+
+		//frame 2
+		@(posedge CLK);
+		dcif.dmemaddr = {tag_last2, idx7, offset0, 2'b0};
+		dcif.dmemstore = 32'hBA;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		dcif.dmemaddr = {tag_last2, idx7, offset1, 2'b0};
+		dcif.dmemstore = 32'hBB;
 		@(posedge CLK);
 		cif.dwait = 0;
 		@(posedge CLK);
@@ -398,13 +404,14 @@ program test(
 		@(posedge CLK);
 
 		dcif.dmemaddr = {tag_last2, idx7, offset0, 2'b0};
-		dcif.dmemstore = 32'd98;
+		dcif.dmemstore = 32'hBA;
 		@(posedge CLK);
 		cif.dwait = 0;
 		@(posedge CLK);
 		cif.dwait = 1;
+		@(posedge CLK);
 		dcif.dmemaddr = {tag_last2, idx7, offset1, 2'b0};
-		dcif.dmemstore = 32'd99;
+		dcif.dmemstore = 32'hBB;
 		@(posedge CLK);
 		cif.dwait = 0;
 		@(posedge CLK);
@@ -415,23 +422,7 @@ program test(
 		@(posedge CLK);
 		@(posedge CLK);
 		@(posedge CLK);
-		@(posedge CLK);
-		@(posedge CLK);
-		@(posedge CLK);
-		@(posedge CLK);
-		@(posedge CLK);
-		@(posedge CLK);
-		@(posedge CLK);
-		cif.dwait = 0;
-		@(posedge CLK);
-		cif.dwait = 1;
-		@(posedge CLK);
-		cif.dwait = 0;
-		@(posedge CLK);
-		cif.dwait = 1;
-		@(posedge CLK);
-		@(posedge CLK);
-		@(posedge CLK);
+		//frame 1 index 1 flush1 and 2
 		cif.dwait = 0;
 		@(posedge CLK);
 		cif.dwait = 1;
@@ -445,7 +436,32 @@ program test(
 		@(posedge CLK);
 		@(posedge CLK);
 		@(posedge CLK);
+		//frame 1 index 7 flush 1 and 2
+		cif.dwait = 0;
 		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		//frame2 index 1 flush 1 and 2
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		cif.dwait = 0;
+		@(posedge CLK);
+		cif.dwait = 1;
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
+		//frame 2 index 7 flush 1 and flush 2
 		cif.dwait = 0;
 		@(posedge CLK);
 		cif.dwait = 1;
@@ -457,11 +473,11 @@ program test(
 		@(posedge CLK);
 		@(posedge CLK);
 		
-		if (cif.dstore == 24) begin
-			$display("Passed test %d: count value is correct, all data flushed", testcase);
+		if (cif.dstore == 34) begin
+			$display("Passed test %d: count value is correct", testcase);
 		end
 		else begin
-			$display("Failed test %d: count value is not correct: %d, data not flushed", testcase, cif.dstore);
+			$display("Failed test %d: count value is not correct: %d", testcase, cif.dstore);
 		end
 
 		@(posedge CLK);
@@ -469,7 +485,16 @@ program test(
 		@(posedge CLK);
 		cif.dwait = 1;
 		//finish writing count.
-
+		++testcase;
+		if (dcif.flushed == 1) begin
+			$display("Passed test %d: data is flushed", testcase);
+		end
+		else begin
+			$display("Failed test %d: data not flushed: %d", testcase, dcif.flushed);
+		end
+		@(posedge CLK);
+		@(posedge CLK);
+		@(posedge CLK);
 
 		#(PERIOD);
 		nRST = 0;

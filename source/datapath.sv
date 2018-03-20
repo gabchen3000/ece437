@@ -437,7 +437,7 @@ module datapath (
 		end
 	end
 
-	assign dpif.imemREN = MEMimemREN;
+	assign dpif.imemREN = !emif.exmem_op_dmemREN && !emif.exmem_op_dmemWEN; //ihit but not dhit yet
 	assign dpif.dmemREN = MEMdmemREN;
 	assign dpif.dmemWEN = MEMdmemWEN;
 	assign dpif.dmemaddr = MEMALU_OUT;
