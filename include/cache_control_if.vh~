@@ -121,7 +121,6 @@ interface cache_control_if(
   end
 
   // controller ports to ram and caches
-	//lab 3 use this in the interface?
   modport cc (
             // cache inputs
     input   iREN, dREN, dWEN, dstore, iaddr, daddr,

@@ -1,5 +1,5 @@
-# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf system_tb.wlf work.system_tb 
-# Start time: 22:10:31 on Mar 19,2018
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf memory_control_tb.wlf work.memory_control_tb 
+# Start time: 20:37:01 on Mar 27,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -12,52 +12,22 @@
 # //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
 # //
 # Loading sv_std.std
-# Loading work.system_tb
 # Loading work.cpu_types_pkg
-# Loading work.system_if
-# Loading work.test
-# Loading work.system
-# Loading work.cpu_ram_if
-# Loading work.pipeline
-# Loading work.datapath_cache_if
+# Loading work.memory_control_tb_sv_unit
+# Loading work.memory_control_tb
 # Loading work.caches_if
 # Loading work.cache_control_if
-# Loading work.datapath
-# Loading work.control_unit_if
-# Loading work.program_counter_if
-# Loading work.alu_if
-# Loading work.register_file_if
-# Loading work.request_unit_if
-# Loading work.if_id_if
-# Loading work.id_ex_if
-# Loading work.ex_mem_if
-# Loading work.mem_wb_if
-# Loading work.hazard_unit_if
-# Loading work.forward_unit_if
-# Loading work.control_unit
-# Loading work.program_counter
-# Loading work.alu
-# Loading work.register_file
-# Loading work.request_unit
-# Loading work.if_id
-# Loading work.id_ex
-# Loading work.ex_mem
-# Loading work.mem_wb
-# Loading work.hazard_unit
-# Loading work.forward_unit
-# Loading work.caches
-# Loading work.icache
-# Loading work.dcache
+# Loading work.cpu_ram_if
+# Loading work.test
 # Loading work.memory_control
-# Loading work.ram
-# Loading altera_mf_ver.altsyncram
-# Loading altera_mf_ver.altsyncram_body
-# Loading altera_mf_ver.ALTERA_DEVICE_FAMILIES
-# Loading altera_mf_ver.ALTERA_MF_MEMORY_INITIALIZATION
 # run -all
-# Starting Processor.
-# Halted at 3640 time and ran for        181 cycles.
-# Starting memory dump.
-# Finished memory dump.
-# End time: 22:10:32 on Mar 19,2018, Elapsed time: 0:00:01
+# ==Case           1 is correct==, ramWEN = 1, ramaddr = 0000008c, ramstore = 000000ab, dwait[0] = 1
+# ==Case           2 is correct==, iREN = 3, iload[1] = 000000dd
+# ==Case           3.1 is correct==, snoop address is correct
+# ==Case           3.2 is correct==, ramaddr = 00000508, ramstore = 000000a1, ramWEN = 1
+# ==Case           3.3 is correct==, dload of cache0 is correct and ccinvalidate is asserted for cache1
+# ==Case           4.1 is correct==, snoop address is correct
+# ==Case           4.2 is correct==, ramaddr = 00000508, ramREN = 1
+# ==Case           4.3 is correct==, dload of cache0 is correct and ccinvalidate is asserted for cache1
+# End time: 20:37:01 on Mar 27,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1

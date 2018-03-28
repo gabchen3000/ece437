@@ -11,7 +11,7 @@ Z0 d/home/ecegrid/a/mg280/ece437/processors
 Ycache_control_if
 Z1 DXx6 sv_std 3 std 0 22 <EOTafDcUY:cQeO^ICn]m3
 Z2 DXx4 work 13 cpu_types_pkg 0 22 k97PmhC^jBNnl@F?Ho]<C0
-Z3 !s110 1522116195
+Z3 !s110 1522197420
 !i10b 1
 !s100 TOL:>`^bYT_=2^NzXOaD90
 IlYVWn2S8_hW0YSKUZEEHK2
@@ -19,7 +19,7 @@ Z4 V`JN@9S9cnhjKRR_L]QIcM3
 Z5 !s105 memory_control_sv_unit
 S1
 R0
-Z6 w1522116180
+Z6 w1522197407
 Z7 Finclude/cache_control_if.vh
 Z8 8source/memory_control.sv
 Z9 Fsource/memory_control.sv
@@ -28,7 +28,7 @@ Z10 OL;L;10.3b;59
 r1
 !s85 0
 31
-Z11 !s108 1522116195.065546
+Z11 !s108 1522197419.770973
 Z12 !s107 include/caches_if.vh|include/cpu_types_pkg.vh|include/cache_control_if.vh|source/memory_control.sv|
 Z13 !s90 +acc|-sv12compat|-mfcu|-lint|+incdir+include|source/memory_control.sv|
 !i113 1
@@ -47,7 +47,7 @@ R5
 S1
 R0
 R6
-Finclude/caches_if.vh
+Z17 Finclude/caches_if.vh
 R7
 R8
 R9
@@ -63,6 +63,33 @@ R13
 R14
 R15
 R16
+Ycpu_ram_if
+R1
+R2
+!s110 1522195571
+!i10b 1
+!s100 hjHhAgmOnZDTN2@[1K8:V0
+Ig_e0Q]GV9`mFf1EZ>oNN80
+R4
+Z18 !s105 memory_control_tb_sv_unit
+S1
+R0
+Z19 w1522195556
+Z20 Finclude/cpu_ram_if.vh
+Z21 8testbench/memory_control_tb.sv
+Z22 Ftestbench/memory_control_tb.sv
+Z23 L0 14
+R10
+r1
+!s85 0
+31
+Z24 !s108 1522195571.469847
+Z25 !s107 include/cpu_ram_if.vh|include/caches_if.vh|include/cpu_types_pkg.vh|include/cache_control_if.vh|testbench/memory_control_tb.sv|
+Z26 !s90 +acc|-sv12compat|-mfcu|-lint|+incdir+include|testbench/memory_control_tb.sv|
+!i113 1
+R14
+R15
+R16
 Xcpu_types_pkg
 R1
 R3
@@ -73,11 +100,11 @@ Vk97PmhC^jBNnl@F?Ho]<C0
 S1
 R0
 R6
-Finclude/cpu_types_pkg.vh
+Z27 Finclude/cpu_types_pkg.vh
 R7
 R8
 R9
-Z17 L0 15
+Z28 L0 15
 R10
 r1
 !s85 0
@@ -94,8 +121,8 @@ R1
 R2
 R3
 !i10b 1
-!s100 G2iNBENQDX7zPMAMDkUA@2
-IiZDb@CVzQo3a32F8`I6@93
+!s100 3:eh]=bji6Qe<WdlYUCPD1
+I<i;F0lonc`T:Y5XWFOEVI2
 R4
 R5
 S1
@@ -103,7 +130,7 @@ R0
 R6
 R8
 R9
-R17
+R28
 R10
 r1
 !s85 0
@@ -111,6 +138,113 @@ r1
 R11
 R12
 R13
+!i113 1
+R14
+R15
+R16
+vmemory_control_tb
+R1
+R2
+Z29 DXx4 work 25 memory_control_tb_sv_unit 0 22 2@KnL1RIGho0kT=n@_alj3
+R4
+r1
+!s85 0
+31
+!i10b 1
+!s100 0L1N:AcK91;n@ORzJL`i@0
+Igjm0z5HXAbDG1^Lc_zMQf2
+R18
+S1
+R0
+R19
+R21
+R22
+R23
+R10
+R24
+R25
+R26
+!i113 1
+R14
+R15
+R16
+Xmemory_control_tb_sv_unit
+R1
+R2
+V2@KnL1RIGho0kT=n@_alj3
+r1
+!s85 0
+31
+!i10b 1
+!s100 `n>zI75K01Y>QGOR0bZ7F0
+I2@KnL1RIGho0kT=n@_alj3
+!i103 1
+S1
+R0
+R19
+R21
+R22
+R7
+R27
+R17
+R20
+L0 10
+R10
+R24
+R25
+R26
+!i113 1
+R14
+R15
+R16
+vram
+R1
+R2
+!s110 1522162361
+!i10b 1
+!s100 ob[hdb?];=eemcM@5=kKE3
+IW4RLE1?KGX5ELDi32c`jD0
+R4
+!s105 ram_sv_unit
+S1
+R0
+w1519775182
+8source/ram.sv
+Fsource/ram.sv
+L0 13
+R10
+r1
+!s85 0
+31
+!s108 1522162361.187162
+!s107 include/cpu_types_pkg.vh|include/cpu_ram_if.vh|source/ram.sv|
+!s90 +acc|-sv12compat|-mfcu|-lint|+incdir+include|source/ram.sv|
+!i113 1
+R14
+R15
+R16
+4test
+R1
+R2
+R29
+R4
+r1
+!s85 0
+31
+!i10b 1
+!s100 HRc@I<d:^>8X93Ae_RTI51
+IdPaFe:aA_N^65md4WiLNO0
+R18
+S1
+R0
+R19
+R21
+R22
+L0 58
+R10
+R24
+R25
+R26
 !i113 1
 R14
 R15

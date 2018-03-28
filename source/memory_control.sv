@@ -72,7 +72,7 @@ end
 	always_ff @(posedge CLK, negedge nRST) begin
 		if (nRST == 0) begin
 			cur_state <= IDLE;
-			iselect <= 0;
+			iselect <= 1;
 			snoopcache <= 1;
 		end
 		else begin
@@ -80,11 +80,14 @@ end
 			if (cur_state == IDLE) begin
 				snoopcache <= ccif.dREN[0] ? 1 : 0;
 			end
-			if (cur_state == IDLE) begin
-				iselect <= !prev_iselect;
+			if (cur_state == IDLE && nxt_state == IArbitrate) begin
+				iselect <= !iselect;
 			end
 			else if (cur_state == IArbitrate) begin
 				iselect <= (ccif.iREN[iselect]) ? iselect : !iselect;
+			end
+			else begin
+				iselect <= iselect;
 			end
 		end
 	end
@@ -107,7 +110,12 @@ end
 			end
 
 			DArbitrate: begin
-				nxt_state = SNOOP;
+				if (ccif.dREN[0] || ccif.dREN[1] || ccif.dWEN[0] || ccif.dWEN[1]) begin
+					nxt_state = SNOOP;
+				end
+				else begin
+					nxt_state = IDLE;
+				end
 			end
 
 			SNOOP: begin
@@ -145,7 +153,7 @@ end
 
 			NONCO_WB0: begin
 				if (ccif.ramstate == ACCESS) begin
-					nxt_state = IDLE;
+					nxt_state = NONCO_WB1;
 				end
 			end
 
@@ -176,18 +184,19 @@ end
 		ccif.ramaddr = 0;
 		ccif.iload[0] = 0;
 		ccif.dload[0] = 0;
-		ccif.dwait[0] = 1;
-		ccif.iwait[0] = 1;
+		ccif.dwait[0] = 0;
+		ccif.iwait[0] = 0;
 		ccif.ccinv[0] = 0;
 		ccif.ccwait[0] = 0;
 		ccif.ccsnoopaddr[0] = 0;
 		ccif.iload[1] = 0;
 		ccif.dload[1] = 0;
-		ccif.dwait[1] = 1;
-		ccif.iwait[1] = 1;
+		ccif.dwait[1] = 0;
+		ccif.iwait[1] = 0;
 		ccif.ccinv[1] = 0;
 		ccif.ccwait[1] = 0;
 		ccif.ccsnoopaddr[1] = 0;
+		//prev_iselect = prev_iselect;
 
 		casez (cur_state)
 
@@ -203,21 +212,21 @@ end
 			SNOOP: begin
 				ccif.ccwait[snoopcache] = 1;
 				ccif.ccsnoopaddr[snoopcache] = ccif.daddr[!snoopcache];
-				ccif.ccinv[snoopcache] = ccif.ccwrite[!snoopcache];
 			end
 
 			MEM0: begin
 				ccif.ramaddr = ccif.daddr[!snoopcache];
-				ccif.ramREN = ccif.dWEN[!snoopcache];
+				ccif.ramREN = ccif.dREN[!snoopcache];
 				ccif.dwait[!snoopcache] = 1;
 				ccif.dload[!snoopcache] = ccif.ramload;
 			end
 
 			MEM1: begin
 				ccif.ramaddr = ccif.daddr[!snoopcache];
-				ccif.ramREN = ccif.dWEN[!snoopcache];
+				ccif.ramREN = ccif.dREN[!snoopcache];
 				ccif.dwait[!snoopcache] = 1;
 				ccif.dload[!snoopcache] = ccif.ramload;
+				ccif.ccinv[snoopcache] = ccif.ccwrite[!snoopcache];
 			end
 
 			WB0: begin
@@ -225,7 +234,10 @@ end
 				ccif.ramstore = ccif.dstore[snoopcache];
 				ccif.ramWEN = ccif.dWEN[snoopcache];
 				ccif.dwait[snoopcache] = 1;
-				ccif.dstore[!snoopcache] = ccif.dstore[snoopcache];
+				ccif.dload[!snoopcache] = ccif.dstore[snoopcache];
+				if (ccif.ramstate == ACCESS) begin
+					ccif.dwait[snoopcache] = 0;
+				end
 			end
 
 			WB1: begin
@@ -233,15 +245,18 @@ end
 				ccif.ramstore = ccif.dstore[snoopcache];
 				ccif.ramWEN = ccif.dWEN[snoopcache];
 				ccif.dwait[snoopcache] = 1;
-				ccif.dstore[!snoopcache] = ccif.dstore[snoopcache];
+				ccif.dload[!snoopcache] = ccif.dstore[snoopcache];
+				ccif.ccinv[snoopcache] = ccif.ccwrite[!snoopcache];
 			end
 
-			//need arbitration for dWEN?
 			NONCO_WB0: begin
 				ccif.ramaddr = ccif.daddr[wbcache];
 				ccif.ramstore = ccif.dstore[wbcache];
 				ccif.ramWEN = ccif.dWEN[wbcache];
 				ccif.dwait[wbcache] = 1;
+				if (ccif.ramstate == ACCESS) begin
+					ccif.dwait[wbcache] = 0;
+				end
 			end
 
 			NONCO_WB1: begin
@@ -256,11 +271,11 @@ end
 			end
 
 			INSTR: begin
-				prev_iselect = iselect;
 				ccif.ramREN = 1;
 				ccif.ramaddr = ccif.iaddr[iselect];
 				ccif.iload[iselect] = ccif.ramload;
 				ccif.iwait[iselect] = 1;
+				//prev_iselect = iselect;
 			end
 
 		endcase
