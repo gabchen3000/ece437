@@ -29,13 +29,18 @@ module dcache (
 	logic [4:0]					flushcount, nxt_flushcount;
 	logic								goflush, offset, dirtyloop, nxt_dirtyloop, miss, frame1_valid, frame2_valid, frame1_dirty, frame2_dirty, lru[7:0], nxt_lru[7:0]; //lru 0 for left, 1 for right
 	word_t							count, nxt_count, frame1_data_1, frame1_data_2, frame2_data_1, frame2_data_2;
-	
-	typedef enum logic[3:0] {IDLE, LD1, LD2, WB1, WB2, FLUSH1, FLUSH2, DIRTY, COUNT, HALT} state_t;
+	//coherence signals
+	logic								stagmiss, snoopdone, snoopoffset, matchframe, frame1_snoopvalid[7:0], frame2_snoopvalid[7:0], frame1_snoopdirty[7:0], frame2_snoopdirty[7:0];
+	logic [25:0]				snooptag, frame1_snooptag[7:0], frame2_snooptag[7:0];
+	logic [2:0]					snoopidx;	
+
+	typedef enum logic[3:0] {IDLE, LD1, LD2, WB1, WB2, FLUSH1, FLUSH2, DIRTY, COUNT, HALT, SNOOPING, CO_WB0, CO_WB1} state_t;
 	state_t							cur_state, nxt_state;
 
 	assign tag = dcif.dmemaddr[31:6];
 	assign idx = dcif.dmemaddr[5:3];
 	assign offset = dcif.dmemaddr[2];
+	//coherence tag copies
 
 	//state machine
 	always_ff @(posedge CLK, negedge nRST) begin
@@ -52,6 +57,57 @@ module dcache (
 			count <= 0;
 			flushcount <= 0;
 			dirtyloop <= 1;
+
+			frame1_snooptag[0] <= 0;
+			frame1_snooptag[1] <= 0;
+			frame1_snooptag[2] <= 0;
+			frame1_snooptag[3] <= 0;
+			frame1_snooptag[4] <= 0;
+			frame1_snooptag[5] <= 0;
+			frame1_snooptag[6] <= 0;
+			frame1_snooptag[7] <= 0;
+			frame2_snooptag[0] <= 0;
+			frame2_snooptag[1] <= 0;
+			frame2_snooptag[2] <= 0;
+			frame2_snooptag[3] <= 0;
+			frame2_snooptag[4] <= 0;
+			frame2_snooptag[5] <= 0;
+			frame2_snooptag[6] <= 0;
+			frame2_snooptag[7] <= 0;
+
+			frame1_snoopvalid[0] <= 0;
+			frame1_snoopvalid[1] <= 0;
+			frame1_snoopvalid[2] <= 0;
+			frame1_snoopvalid[3] <= 0;
+			frame1_snoopvalid[4] <= 0;
+			frame1_snoopvalid[5] <= 0;
+			frame1_snoopvalid[6] <= 0;
+			frame1_snoopvalid[7] <= 0;
+			frame2_snoopvalid[0] <= 0;
+			frame2_snoopvalid[1] <= 0;
+			frame2_snoopvalid[2] <= 0;
+			frame2_snoopvalid[3] <= 0;
+			frame2_snoopvalid[4] <= 0;
+			frame2_snoopvalid[5] <= 0;
+			frame2_snoopvalid[6] <= 0;
+			frame2_snoopvalid[7] <= 0;
+
+			frame1_snoopdirty[0] <= 0;
+			frame1_snoopdirty[1] <= 0;
+			frame1_snoopdirty[2] <= 0;
+			frame1_snoopdirty[3] <= 0;
+			frame1_snoopdirty[4] <= 0;
+			frame1_snoopdirty[5] <= 0;
+			frame1_snoopdirty[6] <= 0;
+			frame1_snoopdirty[7] <= 0;
+			frame2_snoopdirty[0] <= 0;
+			frame2_snoopdirty[1] <= 0;
+			frame2_snoopdirty[2] <= 0;
+			frame2_snoopdirty[3] <= 0;
+			frame2_snoopdirty[4] <= 0;
+			frame2_snoopdirty[5] <= 0;
+			frame2_snoopdirty[6] <= 0;
+			frame2_snoopdirty[7] <= 0;
 		end
 		else begin
 			cur_state <= nxt_state;
@@ -66,6 +122,57 @@ module dcache (
 			count <= nxt_count;
 			flushcount <= nxt_flushcount;
 			dirtyloop <= nxt_dirtyloop;
+
+			frame1_snooptag[0] <= frame1[0].tag;
+			frame1_snooptag[1] <= frame1[1].tag;
+			frame1_snooptag[2] <= frame1[2].tag;
+			frame1_snooptag[3] <= frame1[3].tag;
+			frame1_snooptag[4] <= frame1[4].tag;
+			frame1_snooptag[5] <= frame1[5].tag;
+			frame1_snooptag[6] <= frame1[6].tag;
+			frame1_snooptag[7] <= frame1[7].tag;
+			frame2_snooptag[0] <= frame2[0].tag;
+			frame2_snooptag[1] <= frame2[1].tag;
+			frame2_snooptag[2] <= frame2[2].tag;
+			frame2_snooptag[3] <= frame2[3].tag;
+			frame2_snooptag[4] <= frame2[4].tag;
+			frame2_snooptag[5] <= frame2[5].tag;
+			frame2_snooptag[6] <= frame2[6].tag;
+			frame2_snooptag[7] <= frame2[7].tag;
+
+			frame1_snoopvalid[0] <= frame1[0].valid;
+			frame1_snoopvalid[1] <= frame1[1].valid;
+			frame1_snoopvalid[2] <= frame1[2].valid;
+			frame1_snoopvalid[3] <= frame1[3].valid;
+			frame1_snoopvalid[4] <= frame1[4].valid;
+			frame1_snoopvalid[5] <= frame1[5].valid;
+			frame1_snoopvalid[6] <= frame1[6].valid;
+			frame1_snoopvalid[7] <= frame1[7].valid;
+			frame2_snoopvalid[0] <= frame2[0].valid;
+			frame2_snoopvalid[1] <= frame2[1].valid;
+			frame2_snoopvalid[2] <= frame2[2].valid;
+			frame2_snoopvalid[3] <= frame2[3].valid;
+			frame2_snoopvalid[4] <= frame2[4].valid;
+			frame2_snoopvalid[5] <= frame2[5].valid;
+			frame2_snoopvalid[6] <= frame2[6].valid;
+			frame2_snoopvalid[7] <= frame2[7].valid;
+
+			frame1_snoopdirty[0] <= frame1[0].dirty;
+			frame1_snoopdirty[1] <= frame1[1].dirty;
+			frame1_snoopdirty[2] <= frame1[2].dirty;
+			frame1_snoopdirty[3] <= frame1[3].dirty;
+			frame1_snoopdirty[4] <= frame1[4].dirty;
+			frame1_snoopdirty[5] <= frame1[5].dirty;
+			frame1_snoopdirty[6] <= frame1[6].dirty;
+			frame1_snoopdirty[7] <= frame1[7].dirty;
+			frame2_snoopdirty[0] <= frame2[0].dirty;
+			frame2_snoopdirty[1] <= frame2[1].dirty;
+			frame2_snoopdirty[2] <= frame2[2].dirty;
+			frame2_snoopdirty[3] <= frame2[3].dirty;
+			frame2_snoopdirty[4] <= frame2[4].dirty;
+			frame2_snoopdirty[5] <= frame2[5].dirty;
+			frame2_snoopdirty[6] <= frame2[6].dirty;
+			frame2_snoopdirty[7] <= frame2[7].dirty;
 		end
 	end
 
@@ -95,7 +202,10 @@ module dcache (
 		casez (cur_state)
 
 			IDLE: begin
-				if (dcif.halt) begin
+				if (cif.ccwait) begin
+					nxt_state = SNOOPING;
+				end
+				else if (dcif.halt) begin
 					nxt_state = DIRTY;
 				end
 				else if (miss) begin
@@ -112,7 +222,10 @@ module dcache (
 			end
 
 			LD1: begin
-				if (cif.dwait) begin
+				if (cif.ccwait) begin
+					nxt_state = SNOOPING;
+				end
+				else if (cif.dwait) begin
 					nxt_state = LD1;
 				end
 				else begin
@@ -130,7 +243,10 @@ module dcache (
 			end
 
 			WB1: begin
-				if (cif.dwait) begin
+				if (cif.ccwait) begin
+					nxt_state = SNOOPING;
+				end				
+				else if (cif.dwait) begin
 					nxt_state = WB1;
 				end
 				else begin
@@ -148,7 +264,10 @@ module dcache (
 			end
 
 			FLUSH1: begin
-				if (cif.dwait) begin
+				if (cif.ccwait) begin
+					nxt_state = SNOOPING;
+				end				
+				else if (cif.dwait) begin
 					nxt_state = FLUSH1;
 				end
 				else begin
@@ -174,7 +293,7 @@ module dcache (
 				end
 			end
 
-			COUNT: begin
+			COUNT: begin	//we can delete count.
 				if (!cif.dwait) begin
 					nxt_state = HALT;
 				end
@@ -184,8 +303,38 @@ module dcache (
 				nxt_state = HALT;
 			end
 
+			SNOOPING: begin
+				if (snoopdone) begin
+					nxt_state = IDLE;
+				end
+				else begin
+					if (matchframe == 0) begin
+						nxt_state = frame1[snoopidx].dirty ? CO_WB0 : SNOOPING;
+					end
+					else begin
+						nxt_state = frame2[snoopidx].dirty ? CO_WB0 : SNOOPING;
+					end
+				end
+			end
+
+			CO_WB0: begin
+				if (!cif.dwait) begin
+					nxt_state = CO_WB1;
+				end
+			end
+
+			CO_WB1: begin
+				if (!cif.dwait) begin
+					nxt_state = IDLE;
+				end
+			end
+
 		endcase
 	end
+
+	assign snooptag = cif.ccsnoopaddr[31:6];
+	assign snoopidx = cif.ccsnoopaddr[5:3];
+	assign snoopoffset = cif.ccsnoopaddr[2];
 
 	//output logic
 	always_comb begin
@@ -222,29 +371,41 @@ module dcache (
 		frame2_data_2 = frame2[idx].data[1];
 		dcif.flushed = 0;
 
+		snoopdone = 0;
+		stagmiss = 1;
 
 		casez (cur_state)
 			IDLE: begin
-				if (dcif.dmemREN) begin
+				if (cif.ccwait) begin
+					
+				end
+				else if (dcif.dmemREN) begin
 					if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
 						nxt_count = count + 1;
 						dcif.dhit = 1;
 						dcif.dmemload = frame1[idx].data[offset];
 						nxt_lru[idx] = 1;
+						cif.cctrans = 0;
+						cif.ccwrite = 0;
 					end
 					else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
 						nxt_count = count + 1;
 						dcif.dhit = 1;
 						dcif.dmemload = frame2[idx].data[offset];
 						nxt_lru[idx] = 0;
+						cif.cctrans = 0;
+						cif.ccwrite = 0;
 					end
 					else begin
 						miss = 1;
 						nxt_count = count - 1;
+						cif.cctrans = 1;
+						cif.ccwrite = 0;
 					end
 				end
 				else if (dcif.dmemWEN) begin
 					if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
+						cif.cctrans = 1; //shared -> modified transition
 						nxt_count = count + 1;
 						dcif.dhit = 1;
 						frame1_dirty = 1;
@@ -255,8 +416,11 @@ module dcache (
 							frame1_data_2 = dcif.dmemstore;
 						end
 						nxt_lru[idx] = 1;
+						cif.cctrans = 0;
+						cif.ccwrite = 0;
 					end
 					else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
+						cif.cctrans = 1; //shared -> modified transition
 						nxt_count = count + 1;
 						dcif.dhit = 1;
 						frame2_dirty = 1;
@@ -267,25 +431,42 @@ module dcache (
 							frame2_data_2 = dcif.dmemstore;
 						end
 						nxt_lru[idx] = 0;
+						cif.cctrans = 0;
+						cif.ccwrite = 0;
 					end
 					else begin
 						miss = 1;
 						nxt_count = count - 1;
+						if (lru[idx] == 0) begin
+							cif.cctrans = frame1[idx].dirty ? 0 : 1;
+							cif.ccwrite = frame1[idx].dirty ? 0 : 1;	
+						end
+						else begin
+							cif.cctrans = frame2[idx].dirty ? 0 : 1;
+							cif.ccwrite = frame2[idx].dirty ? 0 : 1;	
+						end
 					end
 				end
 				else if (dcif.halt) begin
 					nxt_dirtyloop = 1;
+					cif.cctrans = 0;
+					cif.ccwrite = 0;
 				end
 			end
 
 			LD1: begin
-				cif.dREN = 1;
-				cif.daddr = {dcif.dmemaddr[31:3], 3'b000}; //load the first words first, set index 2 to 0
-				if (lru[idx] == 0) begin
-					frame1_data_1 = cif.dload;
+				if (cif.ccwait) begin
+					
 				end
-				else begin
-					frame2_data_1 = cif.dload;
+					else begin
+					cif.dREN = 1;
+					cif.daddr = {dcif.dmemaddr[31:3], 3'b000}; //load the first words first, set index 2 to 0
+					if (lru[idx] == 0) begin
+						frame1_data_1 = cif.dload;
+					end
+					else begin
+						frame2_data_1 = cif.dload;
+					end
 				end
 			end
 
@@ -313,14 +494,19 @@ module dcache (
 			end
 
 			WB1: begin
-				cif.dWEN = 1;
-				if (lru[idx] == 0) begin
-					cif.daddr = {frame1[idx].tag, idx, 3'b000}; //write the first words first, set index 2 to 0
-					cif.dstore = frame1[idx].data[0];
+				if (cif.ccwait) begin
+					
 				end
 				else begin
-					cif.daddr = {frame2[idx].tag, idx, 3'b000}; //write the first words first, set index 2 to 0
-					cif.dstore = frame2[idx].data[0];
+					cif.dWEN = 1;
+					if (lru[idx] == 0) begin
+						cif.daddr = {frame1[idx].tag, idx, 3'b000}; //write the first words first, set index 2 to 0
+						cif.dstore = frame1[idx].data[0];
+					end
+					else begin
+						cif.daddr = {frame2[idx].tag, idx, 3'b000}; //write the first words first, set index 2 to 0
+						cif.dstore = frame2[idx].data[0];
+					end
 				end
 			end
 
@@ -329,22 +515,31 @@ module dcache (
 				if (lru[idx] == 0) begin
 					cif.daddr = {frame1[idx].tag, idx, 3'b100}; //write the second words, set index 2 to 1
 					cif.dstore = frame1[idx].data[1];
+					cif.cctrans = 1;
+					cif.ccwrite = 1;
 				end
 				else begin
 					cif.daddr = {frame2[idx].tag, idx, 3'b100}; //write the second words first, set index 2 to 1
 					cif.dstore = frame2[idx].data[1];
+					cif.cctrans = 1;
+					cif.ccwrite = 1;
 				end
 			end
 
 			FLUSH1: begin
-				cif.dWEN = 1;
-				if (flushcount[3] == 0) begin
-					cif.daddr = {frame1[flushcountIDX].tag, flushcountIDX, 3'b000};
-					cif.dstore = frame1[flushcountIDX].data[0];
+				if (cif.ccwait) begin
+					
 				end
 				else begin
-					cif.daddr = {frame2[flushcountIDX].tag, flushcountIDX, 3'b000};
-					cif.dstore = frame2[flushcountIDX].data[0];
+					cif.dWEN = 1;
+					if (flushcount[3] == 0) begin
+						cif.daddr = {frame1[flushcountIDX].tag, flushcountIDX, 3'b000};
+						cif.dstore = frame1[flushcountIDX].data[0];
+					end
+					else begin
+						cif.daddr = {frame2[flushcountIDX].tag, flushcountIDX, 3'b000};
+						cif.dstore = frame2[flushcountIDX].data[0];
+					end
 				end
 			end
 
@@ -398,6 +593,72 @@ module dcache (
 
 			HALT: begin
 				dcif.flushed = 1;
+			end
+
+			SNOOPING: begin //cctrans happens here so that it corresponds correctly with the memory control
+				if ((snooptag == frame1_snooptag[snoopidx]) && frame1_snoopvalid[snoopidx]) begin	//match tag, frame1
+					stagmiss = 0;
+					matchframe = 0;
+					if (!frame1_snoopdirty[snoopidx]) begin //match tag, frame1, not dirty
+						frame1_valid = !cif.ccinv;
+						snoopdone = 1;
+						cif.cctrans = 1;
+						cif.ccwrite = 0;
+					end
+					else begin //match tag, frame1, dirty
+						cif.cctrans = 1;
+						cif.ccwrite = 1;
+					end
+				end
+				else if ((snooptag == frame2_snooptag[snoopidx]) && frame2_snoopvalid[snoopidx]) begin
+					stagmiss = 0;
+					matchframe = 1;
+					if (!frame2_snoopdirty[snoopidx]) begin //match tag, frame2, not dirty
+						frame2_valid = !cif.ccinv;
+						snoopdone = 1;
+						cif.cctrans = 1;
+						cif.ccwrite = 0;
+					end
+					else begin  //match tag, frame2, dirty
+						cif.cctrans = 1;
+						cif.ccwrite = 1;
+					end
+				end
+				else begin  //not match tag
+					stagmiss = 1;
+					cif.cctrans = 1;
+					cif.ccwrite = 0;
+				end
+			end
+
+			CO_WB0: begin
+				cif.dWEN = 1;
+				cif.ccwrite = 1;	
+				if (matchframe == 0) begin
+					cif.daddr = {frame1[snoopidx].tag, snoopidx, 3'b000};
+					cif.dstore = frame1[snoopidx].data[0];
+				end	
+				else begin
+					cif.daddr = {frame2[snoopidx].tag, snoopidx, 3'b000};
+					cif.dstore = frame2[snoopidx].data[0];
+				end
+			end
+
+			CO_WB1: begin
+				cif.ccwrite = 1;	
+				cif.dWEN = 1;
+				if (matchframe == 0) begin
+					cif.daddr = {frame1[snoopidx].tag, snoopidx, 3'b100};
+					cif.dstore = frame1[snoopidx].data[1];
+					frame1_valid = !cif.ccinv;
+					frame1_dirty = 0;
+				end	
+				else begin
+					cif.daddr = {frame2[snoopidx].tag, snoopidx, 3'b100};
+					cif.dstore = frame2[snoopidx].data[1];
+					frame2_valid = !cif.ccinv;
+					frame2_dirty = 0;
+				end
 			end
 
 		endcase

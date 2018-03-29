@@ -78,7 +78,7 @@ end
 		else begin
 			cur_state <= nxt_state;
 			if (cur_state == IDLE) begin
-				snoopcache <= ccif.dREN[0] ? 1 : 0;
+				snoopcache <= ccif.cctrans[0] ? 1 : 0;
 			end
 			if (cur_state == IDLE && nxt_state == IArbitrate) begin
 				iselect <= !iselect;
@@ -119,10 +119,10 @@ end
 			end
 
 			SNOOP: begin
-				if (ccif.cctrans[snoopcache] && !ccif.ccwrite[snoopcache]) begin
+				if (!ccif.ccwrite[snoopcache]) begin //???
 					nxt_state = MEM0;
 				end
-				if (ccif.cctrans[snoopcache] && ccif.ccwrite[snoopcache]) begin
+				if (ccif.cctrans[snoopcache] && ccif.ccwrite[snoopcache]) begin //???
 					nxt_state = WB0;
 				end
 			end
@@ -206,7 +206,10 @@ end
 			end
 
 			DArbitrate: begin
-				//snoopcache = dREN[0] ? 1 : 0;
+				if (nxt_state == IDLE) begin
+					ccif.ccinv[snoopcache] = 1;
+				end
+				ccif.ccwait[snoopcache] = 1;
 			end
 
 			SNOOP: begin
@@ -219,6 +222,7 @@ end
 				ccif.ramREN = ccif.dREN[!snoopcache];
 				ccif.dwait[!snoopcache] = 1;
 				ccif.dload[!snoopcache] = ccif.ramload;
+				ccif.ccwait[snoopcache] = 1;
 			end
 
 			MEM1: begin
@@ -227,6 +231,7 @@ end
 				ccif.dwait[!snoopcache] = 1;
 				ccif.dload[!snoopcache] = ccif.ramload;
 				ccif.ccinv[snoopcache] = ccif.ccwrite[!snoopcache];
+				ccif.ccwait[snoopcache] = 1;
 			end
 
 			WB0: begin
@@ -235,6 +240,7 @@ end
 				ccif.ramWEN = ccif.dWEN[snoopcache];
 				ccif.dwait[snoopcache] = 1;
 				ccif.dload[!snoopcache] = ccif.dstore[snoopcache];
+				ccif.ccwait[snoopcache] = 1;
 				if (ccif.ramstate == ACCESS) begin
 					ccif.dwait[snoopcache] = 0;
 				end
@@ -247,6 +253,7 @@ end
 				ccif.dwait[snoopcache] = 1;
 				ccif.dload[!snoopcache] = ccif.dstore[snoopcache];
 				ccif.ccinv[snoopcache] = ccif.ccwrite[!snoopcache];
+				ccif.ccwait[snoopcache] = 1;
 			end
 
 			NONCO_WB0: begin

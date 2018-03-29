@@ -1,5 +1,5 @@
-# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf memory_control_tb.wlf work.memory_control_tb 
-# Start time: 20:37:01 on Mar 27,2018
+# vsim -c -do "run -all; exit;" -L altera_mf_ver -L altera_ver -L cycloneive_ver -wlf dcache_tb.wlf work.dcache_tb 
+# Start time: 19:11:59 on Mar 29,2018
 # ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
 # //  Questa Sim-64
 # //  Version 10.3b linux_x86_64 May 29 2014
@@ -12,22 +12,26 @@
 # //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
 # //
 # Loading sv_std.std
+# Loading work.dcache_tb
 # Loading work.cpu_types_pkg
-# Loading work.memory_control_tb_sv_unit
-# Loading work.memory_control_tb
+# Loading work.datapath_cache_if
 # Loading work.caches_if
-# Loading work.cache_control_if
-# Loading work.cpu_ram_if
 # Loading work.test
-# Loading work.memory_control
+# Loading work.dcache
 # run -all
-# ==Case           1 is correct==, ramWEN = 1, ramaddr = 0000008c, ramstore = 000000ab, dwait[0] = 1
-# ==Case           2 is correct==, iREN = 3, iload[1] = 000000dd
-# ==Case           3.1 is correct==, snoop address is correct
-# ==Case           3.2 is correct==, ramaddr = 00000508, ramstore = 000000a1, ramWEN = 1
-# ==Case           3.3 is correct==, dload of cache0 is correct and ccinvalidate is asserted for cache1
-# ==Case           4.1 is correct==, snoop address is correct
-# ==Case           4.2 is correct==, ramaddr = 00000508, ramREN = 1
-# ==Case           4.3 is correct==, dload of cache0 is correct and ccinvalidate is asserted for cache1
-# End time: 20:37:01 on Mar 27,2018, Elapsed time: 0:00:00
+# Passed test           1: reading 1 from cache frame 1 word 1
+# Passed test           2: reading 2 from cache frame 1 word 2
+# Passed test           3: reading 3 from cache frame 2 word 1
+# Passed test           4: reading 4 from cache frame 2 word 1
+# Passed test           5: It's a miss, load word eviction, first word loaded to cache
+# Passed test           6: It's a hit, second word loaded to cache
+# Passed test           7: dhit on rewritten data, correct data
+# Passed test           8: dhit on rewritten data, correct data
+# Passed test           9: dhit on a write
+# Passed test          10: dhit on a write
+# Passed test          11: dhit on a write, new dstore into memory
+# Passed test          12: dhit on a write, new dstore into memory
+# Failed test          13: count value is not correct:        187
+# Failed test          14: data not flushed: 0
+# End time: 19:11:59 on Mar 29,2018, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1

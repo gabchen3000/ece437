@@ -236,7 +236,7 @@ program test(
 		cif0.ccwrite = 0;
 		@(posedge CLK);
 
-		//test 4: cache0 is the requesting cache, cache1 is responding cache, cache0 inv to modified state
+		//test 4: cache0 is the requesting cache, cache1 is responding cache, cache0 inv to shared state, cache1 modified to shared
 		//cctrans[1] is also asserted with dREN[1], but arbitration always chooses cache0 first
 		++testcase;
 		cif0.cctrans = 1;
@@ -248,7 +248,7 @@ program test(
 		cif1.cctrans = 1;
 		cif1.ccwrite = 0;
 		cif0.daddr = {tag2, idx1, offset0, 2'b0};
-		cif0.ccwrite = 1;
+		cif0.ccwrite = 0;
 		ccif.ramload = 32'hA3;
 		@(posedge CLK);
 
@@ -276,7 +276,7 @@ program test(
 
 		@(posedge CLK);
 		ccif.ramstate = ACCESS;
-		if (cif0.dload == 32'hA3 && cif1.ccinv == 1) begin
+		if (cif0.dload == 32'hA3 && cif1.ccinv == 0) begin
 			$display("==Case %d.3 is correct==, dload of cache0 is correct and ccinvalidate is asserted for cache1", testcase);
 		end
 		else begin
@@ -296,7 +296,30 @@ program test(
 		cif0.ccwrite = 0;
 
 		@(posedge CLK);
+
+		//test 5: cache0 is the requesting cache, cache1 is responding cache
+		//				cache0 and cache1 is in SHARED state, cache0 is going to modified state
+		//				cache1 should be invalidated
+		++testcase;
+		cif0.cctrans = 1;
+		cif0.dREN = 0;
+		cif1.dREN = 0;
+		cif0.dWEN = 0;
+		cif1.dWEN = 0;
+
+		@(posedge CLK);
+
+		if (cif1.ccinv == 1) begin
+			$display("==Case %d is correct==, ccinv1 is asserted, this means that cache0 is in modified", testcase);
+		end
+		else begin
+			$display("==Case %d is not correct==, ccinv1 = %h", testcase, cif1.ccinv);
+		end
+
+
 //add extra case, where DArbitrate goes back to IDLE
+//when requesting cache goes from shared to modified
+
 
 		@(posedge CLK);
 				#(PERIOD);
