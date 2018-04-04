@@ -289,7 +289,7 @@ module dcache (
 					nxt_state = FLUSH1;
 				end
 				else if (!dirtyloop) begin
-					nxt_state = COUNT;
+					nxt_state = HALT;
 				end
 			end
 
@@ -370,6 +370,8 @@ module dcache (
 		frame2_data_1 = frame2[idx].data[0];
 		frame2_data_2 = frame2[idx].data[1];
 		dcif.flushed = 0;
+		cif.cctrans = 0;
+		cif.ccwrite = dcif.dmemWEN;
 
 		snoopdone = 0;
 		stagmiss = 1;
@@ -386,7 +388,7 @@ module dcache (
 						dcif.dmemload = frame1[idx].data[offset];
 						nxt_lru[idx] = 1;
 						cif.cctrans = 0;
-						cif.ccwrite = 0;
+						//cif.ccwrite = 0;
 					end
 					else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
 						nxt_count = count + 1;
@@ -394,13 +396,19 @@ module dcache (
 						dcif.dmemload = frame2[idx].data[offset];
 						nxt_lru[idx] = 0;
 						cif.cctrans = 0;
-						cif.ccwrite = 0;
+						//cif.ccwrite = 0;
 					end
 					else begin
 						miss = 1;
 						nxt_count = count - 1;
 						cif.cctrans = 1;
-						cif.ccwrite = 0;
+						/*if (lru[idx] == 0) begin
+							cif.cctrans = frame1[idx].dirty ? 0 : 1;
+						end
+						else begin
+							cif.cctrans = frame2[idx].dirty ? 0 : 1;
+						end*/
+						//cif.ccwrite = 0;
 					end
 				end
 				else if (dcif.dmemWEN) begin
@@ -416,8 +424,8 @@ module dcache (
 							frame1_data_2 = dcif.dmemstore;
 						end
 						nxt_lru[idx] = 1;
-						cif.cctrans = 0;
-						cif.ccwrite = 0;
+						cif.cctrans = 1;
+						//cif.ccwrite = 0;
 					end
 					else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
 						cif.cctrans = 1; //shared -> modified transition
@@ -431,26 +439,20 @@ module dcache (
 							frame2_data_2 = dcif.dmemstore;
 						end
 						nxt_lru[idx] = 0;
-						cif.cctrans = 0;
-						cif.ccwrite = 0;
+						cif.cctrans = 1;
+						//cif.ccwrite = 0;
 					end
 					else begin
 						miss = 1;
 						nxt_count = count - 1;
-						if (lru[idx] == 0) begin
-							cif.cctrans = frame1[idx].dirty ? 0 : 1;
-							cif.ccwrite = frame1[idx].dirty ? 0 : 1;	
-						end
-						else begin
-							cif.cctrans = frame2[idx].dirty ? 0 : 1;
-							cif.ccwrite = frame2[idx].dirty ? 0 : 1;	
-						end
+						cif.cctrans = 1;
+							//cif.ccwrite = frame1[idx].dirty ? 0 : 1;	
 					end
 				end
 				else if (dcif.halt) begin
 					nxt_dirtyloop = 1;
 					cif.cctrans = 0;
-					cif.ccwrite = 0;
+					//cif.ccwrite = 0;
 				end
 			end
 
@@ -516,13 +518,13 @@ module dcache (
 					cif.daddr = {frame1[idx].tag, idx, 3'b100}; //write the second words, set index 2 to 1
 					cif.dstore = frame1[idx].data[1];
 					cif.cctrans = 1;
-					cif.ccwrite = 1;
+					//cif.ccwrite = 1;
 				end
 				else begin
 					cif.daddr = {frame2[idx].tag, idx, 3'b100}; //write the second words first, set index 2 to 1
 					cif.dstore = frame2[idx].data[1];
 					cif.cctrans = 1;
-					cif.ccwrite = 1;
+					//cif.ccwrite = 1;
 				end
 			end
 
@@ -602,12 +604,12 @@ module dcache (
 					if (!frame1_snoopdirty[snoopidx]) begin //match tag, frame1, not dirty
 						frame1_valid = !cif.ccinv;
 						snoopdone = 1;
-						cif.cctrans = 1;
-						cif.ccwrite = 0;
+						//cif.cctrans = 0;
+						//cif.ccwrite = 0;
 					end
 					else begin //match tag, frame1, dirty
 						cif.cctrans = 1;
-						cif.ccwrite = 1;
+						//cif.ccwrite = 1;
 					end
 				end
 				else if ((snooptag == frame2_snooptag[snoopidx]) && frame2_snoopvalid[snoopidx]) begin
@@ -616,24 +618,25 @@ module dcache (
 					if (!frame2_snoopdirty[snoopidx]) begin //match tag, frame2, not dirty
 						frame2_valid = !cif.ccinv;
 						snoopdone = 1;
-						cif.cctrans = 1;
-						cif.ccwrite = 0;
+						//cif.cctrans = 1;
+						//cif.ccwrite = 0;
 					end
 					else begin  //match tag, frame2, dirty
 						cif.cctrans = 1;
-						cif.ccwrite = 1;
+						//cif.ccwrite = 1;
 					end
 				end
 				else begin  //not match tag
 					stagmiss = 1;
-					cif.cctrans = 1;
-					cif.ccwrite = 0;
+					snoopdone = 1;
+					//cif.cctrans = 1;
+					//cif.ccwrite = 0;
 				end
 			end
 
 			CO_WB0: begin
 				cif.dWEN = 1;
-				cif.ccwrite = 1;	
+				//cif.ccwrite = 1;	
 				if (matchframe == 0) begin
 					cif.daddr = {frame1[snoopidx].tag, snoopidx, 3'b000};
 					cif.dstore = frame1[snoopidx].data[0];
@@ -645,7 +648,7 @@ module dcache (
 			end
 
 			CO_WB1: begin
-				cif.ccwrite = 1;	
+				//cif.ccwrite = 1;	
 				cif.dWEN = 1;
 				if (matchframe == 0) begin
 					cif.daddr = {frame1[snoopidx].tag, snoopidx, 3'b100};
@@ -659,6 +662,11 @@ module dcache (
 					frame2_valid = !cif.ccinv;
 					frame2_dirty = 0;
 				end
+			end
+
+			HALT: begin
+				cif.cctrans = cif.ccwait;
+				//cif.ccwrite = !cif.ccwait;
 			end
 
 		endcase

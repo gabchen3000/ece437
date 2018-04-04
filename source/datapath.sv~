@@ -42,7 +42,7 @@ module datapath (
 
 	//DUT
 	control_unit CU (cuif);
-	program_counter PC (CLK, nRST, pcif);
+	program_counter #(.PC_INIT(PC_INIT)) PC (CLK, nRST, pcif);
 	alu ALU (aif);
 	register_file REGF (CLK, nRST, rfif);
 	request_unit RU (CLK, nRST, ruif);
@@ -327,7 +327,8 @@ module datapath (
 
 	assign IDrdat1 = rfif.rdat1;
 	assign IDrdat2 = rfif.rdat2;
-	assign IDext = (cuif.ExtOp) ? ((IDimemload[15]) ? {16'hFFFF, IDimemload[15:0]} : {16'b0, IDimemload[15:0]}) : {16'b0, IDimemload[15:0]};
+	assign IDext = (cuif.ExtOp) ? ((IDimemload[15]) ? {16'hFFFF, IDimemload[15:0]} : {16'b0, IDimemload[15:0]}) : {16'b0, IDimemload[15:0]}; this works for coherence1
+	//assign IDext = ((IDimemload[15]) ? {16'hFFFF, IDimemload[15:0]} : {16'b0, IDimemload[15:0]});	//this works for coherence2
 	assign IDshamt = {27'b0, IDimemload[10:6]};
 
 	assign IDjump = cuif.jump;
@@ -430,6 +431,7 @@ module datapath (
   		dpif.halt <= 0;
 		end
 		else if (dpif.halt == 1)begin
+			//dpif.halt <= 1; 
 			dpif.halt <= dpif.halt;
 		end
 		else begin

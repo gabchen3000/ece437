@@ -55,6 +55,8 @@ program test(
 	logic offset0 						= 1'b0;
 	logic offset1 						= 1'b1;
 
+	logic [25:0] tag_junk_2 		= 26'd99;
+	
 	initial begin
 		
 		//to test:
@@ -70,6 +72,11 @@ program test(
 		//	dcif.halt				-- controls halt
 		//	dcif.dmemREN
 		//	dcif.dmemWEN
+
+		cif.ccwait 			= '0;		
+		cif.ccinv  			= '0;
+		cif.ccsnoopaddr = '0;
+
 
 		dcif.dmemaddr		= '0;
 		dcif.imemREN		= '0;
@@ -227,7 +234,7 @@ program test(
 		@(posedge CLK);
 		cif.dwait = 1;
 
-		//case 7: test dhit and dmemload on rewritten data first word // hit6
+		//case 7: test dhit and dmemload on replace data first word // hit6
 		dcif.dmemaddr =  {tag_junk, idx1, offset0, 2'b00};
 		++testcase;
 
@@ -239,7 +246,7 @@ program test(
 			$display("Failed test %d: no dhit on rewritten data, data is %d", testcase, dcif.dmemload);
 		end 
 
-		//case 8: test dhit and dmemload on rewritten data first word //hit7
+		//case 8: test dhit and dmemload on replace data first word //hit7
 		dcif.dmemaddr =  {tag_junk, idx1, offset1, 2'b00};
 		++testcase;
 
@@ -301,7 +308,7 @@ program test(
 			$display("Passed test %d: dhit on a write", testcase);
 		end
 		else begin
-			$display("Failed test %d: no dhit on a write", testcase);
+			$display("Failed test %d: no dhit on a writedcif", testcase);
 		end
 
 		@(posedge CLK);
@@ -350,7 +357,8 @@ program test(
 		cif.dwait = 0;
 		@(posedge CLK);
 		cif.dwait = 1;
-				
+		
+		/*		
 		//case 13 write into one more index, test flush all dirty data with halt signal
 		++testcase;
 		//frame 1				
@@ -418,7 +426,7 @@ program test(
 		cif.dwait = 1;
 		@(posedge CLK);
 		
-		dcif.halt = 1;
+		//dcif.halt = 1; Commenting out halt.......................
 		@(posedge CLK);
 		@(posedge CLK);
 		@(posedge CLK);
@@ -480,6 +488,8 @@ program test(
 			$display("Failed test %d: count value is not correct: %d", testcase, cif.dstore);
 		end
 
+		@(posedge CLK);dcif.dmemaddr =  {tag_junk, idx1, offset1, 2'b00};
+		cif.dload = 32'd67;
 		@(posedge CLK);
 		cif.dwait = 0;
 		@(posedge CLK);
@@ -495,9 +505,138 @@ program test(
 		@(posedge CLK);
 		@(posedge CLK);
 		@(posedge CLK);
+	
+		*/
+		//#(PERIOD);
+		//nRST = 0;
+		//@(posedge CLK);
+		//nRST = 1;
+		@(posedge CLK);
+	
+		//test 13
+		//test IDLE -> SNOOPING (stagmiss) _> IDLE
+		/// when dcache is the responding cache
+		cif.ccwait = '1;
+		//finish writing count.
+		
+		@(posedge CLK);
+		++testcase;
+		if (cif.cctrans == 1 && cif.ccwrite == 0) begin
+			$display("Passed test %d: dcache is in snooping, on stagmiss: has set cctrans and reset ccwrite", testcase);
+		end
+		else begin
+			$display("Failed test %d: failed idle to snooping, stagmiss case", testcase, dcif.flushed);
+		end
+		
+		@(posedge CLK);
 
-		#(PERIOD);
-		nRST = 0;
+		//test 14
+		//test IDLE -> SNOOPING (!stagmiss && !dirty) _> IDLE
+		// match tag, frame1, dirty
+		/*Note:
+			assign snooptag = cif.ccsnoopaddr[31:6];
+			assign snoopidx = cif.ccsnoopaddr[5:3];
+			assign snoopoffset = cif.ccsnoopaddr[2];
+		*/
+
+		cif.ccwait = '0;
+		@(posedge CLK);
+		cif.ccwait = '1;
+		cif.ccsnoopaddr = 32'haa;
+		
+		@(posedge CLK);
+		++testcase;
+		if (cif.cctrans == 1 && cif.ccwrite == 0) begin
+			$display("Passed test %d: dcache is in snooping, on staghit && not dirty: has set cctrans and reset ccwrite", testcase);
+		end
+		else begin
+			$display("Failed test %d: failed idle to snooping, stagmiss case", testcase, dcif.flushed);
+		end
+		
+		//test 15
+		//test IDLE -> SNOOPING (!stagmiss && dirty) -> coherence write backs		
+		@(posedge CLK);
+		cif.ccsnoopaddr = 32'h90c;
+	
+		@(posedge CLK);
+		++testcase;
+		if (cif.cctrans == 1 && cif.ccwrite == 1) begin
+			$display("Passed test %d: dcache is in snooping, on staghit && dirty: has set cctrans and ccwrite", testcase);
+		end
+		else begin
+			$display("Failed test %d: failed idle to snooping, !stagmiss case", testcase, dcif.flushed);
+		end
+		@(posedge CLK);
+
+		//test 16
+		//test CO_WBO		
+		@(posedge CLK);
+		++testcase;
+		if (cif.dWEN == 1 && cif.dstore == 32'h43 && cif.ccwrite == 1) begin
+			$display("Passed test %d: dcache is in CO_WBO, dWEN is high and dstore is same as frame1_data_1", testcase);
+		end
+		else begin
+			$display("Failed test %d: failed -- didn't get expected CO_WB1 beahvior", testcase);
+		end
+		@(posedge CLK);
+
+		//test 17
+		//test CO_WB1
+		cif.dwait = '0;		
+		@(posedge CLK);
+		++testcase;
+		if (cif.dWEN == 1 && cif.dstore == 32'h3b && cif.ccwrite == 1) begin
+			$display("Passed test %d: dcache is in CO_WB1, dWEN is high and dstore is same as frame1_data_2", testcase);
+		end
+		else begin
+			$display("Failed test %d: failed -- didn't get expected CO_WB1 beahvior", testcase);
+		end
+		@(posedge CLK);
+
+		//send back to IDLE 
+		cif.dwait = '0;
+		cif.ccwait = '0;		
+		@(posedge CLK);				
+
+		//test 18
+		//test transition writeback1 to snooping 
+		dcif.dmemaddr =  {tag_junk, idx1, offset0, 2'b00};//miss
+		@(posedge CLK);
+		//now dcache is in writeback1
+		cif.ccwait = 1;
+		cif.ccsnoopaddr = 32'haa;
+		@(posedge CLK);
+		
+		++testcase;
+		if (cif.cctrans == 1 && cif.ccwrite == 0) begin
+			$display("Passed test %d: dcache is in snooping after writeback1, and on stagmiss: has set cctrans and reset ccwrite", testcase);
+		end		
+		else begin
+			$display("Failed test %d: failed writeback1 to snooping transition", testcase);
+		end
+		@(posedge CLK);
+		
+		//test 19
+		//test transition load1 to snooping 
+		cif.dwait = '0;
+		cif.ccwait = '0;	
+		dcif.dmemaddr =  {tag_junk_2, idx4, offset0, 2'b00};//miss
+		@(posedge CLK);
+		//now dcache is in load1
+		cif.ccwait = 1;
+		cif.ccsnoopaddr = 32'haa;
+		@(posedge CLK);
+		
+		++testcase;
+		if (cif.cctrans == 1 && cif.ccwrite == 0) begin
+			$display("Passed test %d: dcache is in snooping after load1, and on stagmiss: has set cctrans and reset ccwrite", testcase);
+		end		
+	else begin
+			$display("Failed test %d: failed load1 to snooping transition", testcase);
+		end
+		@(posedge CLK);
+
+		$display("Failed: didn't write test case for flush to snooping transition");		
   end
 
 endprogram

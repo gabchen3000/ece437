@@ -12,6 +12,8 @@ module program_counter (
   program_counter_if.pc pcif
 );
 
+  parameter PC_INIT = 0;
+
   // import types
   import cpu_types_pkg::*;
 
@@ -20,7 +22,7 @@ module program_counter (
 	always_ff @(posedge CLK, negedge nRST) begin
 
 		if (nRST == 0) begin
-			pcif.cur_pc <= 0;
+			pcif.cur_pc <= PC_INIT;
 		end
 		else if (pcif.PCSrc != 3) begin
 			pcif.cur_pc <= pcif.next_pc;

@@ -148,12 +148,14 @@ module control_unit (
 				BEQ		:	begin
 								cuif.branch = 1;
 								cuif.beq = 1;
+								cuif.ExtOp = 1;
 								cuif.ALUOP = ALU_SUB;
 				end
 
 				BNE		:	begin
 								cuif.branch = 1;
 								cuif.bne = 1;
+								cuif.ExtOp = 1;
 								cuif.ALUOP = ALU_SUB;
 				end
 
