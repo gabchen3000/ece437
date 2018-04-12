@@ -42,6 +42,8 @@ module dcache (
 	assign offset = dcif.dmemaddr[2];
 	//coherence tag copies
 
+//33 bits for linked register, 32 bits address and a valid (status) bit
+
 	//state machine
 	always_ff @(posedge CLK, negedge nRST) begin
 		if (nRST == 0) begin

@@ -42,6 +42,10 @@ module dcache (
 	assign offset = dcif.dmemaddr[2];
 	//coherence tag copies
 
+//33 bits for linked register, 32 bits address and a valid (status) bit
+//if this core is trying to store or store conditional, break the link when finished
+//this also applies for when the other cache is snooping into this cache
+
 	//state machine
 	always_ff @(posedge CLK, negedge nRST) begin
 		if (nRST == 0) begin

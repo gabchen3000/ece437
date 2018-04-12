@@ -35,12 +35,16 @@ module control_unit (
 		cuif.beq = 0;				//beq signal for branch logic
 		cuif.bne = 0;				//bne signal for branch logic
 		cuif.RegDest = 0;
+		cuif.datomic = 0;		//should be asserted when it is LL/SC
 		//cuif.rs = 0;				//Ra to rdat1
 		//cuif.rt = 0;				//Rb to rdat1 / Rw to rdat2
 		//cuif.rd = 0;				//Rw to rdat2
 		//cuif.imm = 0;				//imm for itype
 		//cuif.baddr = 0;			//branch address
 		//cuif.shamt = 0;			//shift amount for rtype
+
+//send datomic signal to datapath if LL or SC
+
 
 		/*
 		R [opcode 6 | rs 5 | rt 5 | rd 5 | shamt 5 | funct 6] 
@@ -155,6 +159,7 @@ module control_unit (
 				BNE		:	begin
 								cuif.branch = 1;
 								cuif.bne = 1;
+								cuif.ExtOp = 1;
 								cuif.ALUOP = ALU_SUB;
 				end
 
@@ -227,6 +232,25 @@ module control_unit (
 
 				HALT	:	begin
 								cuif.halt = 1;
+				end
+
+				LL		: begin
+								cuif.ALUOP = ALU_ADD;
+								cuif.ExtOp = 1;
+								cuif.ALUSrc = 1;
+								cuif.MemtoReg = 1;
+								cuif.RegWr = 1;
+								cuif.dREN = 1;
+								cuif.datomic = 1;
+				end
+
+				SC		: begin
+								cuif.ALUOP = ALU_ADD;
+								cuif.ExtOp = 1;
+								cuif.ALUSrc = 1;
+								cuif.dWEN = 1;
+								cuif.datomic = 1;
+								cuif.RegWr = 1;
 				end
 
 			endcase
