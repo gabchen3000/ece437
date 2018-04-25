@@ -25,7 +25,7 @@ module icache (
 	assign tag = dcif.imemaddr[31:6];
 	assign idx = dcif.imemaddr[5:2];
 	assign cif.iREN = hit ? 0 : dcif.imemREN;
-	assign cif.iaddr = hit ? 0 : dcif.imemaddr;
+	assign cif.iaddr = dcif.imemaddr;
 
 	always_comb begin
 		if (dcif.imemREN) begin

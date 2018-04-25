@@ -28,7 +28,9 @@ always_ff @(posedge CLK, negedge nRST) begin
  end
   //  if opcode is LW or SW then wait for dhit to update
   else if ((memwb_if.memwb_ip_imemload[31:26] == SW ||
-            memwb_if.memwb_ip_imemload[31:26] == LW)
+            memwb_if.memwb_ip_imemload[31:26] == LW || 
+						memwb_if.memwb_ip_imemload[31:26] == LL || 
+						memwb_if.memwb_ip_imemload[31:26] == SC)
             && (memwb_if.memwb_ip_dhit)) begin
     memwb_if.memwb_op_npc         <=    memwb_if.memwb_ip_npc;
     memwb_if.memwb_op_imemload    <=    memwb_if.memwb_ip_imemload;

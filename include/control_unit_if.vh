@@ -17,7 +17,7 @@ interface control_unit_if;
 	aluop_t				ALUOP;
 	logic [1:0]		RegDest;
 	//logic [25:0]	jaddr;
-	logic 				ALUSrc, ExtOp, dREN, dWEN, RegWr, MemtoReg, jal, jr, halt, lui, imemREN, branch, jump, sll, srl, bne, beq, datomic;
+	logic 				ALUSrc, ExtOp, dREN, dWEN, RegWr, MemtoReg, jal, jr, halt, lui, imemREN, branch, jump, sll, srl, bne, beq;
 	//regbits_t			rs, rt, rd;
 	//logic [15:0] 	imm, baddr;
 	//word_t				shamt;
@@ -25,11 +25,11 @@ interface control_unit_if;
 	// request unit ports to control unit and cache
 	modport cu(
 		input		imemload,
-		output	ALUOP, RegDest, ALUSrc, ExtOp, dREN, dWEN, RegWr, MemtoReg, jal, jr, halt, lui, imemREN, branch, jump, sll, srl, bne, beq, datomic,//,jaddr, rs, rt, rd, imm, baddr, shamt
+		output	ALUOP, RegDest, ALUSrc, ExtOp, dREN, dWEN, RegWr, MemtoReg, jal, jr, halt, lui, imemREN, branch, jump, sll, srl, bne, beq//,jaddr, rs, rt, rd, imm, baddr, shamt
 	);
 
 	modport cutb(
-		input		ALUOP, RegDest, ALUSrc, ExtOp, dREN, dWEN, RegWr, MemtoReg, jal, jr, halt, lui, imemREN, branch, jump, sll, srl, bne, beq, datomic,//jaddr, rs, rt, rd, imm, baddr, shamt,
+		input		ALUOP, RegDest, ALUSrc, ExtOp, dREN, dWEN, RegWr, MemtoReg, jal, jr, halt, lui, imemREN, branch, jump, sll, srl, bne, beq,//jaddr, rs, rt, rd, imm, baddr, shamt,
 		output	imemload
 	);
 

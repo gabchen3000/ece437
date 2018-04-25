@@ -22,7 +22,7 @@ module memory_control (
   // number of cpus for cc
   parameter CPUS = 2;
 
-	logic		snoopcache, iselect, prev_iselect, wbcache;
+	logic		snoopcache, iselect, prev_iselect, wbcache, nxt_wbcache;
 	typedef enum logic[3:0] {IDLE, IArbitrate, INSTR, NONCO_WB0, NONCO_WB1, DArbitrate, SNOOP, WB0, WB1, MEM0, MEM1} state_t;
 	state_t							cur_state, nxt_state;
 	word_t							iload0, iload1;
@@ -73,25 +73,32 @@ end
 	always_ff @(posedge CLK, negedge nRST) begin
 		if (nRST == 0) begin
 			cur_state <= IDLE;
-			iselect <= 1;
+			iselect <= 0;
 			snoopcache <= 1;
 			ccif.iload[0] <= 0;
 			ccif.iload[1] <= 0;
+			wbcache <= 0;
 		end
 		else begin
 			ccif.iload[0] <= iload0;
 			ccif.iload[1] <= iload1;
+			wbcache <= nxt_wbcache;
 
 			cur_state <= nxt_state;
 			if (cur_state == IDLE) begin
 				snoopcache <= ccif.cctrans[0] ? 1 : 0;
 			end
-			if (cur_state == IDLE && nxt_state == IArbitrate) begin
-				iselect <= !iselect;
+			if (cur_state == IDLE) begin
+				if (ccif.iREN[0] && ccif.iREN[1]) begin
+					iselect <= !iselect;
+				end
+				else begin
+					iselect <= (ccif.iREN[iselect]) ? iselect : !iselect;
+				end
 			end
-			else if (cur_state == IArbitrate) begin
-				iselect <= (ccif.iREN[iselect]) ? iselect : !iselect;
-			end
+			//else if (cur_state == IDLE && nxt_state == IArbitrate) begin
+			//	iselect <= !iselect;
+			//end
 			else begin
 				iselect <= iselect;
 			end
@@ -171,6 +178,9 @@ end
 			end
 
 			IArbitrate: begin
+				/*if (ccif.ramstate == ACCESS) begin
+					nxt_state = INSTR;
+				end*/
 				nxt_state = INSTR;
 				if (ccif.dWEN[0] || ccif.dWEN[1]) begin
 					nxt_state = NONCO_WB0;
@@ -190,6 +200,9 @@ end
 				end
 				else if (ccif.cctrans[0] || ccif.cctrans[1]) begin
 					nxt_state = DArbitrate;
+				end
+				else begin
+					nxt_state = IDLE;
 				end
 			end
 
@@ -219,12 +232,13 @@ end
 		ccif.ccwait[1] = 0;
 		ccif.ccsnoopaddr[1] = 0;
 		//prev_iselect = prev_iselect;
+		nxt_wbcache = ccif.dWEN[0] ? 0 : 1;;
 
 		casez (cur_state)
 
 			IDLE: begin
 				//iselect = !prev_iselect;
-				wbcache = ccif.dWEN[0] ? 0 : 1;
+				nxt_wbcache = ccif.dWEN[0] ? 0 : 1;
 			end
 
 			DArbitrate: begin
@@ -290,6 +304,7 @@ end
 				ccif.ramstore = ccif.dstore[wbcache];
 				ccif.ramWEN = ccif.dWEN[wbcache];
 				ccif.dwait[wbcache] = 0;
+				ccif.ccwait[!wbcache] = 1; //not sure
 				if (ccif.ramstate == ACCESS) begin
 					ccif.dwait[wbcache] = 0;
 				end
@@ -299,11 +314,30 @@ end
 				ccif.ramaddr = ccif.daddr[wbcache];
 				ccif.ramstore = ccif.dstore[wbcache];
 				ccif.ramWEN = ccif.dWEN[wbcache];
-				ccif.dwait[wbcache] = 0;
+				ccif.ccwait[!wbcache] = 1; //not sure
+				if (ccif.ramstate == ACCESS) begin
+					ccif.dwait[wbcache] = 0;
+				end
 			end
 
 			IArbitrate: begin
-				//iselect = (ccif.iREN[iselect]) ? iselect : !iselect;
+				ccif.ramREN = 1;
+				ccif.ramaddr = ccif.iaddr[iselect];
+				if (iselect == 0) begin				
+					iload0 = ccif.ramload;
+				end
+				else begin
+					iload1 = ccif.ramload;
+				end
+				/*ccif.ramREN = 1;
+				ccif.ramaddr = ccif.iaddr[iselect];
+				if (iselect == 0) begin				
+					iload0 = ccif.ramload;
+				end
+				else begin
+					iload1 = ccif.ramload;
+				end*/
+				//ccif.iwait[iselect] = 0;
 			end
 
 			INSTR: begin
@@ -315,8 +349,9 @@ end
 				else begin
 					iload1 = ccif.ramload;
 				end
-				ccif.iwait[iselect] = 0;
-				//prev_iselect = iselect;
+				if (nxt_state == IDLE) begin
+					ccif.iwait[iselect] = 0;
+				end
 			end
 
 		endcase

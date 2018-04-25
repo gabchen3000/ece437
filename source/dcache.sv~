@@ -27,12 +27,15 @@ module dcache (
 	logic [25:0]				tag, frame1_tag, frame2_tag;
 	logic [2:0]					idx, flushcountIDX; //0 - 8
 	logic [4:0]					flushcount, nxt_flushcount;
-	logic								goflush, offset, dirtyloop, nxt_dirtyloop, miss, frame1_valid, frame2_valid, frame1_dirty, frame2_dirty, lru[7:0], nxt_lru[7:0]; //lru 0 for left, 1 for right
+	logic								goflush, offset, dirtyloop, nxt_dirtyloop, miss, frame1_valid, frame2_valid, frame1_dirty, frame2_dirty, sframe1_snoopvalid, sframe2_snoopvalid, sframe1_snoopdirty, sframe2_snoopdirty, lru[7:0], nxt_lru[7:0]; //lru 0 for left, 1 for right
 	word_t							count, nxt_count, frame1_data_1, frame1_data_2, frame2_data_1, frame2_data_2;
 	//coherence signals
-	logic								stagmiss, snoopdone, snoopoffset, matchframe, frame1_snoopvalid[7:0], frame2_snoopvalid[7:0], frame1_snoopdirty[7:0], frame2_snoopdirty[7:0];
+	logic								stagmiss, snoopdone, snoopoffset, matchframe, nxt_matchframe, frame1_snoopvalid[7:0], frame2_snoopvalid[7:0], frame1_snoopdirty[7:0], frame2_snoopdirty[7:0];
 	logic [25:0]				snooptag, frame1_snooptag[7:0], frame2_snooptag[7:0];
 	logic [2:0]					snoopidx;	
+	//LL SC stuff
+	word_t							linked_reg, nxt_linked_reg;
+	logic								linked_valid, nxt_linked_valid;
 
 	typedef enum logic[3:0] {IDLE, LD1, LD2, WB1, WB2, FLUSH1, FLUSH2, DIRTY, COUNT, HALT, SNOOPING, CO_WB0, CO_WB1} state_t;
 	state_t							cur_state, nxt_state;
@@ -43,10 +46,15 @@ module dcache (
 	//coherence tag copies
 
 //33 bits for linked register, 32 bits address and a valid (status) bit
+//if this core is trying to store or store conditional, break the link when finished
+//this also applies for when the other cache is snooping into this cache
 
 	//state machine
 	always_ff @(posedge CLK, negedge nRST) begin
 		if (nRST == 0) begin
+			linked_reg <= 0;
+			linked_valid <= 0;
+
 			cur_state <= IDLE;
 			lru[7] <= 0;
 			lru[6] <= 0;
@@ -59,6 +67,7 @@ module dcache (
 			count <= 0;
 			flushcount <= 0;
 			dirtyloop <= 1;
+			matchframe <= 0;
 
 			frame1_snooptag[0] <= 0;
 			frame1_snooptag[1] <= 0;
@@ -112,6 +121,9 @@ module dcache (
 			frame2_snoopdirty[7] <= 0;
 		end
 		else begin
+			linked_reg <= nxt_linked_reg;
+			linked_valid <= nxt_linked_valid;
+
 			cur_state <= nxt_state;
 			lru[7] <= nxt_lru[7];
 			lru[6] <= nxt_lru[6];
@@ -124,6 +136,7 @@ module dcache (
 			count <= nxt_count;
 			flushcount <= nxt_flushcount;
 			dirtyloop <= nxt_dirtyloop;
+			matchframe <= nxt_matchframe;
 
 			frame1_snooptag[0] <= frame1[0].tag;
 			frame1_snooptag[1] <= frame1[1].tag;
@@ -185,16 +198,25 @@ module dcache (
 			frame2[7:0] <= '0;
 		end
 		else begin
-			frame1[idx].valid <= frame1_valid;
+
 			frame1[idx].dirty <= frame1_dirty;
 			frame1[idx].tag <= frame1_tag;
 			frame1[idx].data[0] <= frame1_data_1;
 			frame1[idx].data[1] <= frame1_data_2;
-			frame2[idx].valid <= frame2_valid;
 			frame2[idx].dirty <= frame2_dirty;
 			frame2[idx].tag <= frame2_tag;
 			frame2[idx].data[0] <= frame2_data_1;
 			frame2[idx].data[1] <= frame2_data_2;
+
+			if (cur_state == SNOOPING) begin
+				frame1[snoopidx].valid <= sframe1_snoopvalid;
+				frame2[snoopidx].valid <= sframe2_snoopvalid;
+			end
+			else begin
+				frame1[idx].valid <= frame1_valid;
+				frame2[idx].valid <= frame2_valid;
+			end
+
 		end
 	end
 
@@ -287,6 +309,9 @@ module dcache (
 			end
 
 			DIRTY: begin
+				if (cif.ccwait) begin
+					nxt_state = SNOOPING;
+				end		
 				if (goflush) begin
 					nxt_state = FLUSH1;
 				end
@@ -310,7 +335,7 @@ module dcache (
 					nxt_state = IDLE;
 				end
 				else begin
-					if (matchframe == 0) begin
+					if (nxt_matchframe == 0) begin
 						nxt_state = frame1[snoopidx].dirty ? CO_WB0 : SNOOPING;
 					end
 					else begin
@@ -374,16 +399,189 @@ module dcache (
 		dcif.flushed = 0;
 		cif.cctrans = 0;
 		cif.ccwrite = dcif.dmemWEN;
+		sframe1_snoopvalid = frame1_valid;
+		sframe2_snoopvalid = frame2_valid;
 
 		snoopdone = 0;
 		stagmiss = 1;
+		nxt_matchframe = matchframe;
+	
+		nxt_linked_reg = linked_reg;
+		nxt_linked_valid = linked_valid;
 
 		casez (cur_state)
+//---------------------------------------------------------------------------------------------------------------------------------------------------------
+/*			IDLE: begin
+				if (cif.ccwait) begin
+					
+				end
+				else if (dcif.dmemREN) begin
+					//LL
+					if (dcif.datomic) begin
+						nxt_linked_reg = dcif.dmemaddr;
+						nxt_linked_valid = 1;
+					end
+					if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
+						nxt_count = count + 1;
+						dcif.dhit = 1;
+						dcif.dmemload = frame1[idx].data[offset];
+						nxt_lru[idx] = 1;
+						cif.cctrans = 0;
+						//cif.ccwrite = 0;
+					end
+					else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
+						nxt_count = count + 1;
+						dcif.dhit = 1;
+						dcif.dmemload = frame2[idx].data[offset];
+						nxt_lru[idx] = 0;
+						cif.cctrans = 0;
+						//cif.ccwrite = 0;
+					end
+					else begin
+						miss = 1;
+						nxt_count = count - 1;
+						cif.cctrans = 1;
+
+						//cif.ccwrite = 0;
+					end
+				end
+				else if (dcif.dmemWEN) begin
+					//SC store only when addr matches and valid
+					if (dcif.datomic) begin
+						if ((dcif.dmemaddr == linked_reg) && linked_valid) begin
+							dcif.dmemload = 1; //stored in R[rt]
+							if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
+
+								if (frame1[idx].dirty == 0) begin 
+									miss = 1;
+									frame1_dirty = 1;
+								end
+								else begin
+									//reset the linked register
+									nxt_linked_valid = 0;
+									nxt_linked_reg = 0;
+									cif.cctrans = 1; //shared -> modified transition
+									nxt_count = count + 1;
+									dcif.dhit = 1;
+									frame1_dirty = 1;
+									if (offset == 0) begin
+										frame1_data_1 = dcif.dmemstore;
+									end
+									else begin
+										frame1_data_2 = dcif.dmemstore;
+									end
+									nxt_lru[idx] = 1;
+									cif.cctrans = 1;
+									//cif.ccwrite = 0;
+								end
+							end
+							else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
+
+								if (frame2[idx].dirty == 0) begin 
+									miss = 1;
+									frame2_dirty = 1;
+								end
+								else begin
+									//reset the linked register
+									nxt_linked_valid = 0;
+									nxt_linked_reg = 0;
+									cif.cctrans = 1; //shared -> modified transition
+									nxt_count = count + 1;
+									dcif.dhit = 1;
+									frame2_dirty = 1;
+									if (offset == 0) begin
+										frame2_data_1 = dcif.dmemstore;
+									end
+									else begin
+										frame2_data_2 = dcif.dmemstore;
+									end
+									nxt_lru[idx] = 0;
+									cif.cctrans = 1;
+									//cif.ccwrite = 0;
+								end
+							end
+							else begin
+								miss = 1;
+								nxt_count = count - 1;
+								cif.cctrans = 1;
+									//cif.ccwrite = frame1[idx].dirty ? 0 : 1;	
+							end
+						end
+						else begin //if link is not valid or link addr not match
+							dcif.dmemload = 0; //stored in R[rt]
+							dcif.dhit = 1;
+						end
+					end
+					//normal SW
+					else begin
+						if (dcif.dmemaddr == linked_reg) begin
+							nxt_linked_reg = 0;
+							nxt_linked_valid = 0;
+						end
+						if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
+							if (frame1[idx].dirty == 0) begin 
+								miss = 1;
+								frame1_dirty = 1;
+							end
+							else begin
+								cif.cctrans = 1; //shared -> modified transition
+								nxt_count = count + 1;
+								dcif.dhit = 1;
+								frame1_dirty = 1;
+								if (offset == 0) begin
+									frame1_data_1 = dcif.dmemstore;
+								end
+								else begin
+									frame1_data_2 = dcif.dmemstore;
+								end
+								nxt_lru[idx] = 1;
+								cif.cctrans = 1;
+								//cif.ccwrite = 0;
+							end
+						end
+						else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
+							if (frame2[idx].dirty == 0) begin 
+								miss = 1;
+								frame2_dirty = 1;
+							end
+							else begin
+								cif.cctrans = 1; //shared -> modified transition
+								nxt_count = count + 1;
+								dcif.dhit = 1;
+								frame2_dirty = 1;
+								if (offset == 0) begin
+									frame2_data_1 = dcif.dmemstore;
+								end
+								else begin
+									frame2_data_2 = dcif.dmemstore;
+								end
+								nxt_lru[idx] = 0;
+								cif.cctrans = 1;
+							end
+						end
+						else begin
+							miss = 1;
+							nxt_count = count - 1;
+							cif.cctrans = 1;
+						end
+					end
+				end
+				else if (dcif.halt) begin
+					nxt_dirtyloop = 1;
+					cif.cctrans = 0;
+				end
+			end*/
+//-------------------------------------------------------------
 			IDLE: begin
 				if (cif.ccwait) begin
 					
 				end
 				else if (dcif.dmemREN) begin
+					//LL
+					if (dcif.datomic) begin
+						nxt_linked_reg = dcif.dmemaddr;
+						nxt_linked_valid = 1;
+					end
 					if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
 						nxt_count = count + 1;
 						dcif.dhit = 1;
@@ -414,41 +612,100 @@ module dcache (
 					end
 				end
 				else if (dcif.dmemWEN) begin
-					if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
-						cif.cctrans = 1; //shared -> modified transition
-						nxt_count = count + 1;
-						dcif.dhit = 1;
-						frame1_dirty = 1;
-						if (offset == 0) begin
-							frame1_data_1 = dcif.dmemstore;
+					//SC store only when addr matches and valid
+					if (dcif.datomic) begin
+						if ((dcif.dmemaddr == linked_reg) && linked_valid) begin
+							dcif.dmemload = 1; //stored in R[rt]
+							if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
+								//reset the linked register
+								nxt_linked_valid = 0;
+								nxt_linked_reg = 0;
+								cif.cctrans = 1; //shared -> modified transition
+								nxt_count = count + 1;
+								dcif.dhit = 1;
+								frame1_dirty = 1;
+								if (offset == 0) begin
+									frame1_data_1 = dcif.dmemstore;
+								end
+								else begin
+									frame1_data_2 = dcif.dmemstore;
+								end
+								nxt_lru[idx] = 1;
+								cif.cctrans = 1;
+								//cif.ccwrite = 0;
+							end
+							else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
+								//reset the linked register
+								nxt_linked_valid = 0;
+								nxt_linked_reg = 0;
+								cif.cctrans = 1; //shared -> modified transition
+								nxt_count = count + 1;
+								dcif.dhit = 1;
+								frame2_dirty = 1;
+								if (offset == 0) begin
+									frame2_data_1 = dcif.dmemstore;
+								end
+								else begin
+									frame2_data_2 = dcif.dmemstore;
+								end
+								nxt_lru[idx] = 0;
+								cif.cctrans = 1;
+								//cif.ccwrite = 0;
+							end
+							else begin
+								miss = 1;
+								nxt_count = count - 1;
+								cif.cctrans = 1;
+									//cif.ccwrite = frame1[idx].dirty ? 0 : 1;	
+							end
 						end
-						else begin
-							frame1_data_2 = dcif.dmemstore;
+						else begin //if link is not valid or link addr not match
+							dcif.dmemload = 0; //stored in R[rt]
+							dcif.dhit = 1;
 						end
-						nxt_lru[idx] = 1;
-						cif.cctrans = 1;
-						//cif.ccwrite = 0;
 					end
-					else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
-						cif.cctrans = 1; //shared -> modified transition
-						nxt_count = count + 1;
-						dcif.dhit = 1;
-						frame2_dirty = 1;
-						if (offset == 0) begin
-							frame2_data_1 = dcif.dmemstore;
-						end
-						else begin
-							frame2_data_2 = dcif.dmemstore;
-						end
-						nxt_lru[idx] = 0;
-						cif.cctrans = 1;
-						//cif.ccwrite = 0;
-					end
+					//normal SW
 					else begin
-						miss = 1;
-						nxt_count = count - 1;
-						cif.cctrans = 1;
-							//cif.ccwrite = frame1[idx].dirty ? 0 : 1;	
+						if (dcif.dmemaddr == linked_reg) begin
+							nxt_linked_reg = 0;
+							nxt_linked_valid = 0;
+						end
+						if ((tag == frame1[idx].tag) && frame1[idx].valid) begin
+							cif.cctrans = 1; //shared -> modified transition
+							nxt_count = count + 1;
+							dcif.dhit = 1;
+							frame1_dirty = 1;
+							if (offset == 0) begin
+								frame1_data_1 = dcif.dmemstore;
+							end
+							else begin
+								frame1_data_2 = dcif.dmemstore;
+							end
+							nxt_lru[idx] = 1;
+							cif.cctrans = 1;
+							//cif.ccwrite = 0;
+						end
+						else if ((tag == frame2[idx].tag) && frame2[idx].valid) begin
+							cif.cctrans = 1; //shared -> modified transition
+							nxt_count = count + 1;
+							dcif.dhit = 1;
+							frame2_dirty = 1;
+							if (offset == 0) begin
+								frame2_data_1 = dcif.dmemstore;
+							end
+							else begin
+								frame2_data_2 = dcif.dmemstore;
+							end
+							nxt_lru[idx] = 0;
+							cif.cctrans = 1;
+							//cif.ccwrite = 0;
+						end
+						else begin
+							miss = 1;
+							nxt_count = count - 1;
+							cif.cctrans = 1;
+								//cif.ccwrite = frame1[idx].dirty ? 0 : 1;	
+						end
 					end
 				end
 				else if (dcif.halt) begin
@@ -600,11 +857,16 @@ module dcache (
 			end
 
 			SNOOPING: begin //cctrans happens here so that it corresponds correctly with the memory control
+				if (cif.ccsnoopaddr == linked_reg) begin
+					nxt_linked_reg = 0;
+					nxt_linked_valid = 0;
+				end
 				if ((snooptag == frame1_snooptag[snoopidx]) && frame1_snoopvalid[snoopidx]) begin	//match tag, frame1
 					stagmiss = 0;
-					matchframe = 0;
+					nxt_matchframe = 0;
 					if (!frame1_snoopdirty[snoopidx]) begin //match tag, frame1, not dirty
-						frame1_valid = !cif.ccinv;
+						sframe1_snoopvalid = !cif.ccinv;
+						//frame1_valid = !cif.ccinv;
 						snoopdone = 1;
 						//cif.cctrans = 0;
 						//cif.ccwrite = 0;
@@ -616,9 +878,10 @@ module dcache (
 				end
 				else if ((snooptag == frame2_snooptag[snoopidx]) && frame2_snoopvalid[snoopidx]) begin
 					stagmiss = 0;
-					matchframe = 1;
+					nxt_matchframe = 1;
 					if (!frame2_snoopdirty[snoopidx]) begin //match tag, frame2, not dirty
-						frame2_valid = !cif.ccinv;
+						sframe2_snoopvalid = !cif.ccinv;
+						//frame2_valid = !cif.ccinv;
 						snoopdone = 1;
 						//cif.cctrans = 1;
 						//cif.ccwrite = 0;

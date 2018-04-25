@@ -66,6 +66,9 @@ module datapath (
 	//signals in IF stage
 	word_t				IFnpc, IFimemload;
 	logic 				IFflushed;
+	r_t 					IF_r_type;
+	i_t 					IF_i_type;
+	j_t						IF_j_type;
 	//signals in ID stage
 	r_t 					ID_r_type;
 	i_t 					ID_i_type;
@@ -106,6 +109,10 @@ module datapath (
 	assign iiif.ifid_ip_imemload = IFimemload;
 	assign iiif.ifid_ip_ihit = dpif.ihit;
 	assign iiif.ifid_ip_dhit = dpif.dhit;
+  assign IF_r_type = r_t'(IFimemload);
+	assign IF_i_type = i_t'(IFimemload);
+	assign IF_j_type = j_t'(IFimemload);
+
 	//assign iiif.ifid_ip_dopause = huif.IFdopause;
 	assign iiif.ifid_ip_doflush = IFflushed;
 	assign iiif.idex_ip_dopause = IDdopause;	//THIS IS CORRECT SIGNAL
@@ -384,9 +391,12 @@ module datapath (
   assign fuif.WBwsel = WBwsel;
   assign fuif.MEMwsel = MEMwsel;
 	assign fuif.MEMlui = MEMlui;
-  assign MUX_XXX = (fuif.forwardselB == 0) ? EXrdat2 : (fuif.forwardselB == 1) ? WBwdat : (fuif.forwardselB == 2) ? MEMALU_OUT : {MEMimemload[15:0], 16'b0};
 	assign aif.ALUOP = EXALUOP;
-  assign aif.PORT_A = (fuif.forwardselA == 0) ? EXrdat1 : (fuif.forwardselA == 1) ? WBwdat : (fuif.forwardselA == 2) ? MEMALU_OUT : {MEMimemload[15:0], 16'b0};
+  //assign MUX_XXX = (fuif.forwardselB == 0) ? EXrdat2 : (fuif.forwardselB == 1) ? WBwdat : (fuif.forwardselB == 2) ? MEMALU_OUT : {MEMimemload[15:0], 16'b0};
+  //assign aif.PORT_A = (fuif.forwardselA == 0) ? EXrdat1 : (fuif.forwardselA == 1) ? WBwdat : (fuif.forwardselA == 2) ? MEMALU_OUT : {MEMimemload[15:0], 16'b0};
+  assign MUX_XXX = (fuif.forwardselB == 0) ? EXrdat2 : (fuif.forwardselB == 1) ? WBwdat : (fuif.forwardselB == 2) ? (MEMMemtoReg) ? MEMdmemload : MEMALU_OUT : {MEMimemload[15:0], 16'b0};
+  assign aif.PORT_A = (fuif.forwardselA == 0) ? EXrdat1 : (fuif.forwardselA == 1) ? WBwdat : (fuif.forwardselA == 2) ? (MEMMemtoReg) ? MEMdmemload : MEMALU_OUT : {MEMimemload[15:0], 16'b0};
+
 	assign aif.PORT_B = (EXALUSrc == 0) ? MUX_XXX : (EXALUSrc == 1) ? EXext : EXshamt;
 /*
 	assign jaddr = dpif.imemload[25:0];
@@ -463,8 +473,13 @@ module datapath (
 	assign huif.EXRegWr = EXRegWr;
 	assign huif.PCSrc = PCSrc;
 	assign huif.ihit = dpif.ihit;
-  assign IDdopause = (((EXimemload[31:26] == LW || EXimemload[31:26] == SW) || (MEMimemload[31:26] == LW || MEMimemload[31:26] == SW)) && !dpif.dhit) ? huif.IDdopause : 0;
+  //assign IDdopause = (((EXimemload[31:26] == LW || EXimemload[31:26] == SW) || (MEMimemload[31:26] == LW || MEMimemload[31:26] == SW)) && !dpif.dhit) ? huif.IDdopause : 0;
 
+  assign IDdopause = (((EXimemload[31:26] == LW || EXimemload[31:26] == SW || EXimemload[31:26] == LL || EXimemload[31:26] == SC) || (MEMimemload[31:26] == LW || MEMimemload[31:26] == SW || EXimemload[31:26] == LL || EXimemload[31:26] == SC)) && !dpif.dhit) ? huif.IDdopause : 0;
+
+
+	//assert datomic if its LL or SC
+	assign dpif.datomic = (MEMimemload[31:26] == LL) || (MEMimemload[31:26] == SC);
 
 
 

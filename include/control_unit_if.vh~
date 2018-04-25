@@ -25,7 +25,7 @@ interface control_unit_if;
 	// request unit ports to control unit and cache
 	modport cu(
 		input		imemload,
-		output	ALUOP, RegDest, ALUSrc, ExtOp, dREN, dWEN, RegWr, MemtoReg, jal, jr, halt, lui, imemREN, branch, jump, sll, srl, bne, beq//,jaddr, rs, rt, rd, imm, baddr, shamt
+		output	ALUOP, RegDest, ALUSrc, ExtOp, dREN, dWEN, RegWr, MemtoReg, jal, jr, halt, lui, imemREN, branch, jump, sll, srl, bne, beq, //,jaddr, rs, rt, rd, imm, baddr, shamt
 	);
 
 	modport cutb(

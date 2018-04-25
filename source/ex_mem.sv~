@@ -59,7 +59,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     exmem_if.exmem_op_wsel        <=  '0;
 	end
   //  if opcode is not LW and not SW then wait for ihit to update
-  else if (exmem_if.exmem_ip_ihit) begin
+  else if (exmem_if.exmem_ip_ihit || (exmem_if.exmem_ip_dhit && (exmem_if.exmem_op_imemload[31:26] == LW || exmem_if.exmem_op_imemload[31:26] == SW))) begin
     exmem_if.exmem_op_npc         <=    exmem_if.exmem_ip_npc;
     exmem_if.exmem_op_imemload    <=    exmem_if.exmem_ip_imemload;
     exmem_if.exmem_op_branchaddr  <=    exmem_if.exmem_ip_branchaddr;
@@ -119,7 +119,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     exmem_if.exmem_op_jr          <=    exmem_if.exmem_op_jr;
     exmem_if.exmem_op_halt        <=    exmem_if.exmem_op_halt;
     exmem_if.exmem_op_lui         <=    exmem_if.exmem_op_lui;
-    exmem_if.exmem_op_imemREN     <=    !exmem_if.exmem_op_dmemREN && !exmem_if.exmem_op_dmemWEN;
+    exmem_if.exmem_op_imemREN     <=    1;
     exmem_if.exmem_op_branch      <=    exmem_if.exmem_op_branch;
     exmem_if.exmem_op_jump        <=    exmem_if.exmem_op_jump;
     exmem_if.exmem_op_bne         <=    exmem_if.exmem_op_bne;

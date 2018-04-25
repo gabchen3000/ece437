@@ -24,6 +24,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     memwb_if.memwb_op_RegWr       <=  '0;
     memwb_if.memwb_op_ALUOUT      <=  '0;
     memwb_if.memwb_op_wsel        <=  '0;
+		memwb_if.memwb_op_halt        <=  '0;
  end
   //  if opcode is LW or SW then wait for dhit to update
   else if ((memwb_if.memwb_ip_imemload[31:26] == SW ||
@@ -38,6 +39,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     memwb_if.memwb_op_RegWr       <=    memwb_if.memwb_ip_RegWr;
     memwb_if.memwb_op_ALUOUT      <=    memwb_if.memwb_ip_ALUOUT;
     memwb_if.memwb_op_wsel        <=    memwb_if.memwb_ip_wsel;
+    memwb_if.memwb_op_halt        <=    memwb_if.memwb_ip_halt;
   end
   //  if opcode is not LW and not SW then wait for ihit to update
   else if (memwb_if.memwb_ip_ihit) begin
@@ -50,6 +52,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     memwb_if.memwb_op_RegWr       <=    memwb_if.memwb_ip_RegWr;
     memwb_if.memwb_op_ALUOUT      <=    memwb_if.memwb_ip_ALUOUT;
     memwb_if.memwb_op_wsel        <=    memwb_if.memwb_ip_wsel;
+    memwb_if.memwb_op_halt        <=    memwb_if.memwb_ip_halt;
 	end
   //  else just keep things same as before
   else  begin
@@ -62,6 +65,7 @@ always_ff @(posedge CLK, negedge nRST) begin
     memwb_if.memwb_op_RegWr       <=    memwb_if.memwb_op_RegWr;
     memwb_if.memwb_op_ALUOUT      <=    memwb_if.memwb_op_ALUOUT;
     memwb_if.memwb_op_wsel        <=    memwb_if.memwb_op_wsel;
+    memwb_if.memwb_op_halt        <=    memwb_if.memwb_op_halt;
   end
 
 end

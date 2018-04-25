@@ -35,7 +35,6 @@ module control_unit (
 		cuif.beq = 0;				//beq signal for branch logic
 		cuif.bne = 0;				//bne signal for branch logic
 		cuif.RegDest = 0;
-		cuif.datomic = 0;		//should be asserted when it is LL/SC
 		//cuif.rs = 0;				//Ra to rdat1
 		//cuif.rt = 0;				//Rb to rdat1 / Rw to rdat2
 		//cuif.rd = 0;				//Rw to rdat2
@@ -241,7 +240,6 @@ module control_unit (
 								cuif.MemtoReg = 1;
 								cuif.RegWr = 1;
 								cuif.dREN = 1;
-								cuif.datomic = 1;
 				end
 
 				SC		: begin
@@ -249,8 +247,8 @@ module control_unit (
 								cuif.ExtOp = 1;
 								cuif.ALUSrc = 1;
 								cuif.dWEN = 1;
-								cuif.datomic = 1;
 								cuif.RegWr = 1;
+								cuif.MemtoReg = 1; //for writing 1 or 0 into R[rt] from dcache
 				end
 
 			endcase
